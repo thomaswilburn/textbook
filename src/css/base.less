@@ -1,0 +1,65 @@
+/* basic document look and feel */
+
+body {
+  font-family: calibri, tahoma, verdana, sans-serif;
+  width: 700px;
+  padding: 0 2em;
+}
+
+h1 {
+  text-transform: uppercase;
+  background: black;
+  color: white;
+  display: inline-block; 
+}
+
+h2 {
+  border-bottom: 1px solid black;
+}
+
+//code
+var, code {
+  font-family: consolas, monospace;
+  font-size: 14px;
+  font-style: normal;
+}
+
+var {
+  font-weight: bold;
+
+  h1 > &, h2 > &, h2 > & {
+    font-size: inherit;
+  }
+}
+
+code {
+  display: block;
+  padding: .5em;
+  background: #CCA;
+  margin: 1em 0;
+  white-space: pre;
+}
+
+samp {
+  display: block;
+  padding: .5em;
+  background: #CBC;
+  margin: 1em 0;
+
+  &:before {
+    content: "> ";
+    color: #33A;
+  }
+
+  code + & {
+    margin-top: -1em;
+  }
+
+}
+
+
+//definitions
+mark {
+  background: transparent;
+  font-weight: bold;
+}

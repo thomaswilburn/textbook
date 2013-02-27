@@ -1,4 +1,20 @@
-[@import snippets/head.html title="Getting Started"]
+<!doctype html>
+<html>
+<head>
+  <title>Getting Started</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+require.config({
+  baseUrl: '../js',
+  paths: {
+    jquery: 'jquery-1.9.min'
+  }
+});
+  </script>
+</head>
+<body>
 
 <h1>Getting Started</h1>
 
@@ -156,4 +172,5 @@ var added = numeric + text;</code>
 </ol>
 
 
-[@import snippets/foot.html]
+</body>
+</html>
