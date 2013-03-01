@@ -12,10 +12,10 @@
 <h2>Script Tags</h2>
 
 <p>
-  So far we've been working with the JavaScript console, which is a great way to try out code and experiment, but obviously most web pages do not write their scripts this way. We need to learn how to embed scripts into web pages, which means using the <var>script</var> tag. But don't worry: the console is still going to be extremely useful to us.
+  So far we've been working with the JavaScript console, which is a great way to try out code and experiment, but obviously most web pages do not write their scripts this way. We need to learn how to embed scripts into web pages, which means using the <mark>&lt;script&gt;</mark> tag. But don't worry: the console is still going to be extremely useful to us.
 
 <p>
-  The <var>script</var> tag tells the browser to load and execute a piece of JavaScript code. There are two ways to do so, either by writing code directly on the page between the opening and closing tag, or using the <var>src</var> attribute to include it from an external file (pretty much exactly the same way as the &lt;img&gt; tag). Here's an example of each:
+  The &lt;script&gt; tag tells the browser to load and execute a piece of JavaScript code. There are two ways to do so, either by writing code directly on the page between the opening and closing tag, or using the <var>src</var> attribute to include it from an external file (pretty much exactly the same way as the &lt;img&gt; tag). Here's an example of each:
 
 <code class="prettyprint">&lt;script&gt; var x = 12; &lt;/script&gt;
 &lt;script src="external.js"&gt;&lt;/script&gt;</code>
@@ -24,7 +24,7 @@
   You may notice that in both cases, there's a closing tag, even if there is no code inside. This is an unfortunate quirk of the script tag. You <b>must</b> include a separate "&lt;/script&gt;" after opening the tag, and the tag cannot be self-closing (as in "&lt;script /&gt;"). Also, if you include an external script tag, don't try to write any extra code between the tags--the browser will just ignore it.
 
 <p>
-  Traditionally, script tags were often loaded in the &lt;head&gt; tag of a document, but this is a bad idea. When browsers encounter the &lt;script&gt;, they stop completely until the script is downloaded (if external), parsed, and executed completely. The reason for the delay is that JavaScript can alter the structure of the page, and it's difficult for the browser to build the page for display while scripts are busy altering it. If scripts are loaded at the top of the page, that means the user has to stare at a blank screen until everything is loaded. It's better to load your scripts at the bottom of the page, just before the close of the body tag. Page rendering and interaction will still be paused for the same amount of time, but at least people will have something to look at.
+  Traditionally, script tags were often loaded in the &lt;head&gt; tag of a document, but this is a bad idea. When browsers encounter the &lt;script&gt;, they stop all other tasks completely until it is downloaded (if external), parsed, and executed completely. The reason for the delay is that JavaScript can alter the structure of the page, and it's difficult for the browser to build the page for display while scripts are busy altering it. If scripts are loaded at the top of the page, that means the user has to stare at a blank screen until everything is loaded. It's better to load your scripts at the bottom of the page, just before the close of the body tag. Page rendering and interaction will still be paused for the same amount of time, but at least people will have something to look at.
 
 <p>
   Unfortunately, when we run code from inside of a script tag like this, we lose the ability to immediately see its results the way we can when we type each line into the console. We'll need a way to print information to the screen from our script, so that we can see the results of our scripts. For that, we're going to use a function that's attached to the built-in <var>console</var> variable, named <var>console.log()</var>. We can put any expression between the parentheses, and it will be evaluated and printed out on the console for us. Try making a script tag (embedded or external) and including a few log statements, like so:
@@ -34,7 +34,7 @@ console.log(true);
 console.log(123.45);</code>
 
 <p>
-  With that out of the way, we can start making some choices with conditional statements.
+  Using the console for logging will be an important way to check what your script is doing, even after we learn to write to the page for output, because it's not exposed to ordinary page visitors. You can log any errors or information you want to the console during development, and not worry that people using your site are seeing your debugging messages. In some older browsers, however, using the console log without having the developer tools open is an error, so you should remove your log messages before putting the page into public use.
 
 <h2>Conditionals</h2>
 

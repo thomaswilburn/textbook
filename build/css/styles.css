@@ -20,6 +20,12 @@ h1 {
 h2 {
   border-bottom: 1px solid black;
 }
+a {
+  color: #F00;
+}
+a:visited {
+  color: #A00;
+}
 var,
 code {
   font-family: consolas, monospace;
@@ -37,9 +43,11 @@ h2 > var {
 code {
   display: block;
   padding: .5em;
-  background: #CCA;
+  background: black;
+  color: white;
   margin: 1em 0;
   white-space: pre;
+  border-radius: 4px;
 }
 samp {
   display: block;
