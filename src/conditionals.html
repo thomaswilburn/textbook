@@ -10,8 +10,10 @@
 <p>
   The &lt;script&gt; tag tells the browser to load and execute a piece of JavaScript code. There are two ways to do so, either by writing code directly on the page between the opening and closing tag, or using the <var>src</var> attribute to include it from an external file (pretty much exactly the same way as the &lt;img&gt; tag). Here's an example of each:
 
-<code class="prettyprint">&lt;script&gt; var x = 12; &lt;/script&gt;
-&lt;script src="external.js"&gt;&lt;/script&gt;</code>
+<code class="prettyprint">
+&lt;script&gt; var x = 12; &lt;/script&gt;
+&lt;script src="external.js"&gt;&lt;/script&gt;
+</code>
 
 <p>
   You may notice that in both cases, there's a closing tag, even if there is no code inside. This is an unfortunate quirk of the script tag. You <b>must</b> include a separate "&lt;/script&gt;" after opening the tag, and the tag cannot be self-closing (as in "&lt;script /&gt;"). Also, if you include an external script tag, don't try to write any extra code between the tags--the browser will just ignore it.
@@ -22,9 +24,11 @@
 <p>
   Unfortunately, when we run code from inside of a script tag like this, we lose the ability to immediately see its evaluated result the way we can when we type each line into the console. We'll need a way to print information to the screen from our script, so that we can see the output of our scripts. For that, we're going to use a function that's attached to the built-in <var>console</var> variable, named <var>console.log()</var>. We can put any expression between the parentheses, and it will be evaluated and printed out on the console for us. Try making a script tag (embedded or external) and including a few log statements, like so:
 
-<code class="prettyprint">console.log("Hello, world!");
+<code class="prettyprint">
+console.log("Hello, world!");
 console.log(true);
-console.log(123.45);</code>
+console.log(123.45);
+</code>
 
 <p>
   Using the console for logging will be an important way to check what your script is doing, even after we learn to write to the page for output, because it's not exposed to ordinary page visitors. You can log any errors or information you want to the console during development, and not worry that people using your site are seeing your debugging messages. In some older browsers, however, using the console log without having the developer tools open is an error, so you should remove your log messages before putting the page into public use.
@@ -34,10 +38,12 @@ console.log(123.45);</code>
 <p>
   So far, we have only written expressions, stored those values in variables, and used those variables in other expressions. These are good things to be able to do, but they're not much more than a very fancy calculator could do. For our scripts to be really useful, they should be able to make decisions based on those values. That's where conditional statements come in. Here's a very basic conditional:
 
-  <code class="prettyprint">if (somethingTrue) {
+<code class="prettyprint">
+if (somethingTrue) {
   console.log("It's true!")
   console.log(somethingTrue);
-}</code>
+}
+</code>
 
 <p>
   It starts with the <var>if</var> keyword, which means exactly what it sounds like it means. Then, in parentheses, we've written an expression consisting of a single variable. If that variable is true, all the code between the curly braces will be executed (in this case, logging the string "It's true!" and the value of <var>somethingTrue</var>), and if it is false, it gets skipped (nothing happens).
@@ -60,9 +66,11 @@ console.log(123.45);</code>
 <p>
   Anything that is not on this list is equivalent to <var>true</var> inside a conditional statement. So, for example, the following statements will all be truthy, even if they look like they shouldn't be at first glance:
 
-  <code class="prettyprint">if (true) { console.log("True, because it's a literal true value") }
+<code class="prettyprint">
+if (true) { console.log("True, because it's a literal true value") }
 if ("false") { console.log("True, because it's a string and not a Boolean"); }
-if (1) { console.log("True, because it's non-zero"); }</code>
+if (1) { console.log("True, because it's non-zero"); }
+</code>
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
