@@ -20,7 +20,7 @@
   Traditionally, script tags were often loaded in the &lt;head&gt; tag of a document, but this is a bad idea. When browsers encounter the &lt;script&gt;, they stop all other tasks completely until it is downloaded (if external), parsed, and executed completely. The reason for the delay is that JavaScript can alter the structure of the page, and it's difficult for the browser to build the page for display while scripts are busy altering it. If scripts are loaded at the top of the page, that means the user has to stare at a blank screen until everything is loaded. It's better to load your scripts at the bottom of the page, just before the close of the body tag. Page rendering and interaction will still be paused for the same amount of time, but at least people will have something to look at.
 
 <p>
-  Unfortunately, when we run code from inside of a script tag like this, we lose the ability to immediately see its results the way we can when we type each line into the console. We'll need a way to print information to the screen from our script, so that we can see the results of our scripts. For that, we're going to use a function that's attached to the built-in <var>console</var> variable, named <var>console.log()</var>. We can put any expression between the parentheses, and it will be evaluated and printed out on the console for us. Try making a script tag (embedded or external) and including a few log statements, like so:
+  Unfortunately, when we run code from inside of a script tag like this, we lose the ability to immediately see its evaluated result the way we can when we type each line into the console. We'll need a way to print information to the screen from our script, so that we can see the output of our scripts. For that, we're going to use a function that's attached to the built-in <var>console</var> variable, named <var>console.log()</var>. We can put any expression between the parentheses, and it will be evaluated and printed out on the console for us. Try making a script tag (embedded or external) and including a few log statements, like so:
 
 <code class="prettyprint">console.log("Hello, world!");
 console.log(true);
@@ -32,6 +32,37 @@ console.log(123.45);</code>
 <h2>Conditionals</h2>
 
 <p>
+  So far, we have only written expressions, stored those values in variables, and used those variables in other expressions. These are good things to be able to do, but they're not much more than a very fancy calculator could do. For our scripts to be really useful, they should be able to make decisions based on those values. That's where conditional statements come in. Here's a very basic conditional:
+
+  <code>if (somethingTrue) {
+  console.log("It's true!")
+  console.log(somethingTrue);
+}</code>
+
+<p>
+  It starts with the <var>if</var> keyword, which means exactly what it sounds like it means. Then, in parentheses, we've written an expression consisting of a single variable. If that variable is true, all the code between the curly braces will be executed (in this case, logging the string "It's true!" and the value of <var>somethingTrue</var>), and if it is false, it gets skipped (nothing happens).
+
+<p>
+  The existence of Boolean values should start to make a bit more sense now: they're useful for making choices. But technically, JavaScript is not so picky about the values it considers "true"--or more specifically, what it considers "false." The following values are equivalent to <var>false</var> when evaluated inside the parentheses of an <var>if</var> statement:
+
+  <ul>
+    <li> "" (i.e., an "empty" string with nothing in it)
+    <li> <var>false</var>
+    <li> <var>0</var> (but only as a number, not "0" as a string)
+    <li> <var>null</var>
+    <li> <var>undefined</var>
+    <li> <var>NaN</var>
+  </ul>
+
+<p>
+  Three of these are values we're not terribly familiar with yet. We have not talked much about <var>null</var> so far, and we'll probably stay away from it in the future. It's a special value used to indicate a result of no value, which is uncommon. <var>NaN</var>, as we saw earlier, is an error value that results when you try to subtract a string or perform another math operation on a non-numerical value. <var>undefined</var> is another special value: it's the value that all variables start with before they're assigned a value. We haven't seen <var>undefined</var> before, because we've been assigning variables as soon as we create them, which is a good practice to get into, but we'll use it later when making lists.
+
+<p>
+  Anything that is not on this list is equivalent to <var>true</var> inside a conditional statement. So, for example, the following statements will all be truthy, even if they look like they shouldn't be at first glance:
+
+  <code>if (true) { console.log("True, because it's a literal true value") }
+if ("false") { console.log("True, because it's a string and not a Boolean"); }
+if (1) { console.log("True, because it's non-zero"); }</code>
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
