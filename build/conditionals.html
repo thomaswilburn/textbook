@@ -18,12 +18,17 @@
   The &lt;script&gt; tag tells the browser to load and execute a piece of JavaScript code. There are two ways to do so, either by writing code directly on the page between the opening and closing tag, or using the <var>src</var> attribute to include it from an external file (pretty much exactly the same way as the &lt;img&gt; tag). Here's an example of each:
 
 <code class="prettyprint">
-&lt;script&gt; var x = 12; &lt;/script&gt;
+&lt;script&gt;
+  var x = 12;
+&lt;/script&gt;
 &lt;script src="external.js"&gt;&lt;/script&gt;
 </code>
 
 <p>
   You may notice that in both cases, there's a closing tag, even if there is no code inside. This is an unfortunate quirk of the script tag. You <b>must</b> include a separate "&lt;/script&gt;" after opening the tag, and the tag cannot be self-closing (as in "&lt;script /&gt;"). Also, if you include an external script tag, don't try to write any extra code between the tags--the browser will just ignore it.
+
+<p>
+  Sometimes people include a type attribute on their tag (typically it's <var>type="text/javascript"</var> or something similar). This isn't necessary: the only language that runs in the browser is JavaScript, so it will automatically run anything with a &lt;script&gt; tag. More importantly, a typo in the type attribute may cause the browser to <i>not</i> run your code, so it's safer just to leave it off.
 
 <p>
   Traditionally, script tags were often loaded in the &lt;head&gt; tag of a document, but this is a bad idea. When browsers encounter the &lt;script&gt;, they stop all other tasks completely until it is downloaded (if external), parsed, and executed completely. The reason for the delay is that JavaScript can alter the structure of the page, and it's difficult for the browser to build the page for display while scripts are busy altering it. If scripts are loaded at the top of the page, that means the user has to stare at a blank screen until everything is loaded. It's better to load your scripts at the bottom of the page, just before the close of the body tag. Page rendering and interaction will still be paused for the same amount of time, but at least people will have something to look at.
@@ -78,6 +83,8 @@ if (true) { console.log("True, because it's a literal true value") }
 if ("false") { console.log("True, because it's a string and not a Boolean"); }
 if (1) { console.log("True, because it's non-zero"); }
 </code>
+
+  The second line shows why it's so important to know the difference between a Boolean (<var>false</var>) and a string (<var>"false"</var>). The string will be considered truthy for the purpose of conditionals, so if you really mean <var>false</var>, be sure to leave out the quotes.
 
 <script src="../js/require.js"></script>
 <script>
