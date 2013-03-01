@@ -44,7 +44,6 @@ code {
 samp {
   display: block;
   padding: .5em;
-  background: #CBC;
   margin: 1em 0;
 }
 samp:before {
@@ -53,6 +52,7 @@ samp:before {
 }
 code + samp {
   margin-top: -1em;
+  border-bottom: 1px dashed #888;
 }
 mark {
   background: transparent;

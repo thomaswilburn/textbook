@@ -73,7 +73,7 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('default', 'shorts compileCSS serve watch');
+    grunt.registerTask('default', 'shorts compileCSS watch');
 
     grunt.registerTask('serve', 'Serve using PHP simple server', function() {
         require('child_process').spawn('php', ['-S', 'localhost:80']);
