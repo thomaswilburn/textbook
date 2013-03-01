@@ -34,7 +34,7 @@ console.log(123.45);</code>
 <p>
   So far, we have only written expressions, stored those values in variables, and used those variables in other expressions. These are good things to be able to do, but they're not much more than a very fancy calculator could do. For our scripts to be really useful, they should be able to make decisions based on those values. That's where conditional statements come in. Here's a very basic conditional:
 
-  <code>if (somethingTrue) {
+  <code class="prettyprint">if (somethingTrue) {
   console.log("It's true!")
   console.log(somethingTrue);
 }</code>
@@ -60,7 +60,7 @@ console.log(123.45);</code>
 <p>
   Anything that is not on this list is equivalent to <var>true</var> inside a conditional statement. So, for example, the following statements will all be truthy, even if they look like they shouldn't be at first glance:
 
-  <code>if (true) { console.log("True, because it's a literal true value") }
+  <code class="prettyprint">if (true) { console.log("True, because it's a literal true value") }
 if ("false") { console.log("True, because it's a string and not a Boolean"); }
 if (1) { console.log("True, because it's non-zero"); }</code>
 
