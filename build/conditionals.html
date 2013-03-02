@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<h1>Enter the Browser</h1>
+<h1>Choose Your Own Adventure</h1>
 
 <h2>Script Tags</h2>
 
@@ -17,7 +17,7 @@
 <p>
   The &lt;script&gt; tag tells the browser to load and execute a piece of JavaScript code. There are two ways to do so, either by writing code directly on the page between the opening and closing tag, or using the <var>src</var> attribute to include it from an external file (pretty much exactly the same way as the &lt;img&gt; tag). Here's an example of each:
 
-<code class="prettyprint">
+<code>
 &lt;script&gt;
   var x = 12;
 &lt;/script&gt;
@@ -36,7 +36,7 @@
 <p>
   Unfortunately, when we run code from inside of a script tag like this, we lose the ability to immediately see its evaluated result the way we can when we type each line into the console. We'll need a way to print information to the screen from our script, so that we can see the output of our scripts. For that, we're going to use a function that's attached to the built-in <var>console</var> variable, named <var>console.log()</var>. We can put any expression between the parentheses, and it will be evaluated and printed out on the console for us. Try making a script tag (embedded or external) and including a few log statements, like so:
 
-<code class="prettyprint">
+<code>
 console.log("Hello, world!");
 console.log(true);
 console.log(123.45);
@@ -50,15 +50,15 @@ console.log(123.45);
 <p>
   So far, we have only written expressions, stored those values in variables, and used those variables in other expressions. These are good things to be able to do, but they're not much more than a very fancy calculator could do. For our scripts to be really useful, they should be able to make decisions based on those values. That's where conditional statements come in. Here's a very basic conditional:
 
-<code class="prettyprint">
-if (somethingTrue) {
+<code>
+if (expression) {
   console.log("It's true!")
   console.log(somethingTrue);
 }
 </code>
 
 <p>
-  It starts with the <var>if</var> keyword, which means exactly what it sounds like it means. Then, in parentheses, we've written an expression consisting of a single variable. If that variable is true, all the code between the curly braces will be executed (in this case, logging the string "It's true!" and the value of <var>somethingTrue</var>), and if it is false, it gets skipped (nothing happens).
+  It starts with the <var>if</var> keyword, which means exactly what it sounds like it means. Then, in parentheses, we've written an expression consisting of a single variable. If that variable is true, all the code between the curly braces will be executed (in this case, logging the string "It's true!" and the value of <var>somethingTrue</var>), and if it is false, it gets skipped (nothing happens). Curly braces indicate a "block" in JavaScript, collecting several lines of code into a single unit.
 
 <p>
   The existence of Boolean values should start to make a bit more sense now: they're useful for making choices. But technically, JavaScript is not so picky about the values it considers "true"--or more specifically, what it considers "false." The following values are equivalent to <var>false</var> when evaluated inside the parentheses of an <var>if</var> statement:
@@ -78,13 +78,92 @@ if (somethingTrue) {
 <p>
   Anything that is not on this list is equivalent to <var>true</var> inside a conditional statement. So, for example, the following statements will all be truthy, even if they look like they shouldn't be at first glance:
 
-<code class="prettyprint">
-if (true) { console.log("True, because it's a literal true value") }
+<code>
+if (true) { console.log("True, because it's a literal true value"); }
 if ("false") { console.log("True, because it's a string and not a Boolean"); }
 if (1) { console.log("True, because it's non-zero"); }
+
+var value = true;
+if (value) { console.log("We can test variables, in addition to literals."); }
 </code>
 
   The second line shows why it's so important to know the difference between a Boolean (<var>false</var>) and a string (<var>"false"</var>). The string will be considered truthy for the purpose of conditionals, so if you really mean <var>false</var>, be sure to leave out the quotes.
+
+<p>
+  In addition to writing raw values, or single variables, into a conditional statement, we can also perform comparisons between two or more values. The comparison operators are generally straightforward, and when placed between two items they result in <var>true</var> or <var>false</var> as laid out in the following table.
+
+<table>
+  <tr>
+    <th>Operator
+    <th>Meaning
+    <th>Notes
+  <tr>
+    <td>==
+    <td>equal to
+    <td>Performs type conversion: <var>1 == "1"<var> is <var>true</var>
+  <tr>
+    <td>===
+    <td>equal to (strict)
+    <td>Does not convert types: <var>1 === "1"</var> is <var>false</var>
+  <tr>
+    <td>!=
+    <td>not equal to
+    <td>Performs type conversion: <var>1 != "1"</var> is <var>false</var>
+  <tr>
+    <td>!==
+    <td>not equal to (strict)
+    <td>Does not convert types: <var>1 !== "1"</var> is <var>true</var>
+  <tr>
+    <td>&gt;
+    <td>greater than
+    <td>
+  <tr>
+    <td>&gt;=
+    <td>greater than or equal to
+    <td>
+  <tr>
+    <td>&lt;
+    <td>less than
+    <td>
+  <tr>
+    <td>&lt;=
+    <td>less than or equal to
+    <td>
+</table>
+
+<p>
+  All the comparison operators work on both strings and numbers. In strings, the "greater than" and "less than" operators work according to alphabetical order. This can cause some problems, if the values you think are numbers are actually strings--after all, 2 is less than 11, but "2" is greater than "11"! Luckily, this doesn't come up too often, and you can always use the <var>parseInt()</var> function to make sure something is actually a number before the comparison.
+
+<code>
+var n = 12;
+
+if (n == 12) {
+  console.log("True!");
+}
+
+if (n === "12") {
+  console.log("Nope.");
+}
+
+if (n > 10) {
+  console.log("Yes, indeed.");
+}
+</code>
+
+<p>
+  In addition to being able to specify a block of code to be executed if the condition is true, we can also specify a block that runs if it is <i>not</i> true. To do so, we follow our <var>if</var> with an <var>else</var> and another section of code in curly braces.
+
+<code>
+if (name == "Thomas") {
+  console.log('This executes if the statement is true.');
+} else {
+  console.log("This executes if it's false.");
+}
+</code>
+
+  It may be easier to visualize <var>if</var> and <var>if/else</var> using flowcharts. 
+
+  [INSERT FLOWCHART GRAPHIC HERE]
 
 <script src="../js/require.js"></script>
 <script>
@@ -97,7 +176,8 @@ require.config({
 </script>
 <!--<script src="../js/google-code/prettify.js"></script>-->
 <script>
-require(['google-code/prettify'], function() {
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code').addClass('prettyprint');
   PR.prettyPrint();
 });
 </script>

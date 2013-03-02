@@ -66,6 +66,22 @@ mark {
   background: transparent;
   font-weight: bold;
 }
+table {
+  border-collapse: collapse;
+  border: 1px solid #888;
+}
+td,
+th {
+  padding: 4px 1em;
+  border: 1px solid #888;
+}
+th {
+  color: white;
+  background: #555;
+}
+tr:nth-child(2n) {
+  background: #EEE;
+}
 /* Pretty printing styles. Used with prettify.js. */
 /* Vim sunburst theme by David Leibovic */
 pre .str,

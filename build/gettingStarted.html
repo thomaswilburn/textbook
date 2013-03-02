@@ -26,7 +26,7 @@
 <p>
   The console should have a blinking cursor next to a ">", just waiting for you to start typing something. Type the following line, then press the "Enter" key.
 
-<code class="prettyprint">
+<code>
 2 + 2;
 </code>
 
@@ -35,14 +35,14 @@
 <p>
   The code "2 + 2" is what we call an <mark>expression</mark>. An expression is any JavaScript code that can be reduced down into a value, like we did here. The simplest expression possible is just a number value on its own, without any kind of operation. Expressions can be built out of smaller expressions, like so:
 
-<code class="prettyprint">
+<code>
 1 + 2 * 3;
 </code>
 
 <p>
   The <var>*</var> in this code sample means "multiply" (to divide, use <var>/</var>). JavaScript uses the same rules of mathematical order that you learned in grade school: parentheses, exponents, multiplication, division, addition, and subtraction, in that order. So when JavaScript evaluates that expression, it first multiplies 2 and 3, then adds 1, for a final result of 7. Try it in the console now, if you'd like to double-check my math. If you'd like to change the order so that the 1 and 2 are added together before multiplying by 3, just add parentheses:
 
-<code class="prettyprint">
+<code>
 (1 + 2) * 3;
 </code>
 
@@ -55,7 +55,7 @@
 <p>
   We can hold onto a value in JavaScript by assigning it to a <mark>variable</mark>. A variable is like a nickname that we assign to that value. So we might keep track of our work so far using the following code:
 
-<code class="prettyprint">
+<code>
 var result = 1 + 2 * 3;
 </code>
 
@@ -71,20 +71,20 @@ var result = 1 + 2 * 3;
 <p>
   Our variable <var>result</var> now contains the value 7. If we want to use that value, we can just write the variable name into a new expression, like so:
 
-<code class="prettyprint">
+<code>
 21 * 3 / result
 </code>
 
   When JavaScript evaluates this line of code, it'll substitute the value of <var>result</var> into the expression, making it look like this:
 
-<code class="prettyprint">
+<code>
 21 * 3 / 7
 </code>
 
 <p>
   Once it's assigned, a variable holds onto its value until we reassign it. To reassign it, just use the <var>=</var> operator again. You don't have to write <var>var</var> this time, only the first time that you declare a variable (after that, the browser knows that it exists). So we might decide we want our new result to be 8:
 
-<code class="prettyprint">
+<code>
 result = 8
 </code>
 
@@ -100,7 +100,7 @@ result = 8
 <p>
   A <mark>string</mark> is the programming language name for a chunk of text. We write strings in JavaScript by surrounding them with quotes. The type of quote doesn't matter--you can use double or single--as long as it begins and ends with the same kind. The following example shows a pair of variables containing strings quoted in both ways.
 
-<code class="prettyprint">
+<code>
 var president = "Abraham Lincoln";
 var route = 'Lincoln Tunnel';
 </code>
@@ -108,14 +108,14 @@ var route = 'Lincoln Tunnel';
 <p>
   Sometimes, though, we need to use both types of quotes inside of a string. If that's the case, we can <mark>escape</mark> the quotes that we want to go inside of the text by putting a backslash in front of them. 
 
-<code class="prettyprint">
+<code>
 '"Four score and seven years ago," begins Lincoln\'s Gettysburg Address.'
 </code>
 
 <p>
   You can combine strings by using the <var>+</var> operator, just like adding numbers together. Obviously, this works with variables too, which can save you a lot of typing. But remember, the strings will be combined directly. JavaScript doesn't understand English or grammar. You'll have to be careful to include spaces if you want them.
 
-<code class="prettyprint">
+<code>
 var best = "It was the best of times.";
 var worst = "It was the worst of times.";
 var combined = best + " " + worst;
@@ -130,7 +130,7 @@ var combined = best + " " + worst;
 <p>
   Computers are binary machines: at the lowest level, everything is about on and off, ones and zeros. In JavaScript, we're pretty distant from that lowest level, and we rarely--if ever--interact with binary code. But there is a variable type that's a lot like binary, in that it's restricted to two states: <var>true</var> and <var>false</var>. This is the Boolean type, named after George Boole, who invented a kind of math that only works with true and false values.
 
-<code class="prettyprint">
+<code>
 var t = true;
 var f = false;
 </code>
@@ -143,7 +143,7 @@ var f = false;
 <p>
   We know what the type of a variable is when we create it, obviously. But after a few expressions and assignments, it may not be entirely clear, because JavaScript will try to convert values to be helpful. Many times, this is actually what we want. For example, let's say we want to combine a number with a string, which is not an uncommon thing to do.
 
-<code class="prettyprint">
+<code>
 var accountBalance = 123.45;
 var remaining = "You have $" + accountBalance + " remaining in your account.";
 </code>
@@ -151,7 +151,7 @@ var remaining = "You have $" + accountBalance + " remaining in your account.";
 
   In this case, the number will be converted to a string for us, and combined with the other strings into a single sentence. That's good! But sometimes this automatic conversion isn't what we want. If we add two values together, thinking that they're both numbers, but one is a string, they'll get combined end-to-end instead of added together. In this case, we wanted the value 3, but we're not going to get it.
 
-<code class="prettyprint">
+<code>
 var numeric = 1;
 var text = "2";
 var added = numeric + text;</code>
@@ -160,17 +160,17 @@ var added = numeric + text;</code>
 <p>
   This is more common than you might think, because many input functions in JavaScript return strings, even if the user types a number. So you may be asking for a numerical value, but what you have is a string of text instead. How do we know if a variable is the right type? We can ask using the <var>typeof</var> operator.
 
-<code class="prettyprint">
+<code>
 typeof "this is a string"
 </code>
   <samp>"string"</samp>
 
-<code class="prettyprint">
+<code>
 typeof 1.234
 </code>
 <samp>"number"</samp>
 
-<code class="prettyprint">
+<code>
 typeof true
 </code>
 <samp>"boolean"</samp>
@@ -178,13 +178,13 @@ typeof true
 <p>
   <var>typeof</var> returns a string containing the type of the variable being inspected. Once we know that a variable isn't what we want it to be, we can convert it between types with some simple operations. To convert a number to a string, add the empty string to it.
 
-<code class="prettyprint">
+<code>
 var stringified = num + "";
 </code>
 
   We can convert a string to a number by using the <var>parseFloat</var> function that's built-in to JavaScript ("float" refers to "floating point," meaning a number with a decimal point).
 
-<code class="prettyprint">
+<code>
 var float = parseFloat(str);
 </code>
 
@@ -208,7 +208,8 @@ require.config({
 </script>
 <!--<script src="../js/google-code/prettify.js"></script>-->
 <script>
-require(['google-code/prettify'], function() {
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code').addClass('prettyprint');
   PR.prettyPrint();
 });
 </script>
