@@ -1,0 +1,48 @@
+
+//code
+var, code {
+  font-family: consolas, monospace;
+  font-size: 14px;
+  font-style: normal;
+}
+
+var {
+  font-weight: bold;
+
+  h1 > &, h2 > &, h2 > & {
+    font-size: inherit;
+  }
+}
+
+code {
+  display: block;
+  padding: 0 0 1em .5em;
+  background: black;
+  color: white;
+  margin: 1em 0;
+  white-space: pre;
+  border-radius: 4px;
+}
+
+samp {
+  display: block;
+  padding: .5em;
+  margin: 1em 0;
+
+  &:before {
+    content: "> ";
+    color: #33A;
+  }
+
+  code + & {
+    margin-top: -1em;
+    border-bottom: 1px dashed #888;
+  }
+
+}
+
+//definitions
+mark {
+  background: transparent;
+  font-weight: bold;
+}
