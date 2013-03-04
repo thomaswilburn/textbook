@@ -220,3 +220,17 @@ li.L8 {
     color: #060;
   }
 }
+.interactive {
+  position: relative;
+}
+.interactive.flowchart .flowbox {
+  position: absolute;
+  border: 5px solid ;
+  padding: 4px;
+  text-align: center;
+}
+.blank {
+  border: none;
+  border-bottom: 1px dashed #888;
+  text-align: center;
+}

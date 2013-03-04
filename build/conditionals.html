@@ -4,6 +4,16 @@
   <title>Enter the Browser</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+  require.config({
+    baseUrl: '../js',
+    paths: {
+      jquery: 'jquery-1.9.min'
+    }
+  });
+  </script>
+  <!--<script src="../js/defer.js"></script>-->
 </head>
 <body>
 
@@ -165,18 +175,67 @@ if (name == "Thomas") {
 
   [INSERT FLOWCHART GRAPHIC HERE]
 
+  <div class="flowchart interactive">
+    <canvas width=640 height=320 id="flowchart" style="outline: 1px solid #888;"></canvas>
+    <div class="flowbox block" style="top: 10px; left: 100px;">
+      [code]
+    </div>
+    <div class="flowbox choice" style="top: 80px; left: 100px; width: 150px;">
+      IF (
+      <input type="text" class="blank" style="width: 75px;" id="conditional" value="true">
+      )
+    </div>
+    <script>
+require(['jquery', 'dom/Delay', 'meta/Evil'], function($, Delay, Evil) {
+  var canvas = document.querySelector('canvas#flowchart');
+  var context = canvas.getContext('2d');
+
+  var drawBulb = function(on) {
+
+  };
+
+  var drawWire = function(points, on) {
+    context.beginPath();
+    context.moveTo(points[0].x, points[0].y);
+    for (var i = 1; i < points.length; i++) {
+      context.lineTo(points[i].x, points[i].y);
+    }
+    var last = points.pop();
+    var second = points.pop();
+    if (second) {
+      var slope = (last.y - second.y) / (last.x - second.x);
+      console.log(slope);
+    }
+  };
+
+  var drawBackdrop = function() {
+
+  };
+
+  Delay("#flowchart").done(function() {
+    $('#conditional').on('keyup', function(e) {
+      var input = $(this).val();
+      var output = Evil(input);
+      if (typeof output != 'undefined' && !output.error) {
+        if (output) {
+          //truthy path
+          console.log('truth');
+        } else {
+          //falsey path
+          console.log('lies');
+        }
+      } else {
+        //handle errors
+        console.log('invalid input');
+      }
+    });
+  });
+});
+    </script>
+  </div>
+
   Enjoy it while you can: our programs won't always be this easy to draw.
 
-<script src="../js/require.js"></script>
-<script>
-require.config({
-  baseUrl: '../js',
-  paths: {
-    jquery: 'jquery-1.9.min'
-  }
-});
-</script>
-<!--<script src="../js/google-code/prettify.js"></script>-->
 <script>
 require(['jquery', 'google-code/prettify'], function($) {
   $('code').addClass('prettyprint');
