@@ -9,12 +9,17 @@
 
     .flowbox {
       position: absolute;
-      border: 5px solid ;
-      padding: 4px;
-      text-align: center;
+      padding: 0 0 .5em 0;
+      margin: 0;
+      font-weight: bold;
+      font-family: consolas, monospace;
 
-      .choice {
+      &.start {
+        border-bottom: 4px solid @choiceBorder;
+      }
 
+      &.end {
+        border-top: 4px solid @choiceBorder;
       }
     }
 

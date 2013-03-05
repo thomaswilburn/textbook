@@ -171,36 +171,36 @@ if (name == "Thomas") {
 }
 </code>
 
-  It may be easier to visualize <var>if</var> and <var>if/else</var> using flowcharts. 
-
-  [INSERT FLOWCHART GRAPHIC HERE]
+  It may be easier to visualize <var>if</var> and <var>if/else</var> using a kind of flowchart. In the interactive graphic below, we represent the two branches of our code with lighbulbs that are wired to our <var>if</var> statement, and you can edit the condition that's written between the parentheses. If the condition is true, the first block executes, and its lightbulb will light up. If the condition is false, you'll see the second bulb light up as the <var>else</var> block executes. If your condition isn't valid, neither light will be turned on--in that case, try your JavaScript on the console.
 
   <div class="flowchart interactive">
     <canvas width=640 height=320 id="flowchart" style="outline: 1px solid #888;"></canvas>
-    <div class="flowbox block" style="top: 10px; left: 100px;">
-      [code]
-    </div>
-    <div class="flowbox choice" style="top: 80px; left: 100px; width: 150px;">
-      IF (
-      <input type="text" class="blank" style="width: 75px;" id="conditional" value="true">
-      )
-    </div>
+    <pre class="flowbox start" style="top: 0; left: 1em"><span style="color: #888; color: rgba(0, 0, 0, .5);">console.log('Hello, world!');
+placeholder = placeholder + 12;</span>
+if (<input type="text" class="blank" style="width: 75px; background: #EEE" id="conditional" value="true">) {</pre>
+    <pre class="flowbox else" style="top: 150px; left: 1em">} else {</pre>
+    <pre class="flowbox end" style="bottom: 0; left: 1em">}
+<span style="color: #888; color: rgba(0, 0, 0, .5);">console.log("remaining code");
+//we now resume normal program flow</pre>
     <script>
 require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Evil, Stage) {
   var canvas = document.querySelector('canvas#flowchart');
   var context = canvas.getContext('2d');
 
+  var ifTrue = true;
+
   var drawWire = function(points, on) {
+    context.strokeStyle = "#888";
+    context.lineWidth = 4;
+    if (on) {
+      context.strokeStyle = "#5C5";
+    }
     context.beginPath();
     context.moveTo(points[0].x, points[0].y);
     for (var i = 1; i < points.length; i++) {
       context.lineTo(points[i].x, points[i].y);
     }
-    var last = points.pop();
-    var second = points.pop();
-    if (second) {
-      var slope = (last.y - second.y) / (last.x - second.x);
-    }
+    context.stroke();
   };
 
   var stage =  new Stage(canvas);
@@ -236,14 +236,38 @@ require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Ev
   var ifBulb = new Bulb();
   var elseBulb = new Bulb();
   stage.addChild(ifBulb);
-  ifBulb.x = 100;
-  ifBulb.y = elseBulb.y = 150;
-  elseBulb.x = 200;
   stage.addChild(elseBulb);
+  ifBulb.x = 60;
+  ifBulb.y = 80;
+  elseBulb.x = 140
+  elseBulb.y = 180;
 
-  var caption = new stage.TextBox();
-  caption.text = "hello, world this is a long chunk of text";
-  stage.addChild(caption);
+  stage.draw = function() {
+    var start = $('.flowbox.start');
+    var end = $('.flowbox.end');
+    var middle = $('.flowbox.else');
+    var startPos = start.position();
+    var endPos = end.position();
+    drawWire([
+      {x: 140, y: startPos.top + start.outerHeight()},
+      {x: 140, y: ifBulb.y + 45},
+      {x: ifBulb.x + 20, y: ifBulb.y + 45},
+      {x: ifBulb.x + 20, y: ifBulb.y + 55},
+      {x: 10, y: ifBulb.y + 55},
+      {x: 10, y: endPos.top - 10},
+      {x: endPos.left, y: endPos.top}
+    ], ifBulb.on);
+    var midPos = middle.position();
+    drawWire([
+      {x: 200, y: startPos.top + start.outerHeight()},
+      {x: 200, y: midPos.top - 4},
+      {x: midPos.left + middle.outerWidth() + 10, y: midPos.top - 4},
+      {x: midPos.left + middle.outerWidth() + 10, y: midPos.top + middle.outerHeight()},
+      {x: elseBulb.x + 20, y: midPos.top + middle.outerHeight()},
+      {x: elseBulb.x + 20, y: elseBulb.y + 45},
+      {x: elseBulb.x + 20, y: endPos.top}
+    ], elseBulb.on);
+  }
 
   stage.render();
 
@@ -254,22 +278,32 @@ require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Ev
       if (typeof output != 'undefined' && !output.error) {
         if (output) {
           //truthy path
-          console.log('truth');
+          ifBulb.on = true;
+          elseBulb.on = false;
         } else {
           //falsey path
-          console.log('lies');
+          ifBulb.on = false;
+          elseBulb.on = true;
         }
+        stage.render();
       } else {
         //handle errors
-        console.log('invalid input');
+        ifBulb.on = elseBulb.on = false;
       }
-    });
+    }).trigger('keyup');
   });
 });
     </script>
   </div>
 
-  Enjoy it while you can: our programs won't always be this easy to draw.
+<p>
+  Enjoy it while you can: our programs won't always be this easy to draw. In the next chapter, we're going to start working with loops--asking the computer to repeat sections of code for us, instead of having to repeat it ourselves.
+
+<h2>Exercises and Discussion Questions</h2>
+
+<ol>
+  <li>
+</ol>
 
 <script>
 require(['jquery', 'google-code/prettify'], function($) {
