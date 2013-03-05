@@ -186,13 +186,9 @@ if (name == "Thomas") {
       )
     </div>
     <script>
-require(['jquery', 'dom/Delay', 'meta/Evil'], function($, Delay, Evil) {
+require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Evil, Stage) {
   var canvas = document.querySelector('canvas#flowchart');
   var context = canvas.getContext('2d');
-
-  var drawBulb = function(on) {
-
-  };
 
   var drawWire = function(points, on) {
     context.beginPath();
@@ -208,9 +204,15 @@ require(['jquery', 'dom/Delay', 'meta/Evil'], function($, Delay, Evil) {
     }
   };
 
-  var drawBackdrop = function() {
-
-  };
+  var stage =  new Stage(canvas);
+  var sprite = new stage.Sprite();
+  sprite.draw = function() {
+    this.context.fillRect(0, 0, 100, 100);
+  }
+  stage.addChild(sprite);
+  sprite.x = sprite.y = 50;
+  sprite.rotation = Math.PI * .25;
+  stage.render();
 
   Delay("#flowchart").done(function() {
     $('#conditional').on('keyup', function(e) {
