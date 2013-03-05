@@ -200,18 +200,51 @@ require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Ev
     var second = points.pop();
     if (second) {
       var slope = (last.y - second.y) / (last.x - second.x);
-      console.log(slope);
     }
   };
 
   var stage =  new Stage(canvas);
-  var sprite = new stage.Sprite();
-  sprite.draw = function() {
-    this.context.fillRect(0, 0, 100, 100);
+  var Bulb = stage.Sprite;
+  Bulb.prototype = new stage.Sprite();
+  Bulb.prototype.draw = function() {
+    var context = this.context;
+    context.beginPath();
+    context.fillStyle = this.on ? "yellow" : "white";
+    context.arc(20, 20, 20, Math.PI, Math.PI * 2);
+    context.lineTo(30, 40);
+    context.lineTo(10, 40);
+    context.lineTo(0, 20);
+    context.closePath();
+    context.fill();
+    context.stroke();
+    context.beginPath()
+    context.moveTo(10, 20);
+    context.lineTo(20, 40);
+    context.lineTo(30, 20);
+    context.stroke();
+    context.beginPath();
+    context.moveTo(30, 40);
+    context.lineTo(32, 42);
+    context.lineTo(32, 50);
+    context.lineTo(8, 50);
+    context.lineTo(8, 42);
+    context.lineTo(10, 40);
+    context.closePath();
+    context.fillStyle = "#888";
+    context.fill();
   }
-  stage.addChild(sprite);
-  sprite.x = sprite.y = 50;
-  sprite.rotation = Math.PI * .25;
+  var ifBulb = new Bulb();
+  var elseBulb = new Bulb();
+  stage.addChild(ifBulb);
+  ifBulb.x = 100;
+  ifBulb.y = elseBulb.y = 150;
+  elseBulb.x = 200;
+  stage.addChild(elseBulb);
+
+  var caption = new stage.TextBox();
+  caption.text = "hello, world this is a long chunk of text";
+  stage.addChild(caption);
+
   stage.render();
 
   Delay("#flowchart").done(function() {

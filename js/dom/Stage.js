@@ -24,6 +24,9 @@ define([], function() {
     render: function(parentTransform) {
       var context = this.context;
       context.save();
+      context.fillStyle = "black";
+      context.strokeStyle = "black";
+      context.lineWidth = 1;
       var transform = {
         x: this.x || 0,
         y: this.y || 0,
@@ -42,7 +45,7 @@ define([], function() {
       context.rotate(transform.rot);
       context.scale(transform.scaleX, transform.scaleY);
       this.draw();
-      for (var i = 0; i < this.children.length; i++) {
+      if (this.children) for (var i = 0; i < this.children.length; i++) {
         this.children[i].render(transform);
       }
       context.restore();
@@ -56,6 +59,37 @@ define([], function() {
       this.children = this.children.filter(function(item) {
         return item != child;
       });
+    }
+  };
+
+  var TextProto = {
+    x: 0,
+    y: 0,
+    width: 150,
+    height: 100,
+    font: 'sans-serif',
+    size: 16,
+    lineSpacing: 2,
+    color: 'black',
+    text: '',
+    render: SpriteProto.render,
+    draw: function() {
+      var context = this.context;
+      var split = this.text.split(' ');
+      context.fillStyle = this.color;
+      context.font = this.size + "px " + this.font;
+      var x = 0;
+      var y = this.size;
+      for (var i = 0; i < split.length; i++) {
+        var word = split[i] + " ";
+        var measure = context.measureText(word);
+        if (x + measure.width > this.width) {
+          x = 0;
+          y += this.size + this.lineSpacing;
+        }
+        context.fillText(word, x, y);
+        x += measure.width;
+      }
     }
   }
 
@@ -72,8 +106,21 @@ define([], function() {
       this.scaleX = this.scaleY = 1;
       this.rotation = 0;
     };
+
+    var Text = function() {
+      this.context = stage.context;
+      this.x = this.y = 0;
+      this.scaleX = this.scaleY = 1;
+      this.rotation = 0;
+    }
+
     Sprite.prototype = SpriteProto;
+    Text.prototype = TextProto;
     this.Sprite = Sprite;
+    this.TextBox = Text;
+    this.draw = function() {
+      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
   }
   Stage.prototype = SpriteProto;
 
