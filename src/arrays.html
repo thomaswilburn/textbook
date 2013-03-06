@@ -1,0 +1,69 @@
+[@import snippets/head.html title="Loops and Arrays"]
+
+<h1>Loops and Arrays</h1>
+
+<h2>List Comprehension</h2>
+
+<p>
+  All the variables we have seen thus far have stored one value at a time. This is fine for distinct steps, like when we're storing a basic calculation or writing a choose-your-own-adventure story. But what if we wanted to store a lot of items, like a list of tasks for a to-do list? If we need to make a new variable, this gets awkward in a hurry.
+
+<code>
+var listItem1 = "Take out the trash";
+var listItem2 = "Walk the dog";
+var listItem3 = "Do laundry";
+var listItem4 = "Buy groceries";
+</code>
+
+<p>
+  We're quickly drowning in new variable names (and not very good variable names at that). More importantly, what if we need to store more than 4 items? We've only made four variables--we'd have to create one for each possible item that we could have in our list, and imagine the complicated code to check which ones have actually been filled out. Clearly, this solution of individual variables doesn't scale very well. It's also repetitious, and that's what we call a <mark>code smell</mark>: an ugly pattern that warns us we're doing something wrong, the same way that a pungent whiff when we open the fridge is a clue that the milk is well on its way to becoming yoghurt instead.
+
+<p>
+  Luckily, we have a solution. An <mark>array</mark> is a special kind of JavaScript variable type that contains other values in a numbered list. We can declare an array by putting some values between square brackets, like so:
+
+<code>
+var alphabet = ['a', 'b', 'c'];
+</code>
+
+<p>
+  To get values back out of the array, we use square brackets after the variable name, with a number between the brackets to say <i>which</i> item we want to pull out of the list. There's a catch, though: although we normally begin lists with #1, in JavaScript the first item in an array is #0, and we count up from there.
+
+<code>
+var a = alphabet[0];
+console.log(a); // logs "a"
+console.log(alphabet[1]); //logs "b"
+</code>
+
+  What if we try to access an item in a list that doesn't exist? In that case, the value that comes back is <var>undefined</var>, because we haven't put anything in that section of the list yet. We can place an item in any location in the list, including an undefined location, by using the same square brackets that we used to get values out. But be careful: if we forget the square brackets entirely, we'll be talking about the <i>list as a whole</i> and not an item in the list.
+
+<code>
+var todo = ['take out trash', 'walk dog', 'do laundry'];
+todo[3] = 'buy groceries'; //sets the fourth item (remember, we start at 0)
+todo = "learn about arrays"; 
+console.log(todo); //"learn about arrays"
+//Oh no! Instead of adding a fifth item, 
+//we replaced the array with a string!
+</code>
+
+<p>
+  You can store any kind of value in an array, including another array if you want (it ends up looking kind of like a spreadsheet). Most of the time, though, we try to make arrays contain the same type of value. We might have a list of numbers, or a list of names, but we wouldn't want to mix the two up, because it will make it hard to automate processing that list using loops. And loops, maybe more than any other programming concept, are very important.
+
+<h2>Looping</h2>
+
+<p>
+  The fundamental truths about computers are two-fold:
+
+  <ul>
+    <li> Computers are very stupid, and
+    <li> Computers are very fast
+  </ul>
+
+  As you've probably noticed, the fact that computers are stupid means that we have to explain what we want in painstaking detail. But on the other hand, the fact that they are so fast means that they can perform those simple tasks fast enough to <i>look</i> smarter than they are. Computers also don't get bored, which means that they are extremely good at repeating themselves.
+
+<p>
+  In contrast, people are not good at repeating themselves. We get bored, we make mistakes, and we cut corners. One of the most important roles of a programming language, therefore, is to reduce the amount of repetition that the programmer must do. If you find yourself repeating lines of code, or (heaven forbid!) copying and pasting it from place to place, this is also a code smell. The computer is better at repetition than you are--let it do what it does best.
+
+<p>
+
+[@import snippets/scripts.html]
+
+[@import snippets/foot.html]

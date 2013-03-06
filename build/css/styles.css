@@ -228,6 +228,7 @@ li.L8 {
   width: 80%;
   margin: 1em;
   padding: .5em;
+  font-family: consolas, monospace;
 }
 .interactive.escaping input.broken {
   background: #FCC;

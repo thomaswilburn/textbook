@@ -50,7 +50,7 @@
 // this is a code comment
 // I can write anything I want here, and it won't be run as JavaScript.
 
-var code = "JavaScript"; //I can add comments after lines as well.
+var code = "JavaScript"; //I can add comments after lines of code
 
 /* 
 This is a multi-line comment. 
@@ -293,7 +293,9 @@ require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Ev
     $('#conditional').on('keyup', function(e) {
       var input = $(this).val();
       var output = Evil(input);
-      if (typeof output != 'undefined' && !output.error) {
+      if (typeof output == 'undefined' || output.error) {
+        ifBulb.on = elseBulb.on = false;
+      } else {
         if (output) {
           //truthy path
           ifBulb.on = true;
@@ -303,11 +305,8 @@ require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Ev
           ifBulb.on = false;
           elseBulb.on = true;
         }
-        stage.render();
-      } else {
-        //handle errors
-        ifBulb.on = elseBulb.on = false;
       }
+      stage.render();
     }).trigger('keyup');
   });
 });
