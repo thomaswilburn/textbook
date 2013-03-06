@@ -190,6 +190,7 @@ require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Ev
   var Bulb = stage.Sprite;
   Bulb.prototype = new stage.Sprite();
   Bulb.prototype.draw = function() {
+    //draw our lightbulb - man, I hate canvas
     var context = this.context;
     context.beginPath();
     context.fillStyle = this.on ? "yellow" : "white";
