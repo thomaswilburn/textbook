@@ -126,6 +126,39 @@ var route = 'Lincoln Tunnel';
 '"Four score and seven years ago," begins Lincoln\'s Gettysburg Address.'
 </code>
 
+Here, give it a try for yourself. In the following input boxes, there are some strings that haven't been escaped properly. As a result, they are going to break when the browser tries to run them. Add slashes before the quotes that need to be escaped, and the boxes will turn green.
+
+<div class="interactive escaping">
+  <input value="&apos;Who&apos;s line is it anyway?&apos;">
+  <input value="&quot;&quot;We have met the enemy, and he is us,&quot; said Pogo.&quot;">
+  <input value="&apos;&quot;Silence!&quot; screamed the Red Queen&apos;s guards.&apos;">
+  <input value="&quot;This &quot;string&quot; wasn&apos;t escaped properly.&quot;">
+  <div class="praise"></div>
+</div>
+<script>
+require(['jquery', 'meta/Evil'], function($, Evil) {
+
+  var escaping = $('.interactive.escaping');
+  var inputs = escaping.find('input');
+  inputs.each(function(index, item) {
+    var input = $(item);
+    input.addClass('broken');
+    input.on('keyup', function() {
+      var result = Evil(input.val());
+      if (result && !result.error) {
+        input.removeClass('broken').addClass('fixed');
+      } else {
+        input.removeClass('fixed').addClass('broken');
+      }
+      if (escaping.find('.broken').length == 0) {
+        escaping.find('.praise').html('You did it! Congratulations!');
+      }
+    }).trigger('keyup');
+  });
+
+});
+</script>
+
 <p>
   You can combine strings by using the <var>+</var> operator, just like adding numbers together. Obviously, this works with variables too, which can save you a lot of typing. But remember, the strings will be combined directly. JavaScript doesn't understand English or grammar. You'll have to be careful to include spaces if you want them.
 
@@ -135,6 +168,8 @@ var worst = "It was the worst of times.";
 var combined = best + " " + worst;
 </code>
 <samp>"It was the best of times. It was the worst of times."</samp>
+
+  Let's see a hundred monkeys beat that.
 
 <p>
   Unfortunately, none of the other math operators work on strings. It would be nice to be able to subtract text from a sentence, but if you try, you'll get the result <var>NaN</var>. Contrary to what you'd think, this is not a delicious form of Indian bread. It stands for Not a Number, and is the result of trying to do math on non-math variable types in JavaScript.

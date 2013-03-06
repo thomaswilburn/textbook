@@ -223,6 +223,18 @@ li.L8 {
 .interactive {
   position: relative;
 }
+.interactive.escaping input {
+  display: block;
+  width: 80%;
+  margin: 1em;
+  padding: .5em;
+}
+.interactive.escaping input.broken {
+  background: #FCC;
+}
+.interactive.escaping input.fixed {
+  background: #CFC;
+}
 .interactive.flowchart .flowbox {
   position: absolute;
   padding: 0 0 .5em 0;
