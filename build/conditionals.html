@@ -221,7 +221,9 @@ require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Ev
   };
 
   var stage =  new Stage(canvas);
-  var Bulb = stage.Sprite;
+  var Bulb = function() {
+    stage.Sprite.call(this);
+  };
   Bulb.prototype = new stage.Sprite();
   Bulb.prototype.draw = function() {
     //draw our lightbulb - man, I hate canvas
@@ -290,6 +292,7 @@ require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Ev
   stage.render();
 
   Delay("#flowchart").done(function() {
+    $(canvas).hide().fadeIn();
     $('#conditional').on('keyup', function(e) {
       var input = $(this).val();
       var output = Evil(input);
