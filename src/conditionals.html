@@ -27,6 +27,23 @@
   Traditionally, script tags were often loaded in the &lt;head&gt; tag of a document, but this is a bad idea. When browsers encounter the &lt;script&gt;, they stop all other tasks completely until it is downloaded (if external), parsed, and executed completely. The reason for the delay is that JavaScript can alter the structure of the page, and it's difficult for the browser to build the page for display while scripts are busy altering it. If scripts are loaded at the top of the page, that means the user has to stare at a blank screen until everything is loaded. It's better to load your scripts at the bottom of the page, just before the close of the body tag. Page rendering and interaction will still be paused for the same amount of time, but at least people will have something to look at.
 
 <p>
+  Sometimes we want to add comments to our code in English, in order to explain a particularly tricky line or even just to leave ourselves (and other programmers) a note about why we wrote it that way. There are two ways to leave comments in JavaScript. The first is to put a <var>//</var> in front of the line, and the second is to wrap the text in <var>/*</var> and <var>*/</var> markers.
+
+<code>
+// this is a code comment
+// I can write anything I want here, and it won't be run as JavaScript.
+
+var code = "JavaScript"; //I can add comments after lines as well.
+
+/* 
+This is a multi-line comment. 
+Everything between the markers 
+on the outside will be a 
+comment as well.
+*/
+</code>
+
+<p>
   Unfortunately, when we run code from inside of a script tag like this, we lose the ability to immediately see its evaluated result the way we can when we type each line into the console. We'll need a way to print information to the screen from our script, so that we can see the output of our scripts. For that, we're going to use a function that's attached to the built-in <var>console</var> variable, named <var>console.log()</var>. We can put any expression between the parentheses, and it will be evaluated and printed out on the console for us. Try making a script tag (embedded or external) and including a few log statements, like so:
 
 <code>
@@ -157,7 +174,7 @@ if (name == "Thomas") {
   It may be easier to visualize <var>if</var> and <var>if/else</var> using a kind of flowchart. In the interactive graphic below, we represent the two branches of our code with lighbulbs that are wired to our <var>if</var> statement, and you can edit the condition that's written between the parentheses. If the condition is true, the first block executes, and its lightbulb will light up. If the condition is false, you'll see the second bulb light up as the <var>else</var> block executes. If your condition isn't valid, neither light will be turned on--in that case, try your JavaScript on the console.
 
   <div class="flowchart interactive">
-    <canvas width=640 height=320 id="flowchart" style="outline: 1px solid #888;"></canvas>
+    <canvas width=640 height=320 id="flowchart"></canvas>
     <pre class="flowbox start" style="top: 0; left: 1em"><span style="color: #888; color: rgba(0, 0, 0, .5);">console.log('Hello, world!');
 placeholder = placeholder + 12;</span>
 if (<input type="text" class="blank" style="width: 75px; background: #EEE" id="conditional" value="true">) {</pre>
@@ -283,11 +300,29 @@ require(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Ev
 <p>
   Enjoy it while you can: our programs won't always be this easy to draw. In the next chapter, we're going to start working with loops--asking the computer to repeat sections of code for us, instead of having to repeat it ourselves.
 
-<h2>Exercises and Discussion Questions</h2>
+<h2>Practice</h2>
 
-<ol>
-  <li>
-</ol>
+<p>
+  The <var>prompt</var> function lets us ask the user for input, which will be returned as a string (even if they type in a number, so watch out!). For example, the following code asks the user to provide a value, and stores it in the variable named <var>answer</var>.
+
+<code>
+var answer = prompt('Please type a value');
+</code>
+
+<p>
+  Between <var>prompt()</var> and <var>console.log()</var>, we have the required inputs and outputs to write a simple text adventure, like the old "choose your own adventure" books. To practice using conditionals, try telling the user a story, with different outcomes depending on their response to the <var>prompt</var> questions. For example, here's a <i>very</i> brief story:
+
+<code>
+var raven = prompt('Quoth the raven:');
+if (raven == "nevermore") {
+  console.log("We're all doomed!");
+} else {
+  console.log("You just don't get the same quality of ravens these days.");
+}
+</code>
+
+<p>
+  See if you can give your user multiple "branches" to the story, by nesting other conditional statements inside the branches of the first.
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
