@@ -235,7 +235,7 @@ require(['jquery', 'dom/Stage'], function($, Stage) {
     {highlight:"counter", description:"We also create a <var>counter</var> variable, to keep track of how many houses answer <var>true</var>."},
     {highlight:"setup", description:"Now we enter our loop. The first thing to run is the setup, where we declare a variable <var>i</var> and set it equal to 0. This will be used to keep track of which house's answer we're currently examining."},
     {highlight:"condition", description:"<var>i</var> is currently zero, which is less than <var>houses.length</var> (5), so we'll enter the loop."},
-    {highlight:"current", description:"We'll make a variable named <var>current</var> to keep track of the current house. We find that house by looking up the answer at <var>houses[i]</var>. <var>i</var> is currently 0, so we're looking at the first house (<var>houses[0]</var>)", assistant: {x:houses[0].x, y:houses[0].y + 30}},
+    {highlight:"current", description:"We'll make a variable named <var>current</var> to keep track of the current house (visually represented by our little assistant stick person). We find that house by looking up the answer at <var>houses[i]</var>. <var>i</var> is currently 0, so we're looking at the first house (<var>houses[0]</var>)", assistant: {x:houses[0].x, y:houses[0].y + 30}},
     {highlight:"if", description:"If the current house's answer is true, we'll want to keep track of that. In this case, it is, so..."},
     {highlight:"increment", description:"...we'll add one to our counter variable and save the increased value."},
     {highlight:"change", description:"Now we've reached the end of the loop, so the <b>change</b> part of our loop happens. In this case, we move on to the next house by adding 1 to <var>i</var>"},
