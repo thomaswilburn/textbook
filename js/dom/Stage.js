@@ -65,23 +65,34 @@ define([], function() {
     lineSpacing: 2,
     color: 'black',
     text: '',
+    align: 'left',
     render: SpriteProto.render,
     draw: function() {
       var context = this.context;
       var split = this.text.split(' ');
       context.fillStyle = this.color;
       context.font = this.size + "px " + this.font;
-      var x = 0;
       var y = this.size;
+      var line = "";
       for (var i = 0; i < split.length; i++) {
         var word = split[i] + " ";
-        var measure = context.measureText(word);
-        if (x + measure.width > this.width) {
-          x = 0;
+        line += word;
+        var measure = context.measureText(line + (split[i + 1] || ""));
+        if (measure.width > this.width || i == split.length - 1) {
+          var lineWidth = context.measureText(line).width;
+          var margin = 0;
+          switch (this.align) {
+            case 'center':
+              margin = (this.width - lineWidth) / 2;
+              break;
+
+            case 'right':
+              margin = (this.width - lineWidth);
+          }
+          context.fillText(line, margin, y);
+          line = "";
           y += this.size + this.lineSpacing;
         }
-        context.fillText(word, x, y);
-        x += measure.width;
       }
     }
   }
@@ -110,7 +121,6 @@ define([], function() {
       this.x = this.y = 0;
       this.scaleX = this.scaleY = 1;
       this.rotation = 0;
-      this.text = "";
     }
 
     Sprite.prototype = SpriteProto;
