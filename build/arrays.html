@@ -180,7 +180,50 @@ for (<span class="setup">var i = 0</span>; <span class="condition">i &lt; houses
 <script>
 require(['jquery', 'dom/Stage'], function($, Stage) {
   var stage = new Stage('.interactive.houses canvas');
-  
+  var assistant = new stage.Sprite();
+  assistant.draw = function() {
+    var ctx = this.context;
+    ctx.arc(0, 0, 4, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, 10);
+    ctx.lineTo(-4, 14);
+    ctx.moveTo(0, 10);
+    ctx.lineTo(4, 14);
+    ctx.moveTo(-5, 6);
+    ctx.lineTo(5, 6);
+    //ctx.fill();
+    ctx.stroke();
+  };
+  stage.addChild(assistant);
+  assistant.x = assistant.y = 20;
+
+  var House = function(color) {
+    stage.Sprite.call(this);
+    this.color = color || '#888';
+  }
+  House.prototype = new stage.Sprite();
+  House.prototype.draw = function() {
+    var ctx = this.context;
+    ctx.moveTo(-20, 0);
+    ctx.lineTo(-20, 20);
+    ctx.lineTo(20, 20);
+    ctx.lineTo(20, 0);
+    ctx.lineTo(0, -20);
+    ctx.closePath();
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = 'black';
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  var gHouse = new House('green');
+  gHouse.x = gHouse.y = 60;
+  stage.addChild(gHouse);
+  stage.render();
+
+
 });
 </script>
 

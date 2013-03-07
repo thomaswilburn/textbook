@@ -94,6 +94,9 @@ define([], function() {
   }
 
   var Stage = function(canvas) {
+    if (typeof canvas == 'string') {
+      canvas = document.querySelector(canvas);
+    }
     this.canvas = canvas.jquery ? canvas[0] : canvas;
     this.context = this.canvas.getContext('2d');
     this.children = [];
