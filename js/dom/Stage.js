@@ -21,7 +21,7 @@ modules. Let's not.
 define([], function() {
 
   var SpriteProto = {
-    render: function(parentTransform) {
+    render: function() {
       var context = this.context;
       context.save();
       context.fillStyle = "black";
@@ -33,13 +33,6 @@ define([], function() {
         rot: this.rotation || 0,
         scaleX: this.scaleX || 1,
         scaleY: this.scaleY || 1
-      }
-      if (parentTransform) {
-        transform.x += parentTransform.x;
-        transform.y += parentTransform.y;
-        transform.scaleX *= parentTransform.scaleX;
-        transform.scaleY *= parentTransform.scaleY;
-        transform.rot += parentTransform.rot;
       }
       context.translate(transform.x, transform.y);
       context.rotate(transform.rot);
@@ -103,6 +96,7 @@ define([], function() {
     var stage = this;
 
     var Sprite = function() {
+      this.stage = stage;
       this.context = stage.context;
       this.children = [];
       this.x = this.y = 0;
@@ -111,10 +105,12 @@ define([], function() {
     };
 
     var Text = function() {
+      this.stage = stage;
       this.context = stage.context;
       this.x = this.y = 0;
       this.scaleX = this.scaleY = 1;
       this.rotation = 0;
+      this.text = "";
     }
 
     Sprite.prototype = SpriteProto;
