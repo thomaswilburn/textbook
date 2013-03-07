@@ -47,6 +47,27 @@ console.log(todo); //"learn about arrays"
 <p>
   You can store any kind of value in an array, including another array if you want (it ends up looking kind of like a spreadsheet). Most of the time, though, we try to make arrays contain the same type of value. We might have a list of numbers, or a list of names, but we wouldn't want to mix the two up, because it will make it hard to automate processing that list using loops. And loops, maybe more than any other programming concept, are very important.
 
+<p>
+  In addition to the numbered values inside an array, they also have a special property that tells you how many items the array currently contains. This property is the <var>length</var> property. Since arrays start at index #0, the length will always be one more than the highest item index in the array--i.e., an array with a <var>length</var> of 4 will have its last item at <var>[3]</var>.
+
+<code>
+var animals = ['dog', 'cat', 'duck'];
+animals.length == 3; // true, last item is animals[2]
+</code>
+
+<p>
+  If you know the length, you can add to a list by adding new items at the same index as that length, because that will be one more than the last item. But keeping track of that is slow, and the resulting code is pretty ugly. It's a lot easier to add items to a list by using the built-in <var>push()</var> function on the list.
+
+<code>
+//create a new item the ugly way
+animals[animals.length] = "tiger"
+
+//here's the simpler way
+animals.push("lion");
+animals.push('bear');
+//now animals has two more items: the strings "lion" and "bear"
+</code>
+
 <h2>Looping</h2>
 
 <p>
@@ -63,6 +84,152 @@ console.log(todo); //"learn about arrays"
   In contrast, people are not good at repeating themselves. We get bored, we make mistakes, and we cut corners. One of the most important roles of a programming language, therefore, is to reduce the amount of repetition that the programmer must do. If you find yourself repeating lines of code, or (heaven forbid!) copying and pasting it from place to place, this is also a code smell. The computer is better at repetition than you are--let it do what it does best.
 
 <p>
+  So how do we tell a computer to repeat an action more than once? The most common way is what's called a <var>for</var> loop, because it starts with the keyword <var>for</var>. Here's an example that prints the numbers from 0 to 99:
+
+<code>
+for (var i = 0; i &lt; 100; i = i + 1) {
+  console.log(i);
+}
+</code>
+
+  This is a pretty complicated piece of code, compared to what we've done before. Let's break it down into its individual parts. Loops in JavaScript start with the <var>for</var> keyword, followed by parentheses and then by a block of code to repeat--so far, this is very similar to our <var>if</var> statements. The difference comes inside the parentheses. Loops require three statements, separated by semicolons, each of which tells the computer some necessary information about the loop:
+
+<code class="prettyprinted">
+<span class="kwd">for</span> (<b style="color: red">setup</b>; <b style="color: green">conditional</b>; <b style="color: blue">change</b>) {
+  //...
+}
+</code>
+
+  <ul>
+    <li> The <mark style="color: red">setup</mark> contains code that's run <i>before the loop starts</i>. This is where we put any pre-loop initialization code. In the loop above, we created a variable <var>i</var> to keep track of how many times the loop had repeated, starting with 0.
+    <li> The <mark style="color: green">conditional</mark> tells the computer how long to run the loop. As long as this conditional is true, the loop will keep executing--or, to put it another way, it will repeat until the conditional is false. In the loop above, we repeat as long as <var>i</var> is less than 100, meaning that it will go from 0 to 99.
+    <li> Finally, the <mark style="color: blue">change</mark> is a line of code that will run after each loop. Eventually, the change should cause the conditional to be false, and end the loop. Otherwise, your code will repeat forever (or, realistically, until the browser shuts it down for being disruptive--usually about 15 seconds).
+  </ul>
+
+<p>
+  The possibility of a never-ending, infinite loop makes looping arguably the riskiest construct in JavaScript. On the other hand, it may be the most powerful construct, just in terms of being able to reduce the amount of code you write. For example, consider taking a list of prices and discounting them all by $2. Without loops, we're forced to basically treat each item in the loop as an individual variable, with all the problems that entails.
+
+<code>
+var prices = [10, 12, 20, 8, 17];
+prices[0] = prices[0] - 2;
+prices[1] = prices[1] - 2;
+prices[2] = prices[2] - 2;
+prices[3] = prices[3] - 2;
+prices[4] = prices[4] - 2;
+</code>
+
+<p>
+  If you really look at this code critically, there's a lot of repetition going on. In fact, lines 2-6 are exactly the same, except that they change the array index for the item that's being discounted. Using a loop, we can write this code only once:
+
+<code>
+var prices = [10, 12, 20, 8, 17];
+for (var i = 0; i &lt; prices.length; i = i + 1) {
+  prices[i] = prices[i] - 2;
+}
+</code>
+
+  Much shorter! Now we've taken all those lines of code and <i>generalized</i> them into a process that our loop can repeat.
+
+  <ol>
+    <li> First we define our array, <var>prices</var>.
+    <li> Next we set up our loop:
+      <ol>
+        <li> <var>var i = 0</var> (the setup): we define a variable <var>i</var> to keep track of our array location, starting at 0 (the first index of all arrays).
+        <li> <var>i &lt; prices.length</var> (the condition): we say that we will keep going as long as our index-tracking variable <var>i</var> is less than the length of the array. That means it will go all the way to the last item, since the index of the last item is always one less than the <var>length</var> property of the array.
+        <li> <var>i = i + 1</var> (the change): after each repetition, we add one to <var>i</var>, meaning that we have moved up to the next item in the array.
+      </ol>
+    <li> Finally, we perform the actual process inside the loop block, between the curly braces. In this case, we've taken the code from above, but instead of using a literal number between the square brackets, we just use <var>i</var>. As the loop runs, we'll start at <var>prices[0]</var>, and work our way up until we trigger the condition by running out of array items (when the index is the same as the <var>length</var>).
+  </ol>
+
+<p>
+  I often find that it's helpful to think of loops and arrays using some kind of spatial metaphor, like a row of houses. Imagine that you're working as a pollster on a street of houses, starting with #0 and working your way to the end of the block. You'd like to know how many people answer true to a polling question. Unfortunately, you're not able to visit the houses yourself, but you have an assistant that you can send to each house, as long as you explain exactly what you want her to do. It might work something like this:
+
+<div class="interactive houses">
+<canvas width=640 height=240></canvas>
+<pre>
+<span class="array">var houses = [true, false, true, true, false];</span>
+<span class="counter">var counter = 0;</span>
+for (<span class="setup">var i = 0</span>; <span class="condition">i &lt; houses.length</span>;  <span class="change">i = i + 1</span>) {
+  <span class="current">var current = houses[i];</span>
+  <span class="if">if (current) {</span>
+    <span class="increment">counter = counter + 1;</span>
+  }
+}
+</pre>
+<button id="prevous">Previous step</button>
+<button id="next">Next step</button>
+<button id="reset">Reset</button>
+</div>
+<script>
+require(['jquery', 'dom/Stage'], function($, Stage) {
+  var answers = [true, false, true, true, false];
+  var siding = ['#CFC', '#FCC', '#CCF', '#FFC', '#FCF'];
+  var houses = [];
+
+  var stage = new Stage('.interactive.houses canvas');
+  var assistant = new stage.Sprite();
+  assistant.draw = function() {
+    var ctx = this.context;
+    ctx.arc(0, 0, 4, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, 10);
+    ctx.lineTo(-4, 14);
+    ctx.moveTo(0, 10);
+    ctx.lineTo(4, 14);
+    ctx.moveTo(-5, 6);
+    ctx.lineTo(5, 6);
+    //ctx.fill();
+    ctx.stroke();
+  };
+  assistant.x = assistant.y = 20;
+
+  var House = function(color, label) {
+    stage.Sprite.call(this);
+    this.color = color || '#888';
+    if (label) {
+      var l = new stage.TextBox();
+      l.text = label;
+      l.align = 'center';
+      l.width = 40;
+      l.size = 10;
+      l.x = -20;
+      l.y = 0;
+      this.addChild(l);
+    }
+  }
+  House.prototype = new stage.Sprite();
+  House.prototype.draw = function() {
+    var ctx = this.context;
+    ctx.moveTo(-20, 0);
+    ctx.lineTo(-20, 20);
+    ctx.lineTo(20, 20);
+    ctx.lineTo(20, 0);
+    ctx.lineTo(0, -20);
+    ctx.closePath();
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = 'black';
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  for (var i = 0; i < answers.length; i++) {
+    var house = new House(siding[i], answers[i].toString());
+    stage.addChild(house);
+    house.x = i * 60 + 40;
+    house.y = 20;
+    houses.push(house);
+  }
+  
+  stage.addChild(assistant);
+
+  stage.render();
+
+
+});
+</script>
+
 
 [@import snippets/scripts.html]
 
