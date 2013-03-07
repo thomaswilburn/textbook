@@ -37,9 +37,10 @@ define([], function() {
       context.translate(transform.x, transform.y);
       context.rotate(transform.rot);
       context.scale(transform.scaleX, transform.scaleY);
+      context.beginPath();
       this.draw();
       if (this.children) for (var i = 0; i < this.children.length; i++) {
-        this.children[i].render(transform);
+        this.children[i].render();
       }
       context.restore();
     },

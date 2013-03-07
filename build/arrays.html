@@ -179,6 +179,10 @@ for (<span class="setup">var i = 0</span>; <span class="condition">i &lt; houses
 </div>
 <script>
 require(['jquery', 'dom/Stage'], function($, Stage) {
+  var answers = [true, false, true, true, false];
+  var siding = ['#CFC', '#FCC', '#CCF', '#FFC', '#FCF'];
+  var houses = [];
+
   var stage = new Stage('.interactive.houses canvas');
   var assistant = new stage.Sprite();
   assistant.draw = function() {
@@ -196,12 +200,21 @@ require(['jquery', 'dom/Stage'], function($, Stage) {
     //ctx.fill();
     ctx.stroke();
   };
-  stage.addChild(assistant);
   assistant.x = assistant.y = 20;
 
-  var House = function(color) {
+  var House = function(color, label) {
     stage.Sprite.call(this);
     this.color = color || '#888';
+    if (label) {
+      var l = new stage.TextBox();
+      l.text = label;
+      l.align = 'center';
+      l.width = 40;
+      l.size = 10;
+      l.x = -20;
+      l.y = 0;
+      this.addChild(l);
+    }
   }
   House.prototype = new stage.Sprite();
   House.prototype.draw = function() {
@@ -218,9 +231,16 @@ require(['jquery', 'dom/Stage'], function($, Stage) {
     ctx.stroke();
   }
 
-  var gHouse = new House('green');
-  gHouse.x = gHouse.y = 60;
-  stage.addChild(gHouse);
+  for (var i = 0; i < answers.length; i++) {
+    var house = new House(siding[i], answers[i].toString());
+    stage.addChild(house);
+    house.x = i * 60 + 40;
+    house.y = 20;
+    houses.push(house);
+  }
+  
+  stage.addChild(assistant);
+
   stage.render();
 
 
