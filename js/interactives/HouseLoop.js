@@ -69,7 +69,7 @@ define(['jquery', 'dom/Stage'], function($, Stage) {
   var counter = undefined;
 
   var steps = [
-    {highlight:"array", description:"We'll start by declaring an array named <var>houses</var>, containing the answers to the quiz questions."},
+    {highlight:"array", description:"We'll start by declaring an array named <var>houses</var>, containing the answers to the quiz questions.", counter: 0, i: 0, assistant: {x: 20, y: 20}},
     {highlight:"counter", description:"We also create a <var>counter</var> variable, to keep track of how many houses answer <var>true</var>.", counter: 0,},
     {highlight:"setup", description:"Now we enter our loop. The first thing to run is the setup, where we declare a variable <var>i</var> and set it equal to 0. This will be used to keep track of which house's answer we're currently examining.", i: 0},
     {highlight:"condition", description:"<var>i</var> is currently zero, which is less than <var>houses.length</var> (5), so we'll enter the loop.", assistant: {x: 20, y: 20}},
@@ -80,7 +80,11 @@ define(['jquery', 'dom/Stage'], function($, Stage) {
     {highlight:"condition", description:"Should we run this loop again? Let's check the condition. After the change, <var>i</var> is now equal to 1, which is still less than <var>houses.length</var>, so yes, we'll keep going through the loop.", assistant: {x:houses[0].x, y:houses[0].y + 30}},
     {highlight:"current", description:"Once again, we get the current house by using <var>i</var> to pull an item out of our <var>houses</var> array. This time, the answer is <var>false</var>", assistant: {x:houses[1].x, y:houses[1].y + 30}, i: 1},
     {highlight:"if", description:"Since the current answer is false, we won't add one to <var>counter</var>, and we'll end this run through the loop."},
-    {highlight:"change", description:"Update <var>i</var> by adding one to it.", assistant: {x:houses[1].x, y:houses[1].y + 30}, i: 2},
+    {highlight:"change", description:"Update <var>i</var> by adding one to it.", i: 2},
+    {highlight:"condition", description:"Since <var>i</var> is still less than <var>houses.length</var>, execute the loop block again.", assistant: {x:houses[1].x, y:houses[1].y + 30}},
+    {highlight:"current", description:"Set <var>current</var> to the value at <var>houses[i]</var>, which is true. (Remember, <var>i</var> is currently 2, so we're at the third house.", assistant:{x:houses[2].x, y:houses[2].y + 30}},
+    {highlight:"if", description:"Since <var>current</var> is true...", counter: 1},
+    {highlight:"increment", description:"...increase the value of <var>counter</var> by one.", counter: 2},
     {highlight:"condition", description:"Let's skip ahead a few steps: at some point, <var>i</var> (which keeps track of where we are in the <var>houses</var> array) is going to be the same as <var>houses.length</var>. At that point, we've run out items (remember, the last item is at the index <var>length - 1</var>). More importantly, this condition will be false. At that point, instead of running the loop again, we continue with the rest of the script.", assistant: {x: houses[4].x + 40, y: 20}, i: 5, counter: 3},
     {highlight:"finished", description:"Now, let's print the result to the console. All done!"}
   ];
