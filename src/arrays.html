@@ -144,30 +144,13 @@ for (var i = 0; i &lt; prices.length; i = i + 1) {
 <p>
   I often find that it's helpful to think of loops and arrays using some kind of spatial metaphor, like a row of houses. Imagine that you're working as a pollster on a street of houses, starting with #0 and working your way to the end of the block. You'd like to know how many people answer true to a polling question. Unfortunately, you're not able to visit the houses yourself, but you have an assistant that you can send to each house, as long as you explain exactly what you want her to do. It might work something like this:
 
-<div class="interactive houses">
-  <button id="previous">Previous step</button>
-  <button id="next">Next step</button>
-  <button id="reset">Reset</button>
-  <canvas width=640 height=70></canvas>
-  <pre style="width: 400px; float: left;">
-  <span class="array">var houses = [true, false, true, true, false];</span>
-  <span class="counter">var counter = 0;</span>
-  for (<span class="setup">var i = 0</span>; <span class="condition">i &lt; houses.length</span>;  <span class="change">i = i + 1</span>) {
-    <span class="current">var current = houses[i];</span>
-    <span class="if">if (current) {</span>
-      <span class="increment">counter = counter + 1;</span>
-    }
-  }
-  <span class="finished">console.log("Total positive answers: " + counter)</span>
-  </pre>
-  <div class="description" style="width: 200px; float: right;"></div>
-  <div style="clear: both;"></div>
-</div>
+[@import interactives/houses.html]
 <script>
 require(['interactives/HouseLoop']);
 </script>
 
-
+<p>
+  Loops and arrays are a natural pair: using arrays, you can store an unknown number of values without having to manually code for every eventually, and loops give you a way to express what you want to do to those items without writing out every single operation.
 
 
 [@import snippets/scripts.html]

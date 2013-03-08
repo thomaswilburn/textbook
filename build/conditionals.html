@@ -190,19 +190,19 @@ if (name == "Thomas") {
 
   It may be easier to visualize <var>if</var> and <var>if/else</var> using a kind of flowchart. In the interactive graphic below, we represent the two branches of our code with lighbulbs that are wired to our <var>if</var> statement, and you can edit the condition that's written between the parentheses. If the condition is true, the first block executes, and its lightbulb will light up. If the condition is false, you'll see the second bulb light up as the <var>else</var> block executes. If your condition isn't valid, neither light will be turned on--in that case, try your JavaScript on the console.
 
-  <div class="flowchart interactive">
-    <canvas width=640 height=320 id="flowchart"></canvas>
-    <pre class="flowbox start" style="top: 0; left: 1em"><span style="color: #888; color: rgba(0, 0, 0, .5);">console.log('Hello, world!');
+<div class="flowchart interactive">
+  <canvas width=640 height=320 id="flowchart"></canvas>
+  <pre class="flowbox start" style="top: 0; left: 1em"><span style="color: #888; color: rgba(0, 0, 0, .5);">console.log('Hello, world!');
 placeholder = placeholder + 12;</span>
 if (<input type="text" class="blank" style="width: 75px; background: #EEE" id="conditional" value="true">) {</pre>
-    <pre class="flowbox else" style="top: 150px; left: 1em">} else {</pre>
-    <pre class="flowbox end" style="bottom: 0; left: 1em">}
+  <pre class="flowbox else" style="top: 150px; left: 1em">} else {</pre>
+  <pre class="flowbox end" style="bottom: 0; left: 1em">}
 <span style="color: #888; color: rgba(0, 0, 0, .5);">console.log("remaining code");
 //we now resume normal program flow</pre>
-    <script>
+</div>
+  <script>
 require(['interactives/LightIf']);
-    </script>
-  </div>
+  </script>
 
 <p>
   Enjoy it while you can: our programs won't always be this easy to draw. In the next chapter, we're going to start working with loops--asking the computer to repeat sections of code for us, instead of having to repeat it ourselves.
