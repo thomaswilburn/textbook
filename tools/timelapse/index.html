@@ -12,16 +12,160 @@ require.config({
   }
 });
   </script>
+  <style>
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.editor {
+  width: 100%;
+  height: 500px;
+  outline: 1px dashed #888;
+}
+
+.revision-bar {
+  height: 120px;
+  background: #DDD;
+  box-shadow: inset 4px 4px 4px rgba(0, 0, 0, .2);
+  margin: 1em 0;
+  padding: 0;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.revision-bar li {
+  height: 80px;
+  margin: 10px;
+  width: 80px;
+  background: #EEE;
+  border: 4px solid white;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, .2);
+  padding: 4px;
+  display: inline-block;
+  font-family: monospace;
+  font-size: 60px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.revision-bar li.selected {
+  border-color: #ABC;
+  color: #ABC;
+}
+
+button {
+  color: white;
+  background: #789;
+  border: none;
+  margin: 4px 8px;
+  padding: 8px;
+}
+
+button:hover {
+  background: #678;
+}
+  </style>
 </head>
 <body>
 
+<ol class="revision-bar"></ol>
+<div class="ui">
+  <button class="add-revision">Add revision</button>
+  <button class="remove-revision">Remove current revision</button>
+  <button class="export-revisions">Export</button>
+</div>
+<div id="editor" class="editor" contenteditable></div>
+
 <script>
 
-require(['jquery','meta/Timelapse'], function($, TimeLapse) {
+require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
   var tl = new TimeLapse();
   tl.load('./test.time').done(function() {
-    console.log(this.data);
+    //console.log(this.data);
   });
+
+  var editor = ace.edit('editor');
+  editor.setTheme('ace/theme/tomorrow');
+  editor.getSession().setMode('ace/mode/javascript');
+  window.editor = editor;
+
+  var app = {
+    current: -1,
+    createRevision: function(){
+      var base = "";
+      if (this.current > -1) {
+        this.saveRevision();
+        base = editor.getValue();
+      }
+      var dest = this.current + 1;
+      var head = this.revisions.slice(0, dest);
+      var tail = this.revisions.slice(dest);
+      this.revisions = head.concat([base], tail);
+      console.log(head, tail, this.revisions);
+      this.current = dest;
+      this.updateUI();
+    },
+    loadRevision: function(from) {
+      editor.setValue(this.revisions[from]);
+      this.current = from;
+    },
+    saveRevision: function(to) {
+      to = to * 1 || this.current;
+      var text = editor.getValue();
+      this.revisions[to] = text;
+    },
+    switchTo: function(rev) {
+      rev = rev * 1;
+      this.saveRevision();
+      this.loadRevision(rev);
+      this.updateUI();
+    },
+    removeRevision: function(index) {
+      index = index || this.current;
+      var filtered = this.revisions.filter(function(item, i) {
+        return i != index;
+      });
+      this.revisions = filtered;
+      this.loadRevision(this.current);
+      this.updateUI();
+    },
+    updateUI: function() {
+      var bar = $('.revision-bar');
+      bar.empty();
+      var self = this;
+      this.revisions.forEach(function(item, index) {
+        var li = $('<li>');
+        li.html(index);
+        li.attr('data-revision', index);
+        if (index == self.current) li.addClass('selected');
+        bar.append(li);
+      });
+    },
+    revisions: []
+  };
+
+  app.createRevision();
+  app.updateUI();
+
+  $('.add-revision').on('click', function(e) {
+    app.createRevision();
+  });
+
+  $('.remove-revision').on('click', function(e) {
+    app.removeRevision(this.getAttribute('data-revision'));
+  });
+
+  $('.revision-bar').on('click', 'li', function(e) {
+    var id = this.getAttribute('data-revision');
+    app.switchTo(id);
+  });
+
+  window.app = app;
+
 });
 
 </script>
