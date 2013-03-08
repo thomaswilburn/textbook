@@ -63,7 +63,7 @@ define(['jquery'], function() {
         comments: comments,
         length: last + 1
       };
-      this.buildRevisions();
+      this.revisions = this.buildRevisions();
       return this.data;
     },
     buildRevisions: function() {
@@ -86,7 +86,7 @@ define(['jquery'], function() {
           comment: comments[i] ? comments[i].text : ""
         }
       }
-      //revisions.forEach(function(item) { console.log(item)});
+      return revisions;
     }
   };
 
