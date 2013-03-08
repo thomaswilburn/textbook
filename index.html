@@ -1,5 +1,6 @@
 <!doctype html>
-<html>
+<!--[if IE]> <html class="ie"> <![endif]-->
+<!--[if gt IE 9]><!--> <html> <!--<![endif]-->
 <head>
   <title>JavaScript for the Web Savvy</title>
   <meta charset="utf-8">
@@ -27,7 +28,7 @@ a, a:visited {
   width: 200px;
   margin: auto;
   text-decoration: none;
-  color: white;
+  color: #789;
   padding: 8px 1em;
   margin: 2em auto;
   border-radius: 8px;
@@ -41,7 +42,7 @@ a, a:visited {
   transition-duration: .5s;
 }
 
-:not(.ie8) a {
+html:not(.ie) a {
   color: transparent;
   text-shadow: 1px 1px 2px rgba(255, 255, 255, .5),
     0 0 0 black;
