@@ -162,128 +162,29 @@ for (var i = 0; i &lt; prices.length; i = i + 1) {
   I often find that it's helpful to think of loops and arrays using some kind of spatial metaphor, like a row of houses. Imagine that you're working as a pollster on a street of houses, starting with #0 and working your way to the end of the block. You'd like to know how many people answer true to a polling question. Unfortunately, you're not able to visit the houses yourself, but you have an assistant that you can send to each house, as long as you explain exactly what you want her to do. It might work something like this:
 
 <div class="interactive houses">
-<canvas width=640 height=70></canvas>
-<pre>
-<span class="array">var houses = [true, false, true, true, false];</span>
-<span class="counter">var counter = 0;</span>
-for (<span class="setup">var i = 0</span>; <span class="condition">i &lt; houses.length</span>;  <span class="change">i = i + 1</span>) {
-  <span class="current">var current = houses[i];</span>
-  <span class="if">if (current) {</span>
-    <span class="increment">counter = counter + 1;</span>
+  <button id="previous">Previous step</button>
+  <button id="next">Next step</button>
+  <button id="reset">Reset</button>
+  <canvas width=640 height=70></canvas>
+  <pre style="width: 400px; float: left;">
+  <span class="array">var houses = [true, false, true, true, false];</span>
+  <span class="counter">var counter = 0;</span>
+  for (<span class="setup">var i = 0</span>; <span class="condition">i &lt; houses.length</span>;  <span class="change">i = i + 1</span>) {
+    <span class="current">var current = houses[i];</span>
+    <span class="if">if (current) {</span>
+      <span class="increment">counter = counter + 1;</span>
+    }
   }
-}
-</pre>
-<button id="prevous">Previous step</button>
-<button id="next">Next step</button>
-<button id="reset">Reset</button>
-<div class="description"></div>
+  <span class="finished">console.log("Total positive answers: " + counter)</span>
+  </pre>
+  <div class="description" style="width: 200px; float: right;"></div>
+  <div style="clear: both;"></div>
 </div>
 <script>
-require(['jquery', 'dom/Stage'], function($, Stage) {
-  var answers = [true, false, true, true, false];
-  var siding = ['#CFC', '#FCC', '#CCF', '#FFC', '#FCF'];
-  var houses = [];
-
-  var stage = new Stage('.interactive.houses canvas');
-  var assistant = new stage.Sprite();
-  assistant.draw = function() {
-    var ctx = this.context;
-    ctx.arc(0, 0, 3, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, 10);
-    ctx.lineTo(-4, 14);
-    ctx.moveTo(0, 10);
-    ctx.lineTo(4, 14);
-    ctx.moveTo(-5, 6);
-    ctx.lineTo(5, 6);
-    //ctx.fill();
-    ctx.stroke();
-  };
-  assistant.x = 20;
-  assistant.y = 20;
-
-  var House = function(color, label) {
-    stage.Sprite.call(this);
-    this.color = color || '#888';
-    if (label) {
-      var l = new stage.TextBox();
-      l.text = label;
-      l.align = 'center';
-      l.width = 40;
-      l.size = 13;
-      l.x = -18;
-      l.y = -13;
-      this.addChild(l);
-    }
-  }
-  House.prototype = new stage.Sprite();
-  House.prototype.draw = function() {
-    var ctx = this.context;
-    ctx.moveTo(-20, 0);
-    ctx.lineTo(-20, 20);
-    ctx.lineTo(20, 20);
-    ctx.lineTo(20, 0);
-    ctx.lineTo(0, -20);
-    ctx.closePath();
-    ctx.fillStyle = this.color;
-    ctx.strokeStyle = 'black';
-    ctx.fill();
-    ctx.stroke();
-  }
-
-  for (var i = 0; i < answers.length; i++) {
-    var house = new House(siding[i], '#' + i + ': ' + answers[i].toString());
-    stage.addChild(house);
-    house.x = i * 60 + 80;
-    house.y = 20;
-    houses.push(house);
-  }
-  
-  stage.addChild(assistant);
-
-  stage.render();
-
-  var at = 0;
-
-  var steps = [
-    {highlight:"array", description:"We'll start by declaring an array named <var>houses</var>, containing the answers to the quiz questions."},
-    {highlight:"counter", description:"We also create a <var>counter</var> variable, to keep track of how many houses answer <var>true</var>."},
-    {highlight:"setup", description:"Now we enter our loop. The first thing to run is the setup, where we declare a variable <var>i</var> and set it equal to 0. This will be used to keep track of which house's answer we're currently examining."},
-    {highlight:"condition", description:"<var>i</var> is currently zero, which is less than <var>houses.length</var> (5), so we'll enter the loop."},
-    {highlight:"current", description:"We'll make a variable named <var>current</var> to keep track of the current house (visually represented by our little assistant stick person). We find that house by looking up the answer at <var>houses[i]</var>. <var>i</var> is currently 0, so we're looking at the first house (<var>houses[0]</var>)", assistant: {x:houses[0].x, y:houses[0].y + 30}},
-    {highlight:"if", description:"If the current house's answer is true, we'll want to keep track of that. In this case, it is, so..."},
-    {highlight:"increment", description:"...we'll add one to our counter variable and save the increased value."},
-    {highlight:"change", description:"Now we've reached the end of the loop, so the <b>change</b> part of our loop happens. In this case, we move on to the next house by adding 1 to <var>i</var>"},
-    {highlight:"condition", description:"Should we run this loop again? Let's check the condition. After the change, <var>i</var> is now equal to 1, which is still less than <var>houses.length</var>, so yes, we'll keep going through the loop."},
-    {highlight:"current", description:"Once again, we get the current house by using <var>i</var> to pull an item out of our <var>houses</var> array. This time, the answer is <var>false</var>", assistant: {x:houses[1].x, y:houses[1].y + 30}}
-  ];
-
-  var onStep = function(e) {
-    var id = e ? this.id : "reset";
-    switch (id) {
-      case "previous": at = at > 0 ? at - 1 : at; break;
-      case "next": at = at < steps.length - 1 ? at + 1 : at; break;
-      case "reset": at = 0;
-    }
-    var step = steps[at];
-    $('.last').removeClass('last');
-    $('.highlight').removeClass('highlight').addClass('last');
-    $('.' + step.highlight).addClass('highlight');
-    $('.description').html(step.description);
-    if (step.assistant) {
-      assistant.x = step.assistant.x;
-      assistant.y = step.assistant.y;
-    }
-    stage.render();
-  }
-
-  $('#previous, #next, #reset').on('click', onStep);
-  onStep();
-
-});
+require(['interactives/HouseLoop']);
 </script>
+
+
 
 
 <script>
