@@ -249,6 +249,12 @@ li.L8 {
 .interactive.flowchart .flowbox.end {
   border-top: 4px solid #55cc55;
 }
+.interactive.houses .highlight {
+  background: #DFD;
+}
+.interactive.houses .last {
+  background: #EEE;
+}
 .blank {
   border: none;
   border-bottom: 1px dashed #888;
