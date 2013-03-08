@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <title>Time Lapse</title>
+  <meta charset="utf-8">
+  <script src="../../js/require.js"></script>
+  <script>
+require.config({
+  baseUrl: '../../js',
+  paths: {
+    jquery: 'jquery-1.9.min'
+  }
+});
+  </script>
+</head>
+<body>
+
+<script>
+
+require(['jquery','meta/Timelapse'], function($, TimeLapse) {
+  var tl = new TimeLapse();
+  tl.load('./test.time').done(function() {
+    console.log(this.data);
+  });
+});
+
+</script>
+</body>
+</html>

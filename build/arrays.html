@@ -13,7 +13,6 @@
     }
   });
   </script>
-  <!--<script src="../js/defer.js"></script>-->
 </head>
 <body>
 
@@ -42,7 +41,17 @@ var alphabet = ['a', 'b', 'c'];
 </code>
 
 <p>
-  To get values back out of the array, we use square brackets after the variable name, with a number between the brackets to say <i>which</i> item we want to pull out of the list. There's a catch, though: although we normally begin lists with #1, in JavaScript the first item in an array is #0, and we count up from there.
+  To get values back out of the array, we use square brackets after the variable name, with a number between the brackets to say <i>which</i> item we want to pull out of the list. There's a catch, though: although we normally begin lists with #1, in JavaScript the first item in an array is #0, and we count up from there. The number associated with an item is its <mark>index</mark>. If you think of an array as a street of houses, the index is its house number--the number isn't the house itself, it simply tells us where to find what we're really interested in. 
+
+<code>
+alphabet[2]; //gets the third item, because the list starts at index 0
+</code>
+<samp>
+'c'
+</samp>
+
+<p>
+  Getting an array value by index is an expression like any other, which means we can store it in a variable if we want. Sometimes that's useful, because it saves us a lot of typing.
 
 <code>
 var a = alphabet[0];
@@ -62,7 +71,7 @@ console.log(todo); //"learn about arrays"
 </code>
 
 <p>
-  You can store any kind of value in an array, including another array if you want (it ends up looking kind of like a spreadsheet). Most of the time, though, we try to make arrays contain the same type of value. We might have a list of numbers, or a list of names, but we wouldn't want to mix the two up, because it will make it hard to automate processing that list using loops. And loops, maybe more than any other programming concept, are very important.
+  You can store any kind of value in an array, including another array if you want (it ends up looking kind of like a spreadsheet). Most of the time, though, we try to make arrays contain the same type of value. We might have a list of numbers, or a list of names, but we wouldn't want to mix the two up, because it will make it hard to treat those values the same--and if we can't treat them the same, why put them in the same list together?
 
 <p>
   In addition to the numbered values inside an array, they also have a special property that tells you how many items the array currently contains. This property is the <var>length</var> property. Since arrays start at index #0, the length will always be one more than the highest item index in the array--i.e., an array with a <var>length</var> of 4 will have its last item at <var>[3]</var>.
@@ -101,15 +110,7 @@ animals.push('bear');
   In contrast, people are not good at repeating themselves. We get bored, we make mistakes, and we cut corners. One of the most important roles of a programming language, therefore, is to reduce the amount of repetition that the programmer must do. If you find yourself repeating lines of code, or (heaven forbid!) copying and pasting it from place to place, this is also a code smell. The computer is better at repetition than you are--let it do what it does best.
 
 <p>
-  So how do we tell a computer to repeat an action more than once? The most common way is what's called a <var>for</var> loop, because it starts with the keyword <var>for</var>. Here's an example that prints the numbers from 0 to 99:
-
-<code>
-for (var i = 0; i &lt; 100; i = i + 1) {
-  console.log(i);
-}
-</code>
-
-  This is a pretty complicated piece of code, compared to what we've done before. Let's break it down into its individual parts. Loops in JavaScript start with the <var>for</var> keyword, followed by parentheses and then by a block of code to repeat--so far, this is very similar to our <var>if</var> statements. The difference comes inside the parentheses. Loops require three statements, separated by semicolons, each of which tells the computer some necessary information about the loop:
+  So how do we tell a computer to repeat an action more than once? The most common way is what's called a <var>for</var> loop, because it starts with the keyword <var>for</var> (it's not original, but it is descriptive). A loop is composed of several parts, much like our <var>if/else</var> statements were. Loops in JavaScript start with the <var>for</var> keyword, followed by parentheses and then by a block of code to repeat--so far, this is very similar to our <var>if</var> statements. The difference comes inside the parentheses. Loops require three statements, separated by semicolons, each of which tells the computer some necessary information about the loop:
 
 <code class="prettyprinted">
 <span class="kwd">for</span> (<b style="color: red">setup</b>; <b style="color: green">conditional</b>; <b style="color: blue">change</b>) {
@@ -118,10 +119,21 @@ for (var i = 0; i &lt; 100; i = i + 1) {
 </code>
 
   <ul>
-    <li> The <mark style="color: red">setup</mark> contains code that's run <i>before the loop starts</i>. This is where we put any pre-loop initialization code. In the loop above, we created a variable <var>i</var> to keep track of how many times the loop had repeated, starting with 0.
-    <li> The <mark style="color: green">conditional</mark> tells the computer how long to run the loop. As long as this conditional is true, the loop will keep executing--or, to put it another way, it will repeat until the conditional is false. In the loop above, we repeat as long as <var>i</var> is less than 100, meaning that it will go from 0 to 99.
-    <li> Finally, the <mark style="color: blue">change</mark> is a line of code that will run after each loop. Eventually, the change should cause the conditional to be false, and end the loop. Otherwise, your code will repeat forever (or, realistically, until the browser shuts it down for being disruptive--usually about 15 seconds).
+    <li> The <mark style="color: red">setup</mark> contains code that's run <i>before the loop starts</i>. This is where we put any pre-loop initialization code. 
+    <li> The <mark style="color: green">conditional</mark> tells the computer how long to run the loop. As long as this conditional is true, the loop will keep executing--or, to put it another way, it will repeat until the conditional is false.
+    <li> Finally, the <mark style="color: blue">change</mark> is a line of code that will run after each loop. Eventually, the change should cause the conditional to be false, and end the loop.
   </ul>
+
+<p>
+  That's a loop in theory. Here's some practice: a loop that prints the numbers from 0 to 99:
+
+<code>
+for (var i = 0; i &lt; 100; i = i + 1) {
+  console.log(i);
+}
+</code>
+
+  This is a pretty complicated piece of code, compared to what we've done before. Let's break it down into its individual parts. In the setup part of the loop, we created a variable <var>i</var> to keep track of how many times the loop had repeated, starting with 0. Our condition says to repeat as long as <var>i</var> is less than 100, meaning that it will repeat 100 times (remember, it starts at 0). Finally, our change section of the loop adds 1 to <var>i</var> each time we reach the end of the loop--important, because otherwise it would never be greater than 99, which means our condition would never be false, and the code would run forever (or, realistically, until the browser shuts it down for being disruptive--usually about 15 seconds).
 
 <p>
   The possibility of a never-ending, infinite loop makes looping arguably the riskiest construct in JavaScript. On the other hand, it may be the most powerful construct, just in terms of being able to reduce the amount of code you write. For example, consider taking a list of prices and discounting them all by $2. Without loops, we're forced to basically treat each item in the loop as an individual variable, with all the problems that entails.
@@ -136,7 +148,7 @@ prices[4] = prices[4] - 2;
 </code>
 
 <p>
-  If you really look at this code critically, there's a lot of repetition going on. In fact, lines 2-6 are exactly the same, except that they change the array index for the item that's being discounted. Using a loop, we can write this code only once:
+  If you really look at this code critically, there's a lot of repetition going on. In fact, lines 2-6 are exactly the same, except that they change the array index for the item that's being discounted. That's a perfect case for a variable: instead of writing the array index directly, we'll use a variable and then just repeat the expression, changing the value of the variable each time. Using a loop, we can write this code only once:
 
 <code>
 var prices = [10, 12, 20, 8, 17];
@@ -185,7 +197,39 @@ require(['interactives/HouseLoop']);
 </script>
 
 <p>
-  Loops and arrays are a natural pair: using arrays, you can store an unknown number of values without having to manually code for every eventually, and loops give you a way to express what you want to do to those items without writing out every single operation.
+  You may have noticed that we've written all these loops in a similar way. We've used the variable <var>i</var> each time, and the structure always tends to look like this:
+
+<code>
+for (var i = 0; i &lt; arrayToLoopOver.length; i++) {
+  var currentItemInArray = arrayToLoopOver[i];
+  // ...
+}
+</code>
+
+  As far as programming can have a standard loop, this is the form of it. Remember this basic structure every time you want to loop over an array and do something to each item. You'll also encounter this often in other people's code. The variable names may change (although <var>i</var> as the index variable is traditional), but the structure of running through our list by adding one to an index counter is very, very common.
+
+<p>
+  Loops and arrays are a natural pair: using arrays, you can store an unknown number of values without having to manually code for every eventually, and loops give you a way to express what you want to do to those items without writing out every single operation. In addition to <var>for</var> loops, there are also <var>while</var> loops, but these are much more likely to go awry and never stop. A <var>while</var> loop doesn't have any setup or change sections inside its declarative parentheses--only a condition. It'll loop as long as that condition is true. We might mimic the array loops that we've done so far like this:
+
+<code>
+var names = ['Sarah', 'Jacob', 'Juan', 'Amon'];
+var index = 0;
+while (index &lt; names.length) {
+  console.log(names[index]);
+  index++; //careful: if you forget or remove this line, the loop never ends.
+}
+</code>
+
+<p>
+  You can think of a <var>while</var> loop as an <var>if</var> statement that repeats, which gives them a kind of elegance. <var>for</var> loops require us to use a slightly more awkward syntax: you have to remember which part is the setup, which is the conditional, and which is the change. You also have to remember the semicolons that separate those individual parts. But I find that in practice, <var>for</var> loops are harder to mess up. Because they must have all three parts, they encourage you to write loops that will eventually end--whereas, in a <var>while</var> loop, a math error or a forgotten line can lead to infinite looping. Still, they have their uses, and it's good to be familiar with them.
+
+<h2>Exercises and Practice Questions</h2>
+
+<ul>
+  <li> So far, we've looped over each item in a list by adding one. What would you change about a traditional loop if you wanted to only do something to <i>every other</i> item instead? What about every third item?
+  <li> Likewise, what if we wanted to leave the first or last item alone? How would you change the loop to make that possible?
+  <li> In some cases, we don't want to work through the list forward, we might want to do it backward. How would you write a loop that starts at the last item, and ends with the first?
+</ul>
 
 
 <script>
