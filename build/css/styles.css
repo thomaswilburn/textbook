@@ -58,7 +58,7 @@ h2 > var {
 }
 code {
   display: block;
-  padding: 0 0 1em .5em;
+  padding: 1em 0 1em .5em;
   background: black;
   color: white;
   margin: 1em 0;
@@ -160,20 +160,31 @@ pre.prettyprint {
 ol.linenums {
   margin-top: 0;
   margin-bottom: 0;
-  color: #AEAEAE;
+  color: #888;
 }
 /* IE indents via margin-left */
 li.L0,
 li.L1,
 li.L2,
 li.L3,
+li.L4,
 li.L5,
 li.L6,
 li.L7,
 li.L8 {
-  list-style-type: none;
+  list-style-type: decimal-leading-zero;
+  background: black;
+  border-left: 1px solid #333;
+  padding-left: 4px;
 }
 /* Alternate shading for lines */
+li.L1,
+li.L3,
+li.L5,
+li.L7,
+li.L9 {
+  background: #111;
+}
 @media print {
   pre .str,
   code .str {

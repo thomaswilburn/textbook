@@ -233,7 +233,7 @@ var float = parseFloat(text);
 
 <script>
 require(['jquery', 'google-code/prettify'], function($) {
-  $('code').addClass('prettyprint');
+  $('code').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
   PR.prettyPrint();
 });
 </script>
