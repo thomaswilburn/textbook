@@ -18,6 +18,10 @@ require.config({
   box-sizing: border-box;
 }
 
+body {
+  font-family: calibri, sans-serif;
+}
+
 .editor {
   width: 100%;
   height: 500px;
@@ -68,6 +72,46 @@ button {
 button:hover {
   background: #678;
 }
+
+.dialog {
+  position: fixed;
+  width: 500px;
+  left: 50%;
+  top: 30%;
+  background: white;
+  padding: 1em;
+  border-radius: 8px;
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, .2);
+  z-index: 999;
+  margin-left: -250px;
+}
+
+a.close-dialog {
+  content: "[x]";
+  class: 'close-button';
+  position: absolute;
+  top: .5em;
+  right: .5em;
+  cursor: pointer;
+  color: #888;
+  font-family: monospace;
+}
+
+.import input {
+  width: 100%;
+  margin: 1em;
+}
+
+.export textarea {
+  width: 100%;
+  height: 500px;
+  font-size: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
   </style>
 </head>
 <body>
@@ -76,9 +120,20 @@ button:hover {
 <div class="ui">
   <button class="add-revision">Add revision</button>
   <button class="remove-revision">Remove current revision</button>
+  <button class="import-revision">Import</button>
   <button class="export-revisions">Export</button>
 </div>
 <div id="editor" class="editor" contenteditable></div>
+<div class="hidden import dialog">
+  <a class="close-dialog">[x]</a>
+  <h2>Choose a file</h2>
+  <p>
+    Select a timelapse file to import via the input below, or drag it from your computer onto this form.
+  <input class="file" type="file">
+</div>
+<div class="hidden export dialog">
+  <textarea></textarea>
+</div>
 
 <script>
 
@@ -102,7 +157,6 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
       var head = this.revisions.slice(0, dest);
       var tail = this.revisions.slice(dest);
       this.revisions = head.concat([base], tail);
-      console.log(head, tail, this.revisions);
       this.current = dest;
       this.updateUI();
     },
@@ -142,17 +196,25 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
         bar.append(li);
       });
     },
+    importFile: function(fileHandle) {
+      var loading = $.Deferred();
+      var reader = new FileReader();
+      reader.readAsText(fileHandle);
+      reader.onload = function() {
+        loading.resolve(reader.result);
+      }
+      return loading.promise();
+    },
     revisions: [],
     comments: []
   };
 
   var tl = new TimeLapse();
-  tl.load('./test.time').done(function() {
+  /*tl.load('./test.time').done(function() {
     app.revisions = this.revisions.map(function(item) { return item.text });
     app.loadRevision(0);
     app.updateUI();
-    tl.serialize();
-  });
+  });*/
 
   $('.add-revision').on('click', function(e) {
     app.createRevision();
@@ -178,6 +240,35 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
     var id = this.getAttribute('data-revision');
     app.switchTo(id);
   });
+
+  $(document).on('dragstart dragover dragend drop', function(e) {
+    e.preventDefault();
+    console.log(e);
+    console.log(e.originalEvent);
+  });
+
+  $(document).on('click', 'a.close-dialog', function(e) {
+    $(this).closest('.dialog').addClass('hidden');
+  });
+
+  $('.import-revision').on('click', function() {
+    $('.import.dialog').removeClass('hidden');
+  });
+
+  $('.import.dialog input[type=file]').on('change', function(e) {
+    var handle = this.files[0];
+    if (!handle) return;
+    app.importFile(handle).done(function(data) {
+      tl.parse(data);
+      app.revisions = tl.revisions.map(function(item) { return item.text });
+      app.loadRevision(0);
+      app.updateUI();
+      $('.import.dialog').addClass('hidden');
+    });
+  });
+
+  app.createRevision();
+  app.updateUI();
 
   //window.app = app;
 
