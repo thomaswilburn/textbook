@@ -145,6 +145,13 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
   editor.getSession().setUseWorker(false);
   window.editor = editor;
 
+  var tl = new TimeLapse();
+  /*tl.load('./test.time').done(function() {
+    app.revisions = this.revisions.map(function(item) { return item.text });
+    app.loadRevision(0);
+    app.updateUI();
+  });*/
+
   var app = {
     current: -1,
     createRevision: function(){
@@ -201,6 +208,10 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
       var reader = new FileReader();
       reader.readAsText(fileHandle);
       reader.onload = function() {
+        tl.parse(reader.result);
+        app.revisions = tl.revisions.map(function(item) { return item.text });
+        app.loadRevision(0);
+        app.updateUI();
         loading.resolve(reader.result);
       }
       return loading.promise();
@@ -208,13 +219,6 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
     revisions: [],
     comments: []
   };
-
-  var tl = new TimeLapse();
-  /*tl.load('./test.time').done(function() {
-    app.revisions = this.revisions.map(function(item) { return item.text });
-    app.loadRevision(0);
-    app.updateUI();
-  });*/
 
   $('.add-revision').on('click', function(e) {
     app.createRevision();
@@ -241,12 +245,6 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
     app.switchTo(id);
   });
 
-  $(document).on('dragstart dragover dragend drop', function(e) {
-    e.preventDefault();
-    console.log(e);
-    console.log(e.originalEvent);
-  });
-
   $(document).on('click', 'a.close-dialog', function(e) {
     $(this).closest('.dialog').addClass('hidden');
   });
@@ -258,11 +256,27 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
   $('.import.dialog input[type=file]').on('change', function(e) {
     var handle = this.files[0];
     if (!handle) return;
-    app.importFile(handle).done(function(data) {
-      tl.parse(data);
-      app.revisions = tl.revisions.map(function(item) { return item.text });
-      app.loadRevision(0);
-      app.updateUI();
+    app.importFile(handle).done(function() {
+      $('.import.dialog').addClass('hidden');
+    });
+  });
+
+  var cancel = function(e) {
+    e = e.originalEvent || e;
+    e.preventDefault();
+    console.log(e);
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = 'copy';
+    }
+    return false;
+  };
+
+  $('.import.dialog').on('dragenter dragover', cancel);
+  $('.import.dialog').on('drop', function(e) {
+    e.preventDefault();
+    var handle = e.originalEvent.dataTransfer.files[0];
+    if (!handle) return;
+    app.importFile(handle).done(function() {
       $('.import.dialog').addClass('hidden');
     });
   });
