@@ -14,7 +14,7 @@ define(['jquery'], function() {
       request.done(function(data) {
         this.data = this.parse(data);
       }).then(loading.resolve);
-      return loading;
+      return loading.promise();
     },
     parse: function(text) {
       var lines = text.split(/\r?\n\r?/);
