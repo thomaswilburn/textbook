@@ -83,10 +83,6 @@ button:hover {
 <script>
 
 require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
-  var tl = new TimeLapse();
-  tl.load('./test.time').done(function() {
-    //console.log(this.data);
-  });
 
   var editor = ace.edit('editor');
   editor.setTheme('ace/theme/tomorrow');
@@ -145,11 +141,17 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
         bar.append(li);
       });
     },
-    revisions: []
+    revisions: [],
+    comments: []
   };
 
-  app.createRevision();
-  app.updateUI();
+  var tl = new TimeLapse();
+  tl.load('./test.time').done(function() {
+    app.revisions = this.revisions.map(function(item) { return item.text });
+    app.loadRevision(0);
+    app.updateUI();
+    tl.serialize();
+  });
 
   $('.add-revision').on('click', function(e) {
     app.createRevision();
@@ -158,6 +160,18 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
   $('.remove-revision').on('click', function(e) {
     app.removeRevision(this.getAttribute('data-revision'));
   });
+
+  $('.export-revisions').on('click', function(e) {
+    app.saveRevision();
+    tl.revisions = app.revisions.map(function(item, index) {
+      return {
+        text: item,
+        comment: app.comments[index] || ""
+      };
+    });
+    var output = tl.serialize();
+    console.log(output);
+  }); 
 
   $('.revision-bar').on('click', 'li', function(e) {
     var id = this.getAttribute('data-revision');
