@@ -163,7 +163,7 @@ define(['jquery'], function() {
         return tag + item.text;
       });
       var output = tagged.join('\n');
-      return output;
+      return $.trim(output);
     }
   };
 

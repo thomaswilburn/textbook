@@ -86,7 +86,8 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
 
   var editor = ace.edit('editor');
   editor.setTheme('ace/theme/tomorrow');
-  editor.getSession().setMode('ace/mode/javascript');
+  editor.getSession().setMode('ace/mode/javascript')
+  editor.getSession().setUseWorker(false);
   window.editor = editor;
 
   var app = {
@@ -106,7 +107,7 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
       this.updateUI();
     },
     loadRevision: function(from) {
-      editor.setValue(this.revisions[from]);
+      editor.setValue(this.revisions[from], 1);
       this.current = from;
     },
     saveRevision: function(to) {
@@ -178,7 +179,7 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
     app.switchTo(id);
   });
 
-  window.app = app;
+  //window.app = app;
 
 });
 
