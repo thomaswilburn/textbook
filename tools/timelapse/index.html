@@ -264,7 +264,6 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
   var cancel = function(e) {
     e = e.originalEvent || e;
     e.preventDefault();
-    console.log(e);
     if (e.dataTransfer) {
       e.dataTransfer.dropEffect = 'copy';
     }
