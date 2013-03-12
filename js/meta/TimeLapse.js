@@ -17,13 +17,23 @@ define(['jquery'], function() {
       return loading.promise();
     },
     parse: function(text) {
+      //find comments first, because they're multiline
+      var isComment = /[\n\r]*@@(\d)+:([\s\S]*?)@@[\n\r]*/gm;
+      var comment;
+      var comments = [];
+      while (comment = isComment.exec(text)) {
+        var all = comment[0];
+        var rev = comment[1] * 1;
+        comments[rev] = comment[2] || "";
+        text = text.replace(all, '');
+      };
+
+      //then parse remaining text
       var lines = text.split(/\r?\n\r?/);
       var parsed = [];
-      var comments = [];
       var last = 0;
 
       var tagger = /(?:@)([^@]+)(?:@)/;
-      var isComment = /@?c:(\d)@?/;
       var startEnd = /@?(\d+)?,(\d+)?@?/;
 
       for (var i = 0; i < lines.length; i++) {
@@ -32,23 +42,14 @@ define(['jquery'], function() {
         var metadata = {line: i};
         if (match && match[1]) {
           var tagContents = match[1];
-          if (isComment.test(tagContents)) {
-            var comment = {
-              text: line.replace(isComment, ''),
-              revision: isComment.exec(tagContents)[1]
-            };
-            comments.push(comment);
-            if (comment.revision > last) last = comment.revision;
-          } else {
-            var duration = startEnd.exec(tagContents);
-            metadata.start = duration[1] * 1 || 0;
-            metadata.end = duration[2] * 1;
-            if (typeof metadata.end != "number" || isNaN(metadata.end)) metadata.end = Infinity;
-            metadata.text = line.replace(startEnd, '');
-            parsed.push(metadata);
-            if (metadata.start > last) last = metadata.start;
-            if (metadata.end != Infinity && metadata.end > last) last = metadata.end;
-          }
+          var duration = startEnd.exec(tagContents);
+          metadata.start = duration[1] * 1 || 0;
+          metadata.end = duration[2] * 1;
+          if (typeof metadata.end != "number" || isNaN(metadata.end)) metadata.end = Infinity;
+          metadata.text = line.replace(startEnd, '');
+          parsed.push(metadata);
+          if (metadata.start > last) last = metadata.start;
+          if (metadata.end != Infinity && metadata.end > last) last = metadata.end;
         } else {
           var metadata = {
             start: 0,
@@ -63,6 +64,7 @@ define(['jquery'], function() {
         comments: comments,
         length: last + 1
       };
+      console.log(this.data);
       this.revisions = this.buildRevisions();
       return this.data;
     },
@@ -74,16 +76,16 @@ define(['jquery'], function() {
       var current = 0;
 
       for (var i = 0; i < length; i++) {
-        var rev = "";
+        var rev = [];
         for (var j = 0; j < lines.length; j++) {
           var line = lines[j];
           if (line.start <= i && line.end >= i) {
-            rev += line.text + "\n";
+            rev.push(line.text);
           }
         }
         revisions[i] = {
-          text: rev,
-          comment: comments[i] ? comments[i].text : ""
+          text: rev.join('\n'),
+          comment: comments[i] ? comments[i] : ""
         }
       }
       return revisions;
@@ -153,7 +155,7 @@ define(['jquery'], function() {
         }
         list = merged;
       }
-      var tagged = merged.map(function(item) {
+      var tagged = list.map(function(item) {
         var tag = "";
         if (item.start > 0 || item.end < Infinity) {
           tag = "@" + item.start + ',';
@@ -162,6 +164,12 @@ define(['jquery'], function() {
         }
         return tag + item.text;
       });
+      for (var i = 0; i < this.revisions.length; i++) {
+        var comment = this.revisions[i].comment;
+        if (comment) {
+          tagged.push('@@c:' + i + ';' + comment + '@@');
+        }
+      }
       var output = tagged.join('\n');
       return $.trim(output);
     }

@@ -1,4 +1,5 @@
 This is a timelapse file
-@,0@ This line was removed after the first revision
-@1,@ This line was added after the first revision
-@c:1@ This is a revision comment added for the first revision.
+@,0@This line was removed after the first revision
+@1,@This line was added after the first revision
+@@1:This is a revision comment added for the first revision.
+Comments are allowed to be multiline@@

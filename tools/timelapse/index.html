@@ -23,9 +23,20 @@ body {
 }
 
 .editor {
-  width: 100%;
+  width: 80%;
   height: 500px;
-  outline: 1px dashed #888;
+  border: 1px dashed #888;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.comments {
+  width: 20%;
+  height: 500px;
+  border: 1px solid #BBB;
+  display: inline-block;
+  margin: 0px;
+  vertical-align: top;
 }
 
 .revision-bar {
@@ -102,9 +113,14 @@ a.close-dialog {
   margin: 1em;
 }
 
+.export.dialog {
+  top: 1em;
+}
+
 .export textarea {
   width: 100%;
-  height: 500px;
+  height: 300px;
+  margin-top: 1em;
   font-size: 10px;
 }
 
@@ -123,7 +139,8 @@ a.close-dialog {
   <button class="import-revision">Import</button>
   <button class="export-revisions">Export</button>
 </div>
-<div id="editor" class="editor" contenteditable></div>
+<div id="editor" class="editor"></div><textarea id="comments" class="comments"></textarea>
+
 <div class="hidden import dialog">
   <a class="close-dialog">[x]</a>
   <h2>Choose a file</h2>
@@ -132,6 +149,7 @@ a.close-dialog {
   <input class="file" type="file">
 </div>
 <div class="hidden export dialog">
+  <a class="close-dialog">[x]</a>
   <textarea></textarea>
 </div>
 
@@ -165,18 +183,21 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
       var dest = this.current + 1;
       var head = this.revisions.slice(0, dest);
       var tail = this.revisions.slice(dest);
-      this.revisions = head.concat([base], tail);
+      this.revisions = head.concat([{text: base}], tail);
       this.current = dest;
       this.updateUI();
     },
     loadRevision: function(from) {
-      editor.setValue(this.revisions[from], 1);
+      editor.setValue(this.revisions[from].text, 1);
+      $('.comments').val(this.revisions[from].comment);
       this.current = from;
     },
     saveRevision: function(to) {
       to = to * 1 || this.current;
       var text = editor.getValue();
-      this.revisions[to] = text;
+      if (!this.revisions[to]) this.revisions[to] = {};
+      this.revisions[to].text = text;
+      this.revisions[to].comment = $('.comments').val();
     },
     switchTo: function(rev) {
       rev = rev * 1;
@@ -211,7 +232,7 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
       reader.readAsText(fileHandle);
       reader.onload = function() {
         tl.parse(reader.result);
-        app.revisions = tl.revisions.map(function(item) { return item.text });
+        app.revisions = tl.revisions.slice();
         app.loadRevision(0);
         app.updateUI();
         loading.resolve(reader.result);
@@ -232,14 +253,10 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
 
   $('.export-revisions').on('click', function(e) {
     app.saveRevision();
-    tl.revisions = app.revisions.map(function(item, index) {
-      return {
-        text: item,
-        comment: app.comments[index] || ""
-      };
-    });
+    tl.revisions = app.revisions.slice();
     var output = tl.serialize();
-    console.log(output);
+    $('.export.dialog').removeClass('hidden').find('textarea').val(output);
+    if (console && console.log) console.log(output);
   }); 
 
   $('.revision-bar').on('click', 'li', function(e) {
