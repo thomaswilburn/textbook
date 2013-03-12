@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Enter the Browser"]
+[@import snippets/head.html title="Choose Your Own Adventure"]
 
 <h1>Choose Your Own Adventure</h1>
 
@@ -14,6 +14,7 @@
 &lt;script&gt;
   var x = 12;
 &lt;/script&gt;
+
 &lt;script src="external.js"&gt;&lt;/script&gt;
 </code>
 
@@ -27,7 +28,7 @@
   Traditionally, script tags were often loaded in the &lt;head&gt; tag of a document, but this is a bad idea. When browsers encounter the &lt;script&gt;, they stop all other tasks completely until it is downloaded (if external), parsed, and executed completely. The reason for the delay is that JavaScript can alter the structure of the page, and it's difficult for the browser to build the page for display while scripts are busy altering it. If scripts are loaded at the top of the page, that means the user has to stare at a blank screen until everything is loaded. It's better to load your scripts at the bottom of the page, just before the close of the body tag. Page rendering and interaction will still be paused for the same amount of time, but at least people will have something to look at.
 
 <p>
-  Sometimes we want to add comments to our code in English, in order to explain a particularly tricky line or even just to leave ourselves (and other programmers) a note about why we wrote it that way. There are two ways to leave comments in JavaScript. The first is to put a <var>//</var> in front of the line, and the second is to wrap the text in <var>/*</var> and <var>*/</var> markers.
+  Adding code to an HTML page using &lt;script&gt; tags is convenient, but it means that we might sometimes get lost in large blocks of code. Sometimes we want to add comments to our code in English, in order to explain a particularly tricky line or even just to leave ourselves (and other programmers) a note about why we wrote it that way. There are two ways to leave comments in JavaScript. The first is to put a <var>//</var> in front of the line, and the second is to wrap the text in <var>/*</var> and <var>*/</var> markers.
 
 <code>
 // this is a code comment
@@ -44,12 +45,20 @@ comment as well.
 </code>
 
 <p>
-  Unfortunately, when we run code from inside of a script tag like this, we lose the ability to immediately see its evaluated result the way we can when we type each line into the console. We'll need a way to print information to the screen from our script, so that we can see the output of our scripts. For that, we're going to use a function that's attached to the built-in <var>console</var> variable, named <var>console.log()</var>. We can put any expression between the parentheses, and it will be evaluated and printed out on the console for us. Try making a script tag (embedded or external) and including a few log statements, like so:
+  Unfortunately, when we run code from inside of a script tag like this, we lose the ability to immediately see its evaluated result the way we can when we type each line into the console. We'll need a way to print information to the screen from our script, so that we can see the output of our scripts. For that, we're going to use a command that's attached to the built-in <var>console</var> variable, named <var>console.log()</var>. We can put any expression between the parentheses, and it will be evaluated and printed out on the console for us. Try making a script tag (embedded or external) and including a few log statements, like so:
 
 <code>
 console.log("Hello, world!");
 console.log(true);
 console.log(123.45);
+</code>
+
+<p>
+  Like the <var>String()</var> and <var>Number()</var> converters, <var>console.log()</var> is also a function (note the parentheses on the end). Remember, functions are special commands that take their inputs between their trailing parentheses. You can provide multiple inputs to <var>console.log()</var>, or any other function, by listing them one at a time, separated by commas. Not all functions will actually do something with the extra input, but this one will:
+
+<code>
+console.log("Hello", 123, true);
+//logs "Hello" 123 true
 </code>
 
 <p>
@@ -179,7 +188,60 @@ require(['interactives/LightIf']);
   </script>
 
 <p>
-  Enjoy it while you can: our programs won't always be this easy to draw. In the next chapter, we're going to start working with loops--asking the computer to repeat sections of code for us, instead of having to repeat it ourselves.
+  So far, all the conditional statements we've created have had only two paths: the <var>if</var> (when the condition is true) and the <var>else</var> (when it's false). But by combining the <var>else</var> with another <var>if</var>, we can actually chain them together to create a more interesting set of conditions:
+
+<code>
+var x = 12;
+if (x &gt; 20) {
+  //first try one condition
+} else if (x &lt; 10) {
+  //try another condition
+} else {
+  //if all else fails, do this
+}
+</code>
+
+<p>
+  Finally, it's possible to combine or invert multiple conditions into one <var>if</var> statement, using a series of special operators.
+
+<table>
+  <tr>
+    <td>&amp;&amp;
+    <td>AND
+  <tr>
+    <td>||
+    <td>OR
+  <tr>
+    <td>!
+    <td>NOT
+</table>
+
+<p>
+  By putting the <var>&amp;&amp;</var> or <var>||</var> operators between two conditions, you can either require both of them to be true, or specify that either one can be true:
+
+<code>
+if (true &amp;&amp; false) {
+  //this will not execute, because &amp;&amp; means AND:
+  //both the first AND the second item must be true
+}
+
+if (false || true) {
+  //even thought the first item is false, this block will
+  //still execute, because either the first OR the second
+  //item must be true.
+}
+</code>
+
+  <var>&amp;&amp;</var> and <var>||</var> behave like our addition or subtraction operators: they go between two items to create an expression. The NOT operator is different. By placing a <var>!</var> in front of an expression, you flip it from true to false, or from false to true. Be careful with <var>!</var> as it can create some confusing code.
+
+<code>
+if (!false) {
+  //it's NOT false, so it's true
+}
+</code>
+
+<p>
+  These operators are very useful for writing compound conditions, but don't go too crazy with them. Abusing <var>&amp;&amp;</var> and <var>||</var> to create long chains of conditional if statements can end up being very hard to read, and sometimes you're better off just nesting <var>if</var> statements inside each other for the same effect.
 
 <h2>Practice</h2>
 

@@ -28,8 +28,8 @@
 
   <ul>
     <li> In Firefox, you can find it under the Web Developer menu as "Web Console", or by pressing Ctrl-Shift-K.
-    <li> In Chrome, it's called the "JavaScript Console," and it's located under "Tools" in the Chrome menu.
-    <li> Internet Explorer puts its console in one tab of the "Developer Tools" item of the browser menu.
+    <li> In Chrome, it's called the "JavaScript Console," and it's located under "Tools" in the Chrome menu, or by pressing Ctrl-Shift-J.
+    <li> Internet Explorer puts its console in one tab of the "Developer Tools" item of the browser menu, which you can launch by pressing F12.
   </ul>
 
 <p>
@@ -106,7 +106,7 @@ result = result + .5;
 <h2>Types</h2>
 
 <p>
-  So far, we've been working with numberical values exclusively, but JavaScript actually has several types of values that it can use in its expressions and store in variables. The most basic kinds of values JavaScript can store, otherwise known as the <mark>primitive</primitive> types, are numbers, strings, and Booleans. We've already seen how numbers can work, so how about the others?
+  So far, we've been working with numberical values exclusively, but JavaScript actually has several types of values that it can use in its expressions and store in variables. The most basic kinds of values JavaScript can store, otherwise known as the <mark>primitive</mark> types, are numbers, strings, and Booleans. We've already seen how numbers can work, so how about the others?
 
 <h3>Strings</h3>
 
@@ -147,8 +147,6 @@ var worst = "It was the worst of times.";
 var combined = best + " " + worst;
 </code>
 <samp>"It was the best of times. It was the worst of times."</samp>
-
-  Let's see a hundred monkeys beat that.
 
 <p>
   Unfortunately, none of the other math operators work on strings. It would be nice to be able to subtract text from a sentence, but if you try, you'll get the result <var>NaN</var>. Contrary to what you'd think, this is not a delicious form of Indian bread. It stands for Not a Number, and is the result of trying to do math on non-math variable types in JavaScript.
@@ -204,13 +202,14 @@ typeof true
 <samp>"boolean"</samp>
 
 <p>
-  <var>typeof</var> returns a string containing the type of the variable being inspected. Once we know that a variable isn't what we want it to be, we can convert it between types with some simple operations. To convert a number to a string, you can use the <var>String()</var> function.
+  <var>typeof</var> returns a string containing the type of the variable being inspected. Once we know that a variable isn't what we want it to be, we can convert it between types with some simple operations. To convert a number to a string, you can use the <var>String()</var> function. A <mark>function</mark> is a special kind of JavaScript command. For now, just know that functions are usually followed by parentheses, and you place your input value inside of them. The function then evaluates to a value just like any other expression--in this case, it converts the number value into a text string.
 
 <code>
 var num = 2;
 var text = String(num);
 </code>
 
+<p>
   We can go the other way using the <var>Number()</var> function. You can also convert a string to a number by using the <var>parseFloat</var> function that's built-in to JavaScript ("float" refers to "floating point," meaning a number with a decimal point--some languages also use "fixed" point, where the decimal is always in the same place, but JavaScript isn't one of them).
 
 <code>

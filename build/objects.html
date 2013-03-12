@@ -143,10 +143,57 @@ for (var prop in movie) {
 <h2>Construction with Objects</h2>
 
 <p>
-  Using objects gives us a way to create strongly-related values, by combining them under a single variable. By combining them with arrays and other objects, we can write code that is readable, elegant, and efficient. Let's work through an example using some real-world data.
+  Using objects gives us a way to create strongly-related values, by combining them under a single variable. By combining them with arrays and other objects, we can write code that is readable, elegant, and efficient. Let's work through an example using some real-world data that uses all the skills we've picked up over the last few chapters: <var>if/else</var>, <var>for</var> loops, arrays, and objects.
+
+<code>
+var quakes = [
+  {
+    magnitude: 4.3,
+    location: "Seattle"
+  },
+  {
+    magnitude: 2.7,
+    location: "San Francisco"
+  },
+  {
+    magnitude: 5.4,
+    location: "Las Vegas"
+  }
+  {
+    magnitude: 1.8,
+    location: "Washington, DC"
+  }
+];
+</code>
 
 <p>
-  
+  The above code sets up an array full of earthquake data. There are only three quakes in our set, but there could easily be more. The advantage of using a loop over this information is that it would scale, whether it was three earthquakes or three thousand. Now, we're going to look through our data and find out where the largest quake took place. First, we'll set up a variable to contain the highest quake we've found so far. We'll go ahead and assign the first earthquake to the variable, since we need some starting values.
+
+<code>
+var highest = quakes[0];
+</code>
+
+<p>
+  Then we'll loop over the quakes array, checking each item in turn. If it's higher in magnitude than the quake stored in <var>highest</var>, we'll store it in <var>highest</var> instead and keep going.
+
+<code>
+for (var i = 0; i &lt; quakes.length; i++) {
+  var current = quakes[i]; //get the current quake object
+  if (current.magnitude &gt; highest.magnitude) { //check against highest
+    highest = current; //if higher, reassign highest
+  }
+}
+console.log("The biggest earthquake took place in " + highest.location);
+</code>
+
+<p>
+  Problems like this start to show how objects and loops can make many tough problems trivially solveable. Sure, it's easy to find the biggest quake when there are only three items. When there are many more, however, or the comparisons become more complicated, you'll be glad to let the computer handle this kind of manual labor. It can be a little frustrating, having to explain your task to the computer in such painstaking detail. But that's the nature of programming, and the benefits are worth it.
+
+<h2>Exercises and Practice Questions</h2>
+
+<ol>
+  <li>
+</ol>
 
 <script>
 require(['jquery', 'google-code/prettify'], function($) {

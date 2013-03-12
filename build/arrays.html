@@ -165,7 +165,7 @@ for (var i = 0; i &lt; prices.length; i = i + 1) {
       <ol>
         <li> <var>var i = 0</var> (the setup): we define a variable <var>i</var> to keep track of our array location, starting at 0 (the first index of all arrays).
         <li> <var>i &lt; prices.length</var> (the condition): we say that we will keep going as long as our index-tracking variable <var>i</var> is less than the length of the array. That means it will go all the way to the last item, since the index of the last item is always one less than the <var>length</var> property of the array.
-        <li> <var>i = i + 1</var> (the change): after each repetition, we add one to <var>i</var>, meaning that we have moved up to the next item in the array.
+        <li> <var>i = i + 1</var> (the change): after each repetition, we add one to <var>i</var>, meaning that we have moved up to the next item in the array. Adding one to a number variable is a common task in JavaScript, so the language provides a shortcut that you'll often see used in loops: instead of <var>i = i + 1</var>, just write <var>i++</var>.
       </ol>
     <li> Finally, we perform the actual process inside the loop block, between the curly braces. In this case, we've taken the code from above, but instead of using a literal number between the square brackets, we just use <var>i</var>. As the loop runs, we'll start at <var>prices[0]</var>, and work our way up until we trigger the condition by running out of array items (when the index is the same as the <var>length</var>).
   </ol>
@@ -200,6 +200,7 @@ require(['interactives/HouseLoop']);
   You may have noticed that we've written all these loops in a similar way. We've used the variable <var>i</var> each time, and the structure always tends to look like this:
 
 <code>
+//remember, i++ is the same as i = i + 1
 for (var i = 0; i &lt; arrayToLoopOver.length; i++) {
   var currentItemInArray = arrayToLoopOver[i];
   // ...
