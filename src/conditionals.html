@@ -4,6 +4,24 @@
 
 <h2>Script Tags</h2>
 
+<aside>
+
+  <h1>What's Up, Doctype?</h1>
+
+  <p>
+    We're going to be talking about placing scripts into HTML pages in this chapter, and that means we should talk about the doctype. A <mark>doctype</mark> is a tag that goes at the top of the document and identifies the vintage of HTML that the browser should use for this page. Having an old or incorrect doctype will result in the page being handled in non-standard ways, as detailed by <a href="http://hsivonen.iki.fi/doctype/">Henri Sivonen</a> in an excellent post.
+
+  <p>
+    I'll make this easy: for the purposes of writing good, modern JavaScript, you should always start your pages with the HTML5 doctype. Luckily, it is very short and easy to remember:
+
+  <code>
+&lt;!doctype html&gt;
+  </code>
+
+    15 characters and does exactly what it says. Think of it as your HTML5 seal of quality.
+
+</aside>
+
 <p>
   So far we've been working with the JavaScript console, which is a great way to try out code and experiment, but obviously most web pages do not write their scripts this way. We need to learn how to embed scripts into web pages, which means using the <mark>&lt;script&gt;</mark> tag. But don't worry: the console is still going to be extremely useful to us.
 
@@ -24,8 +42,12 @@
 <p>
   Sometimes people include a type attribute on their tag (typically it's <var>type="text/javascript"</var> or something similar). This isn't necessary: the only language that runs in the browser is JavaScript, so it will automatically run anything with a &lt;script&gt; tag. More importantly, a typo in the type attribute may cause the browser to <i>not</i> run your code, so it's safer just to leave it off.
 
-<p>
-  Traditionally, script tags were often loaded in the &lt;head&gt; tag of a document, but this is a bad idea. When browsers encounter the &lt;script&gt;, they stop all other tasks completely until it is downloaded (if external), parsed, and executed completely. The reason for the delay is that JavaScript can alter the structure of the page, and it's difficult for the browser to build the page for display while scripts are busy altering it. If scripts are loaded at the top of the page, that means the user has to stare at a blank screen until everything is loaded. It's better to load your scripts at the bottom of the page, just before the close of the body tag. Page rendering and interaction will still be paused for the same amount of time, but at least people will have something to look at.
+<aside>
+  <h1>Script location</h1>
+
+  <p>
+    Traditionally, script tags were often loaded in the &lt;head&gt; tag of a document, but this is a bad idea. When browsers encounter the &lt;script&gt;, they stop all other tasks completely until it is downloaded (if external), parsed, and executed completely. The reason for the delay is that JavaScript can alter the structure of the page, and it's difficult for the browser to build the page for display while scripts are busy altering it. If scripts are loaded at the top of the page, that means the user has to stare at a blank screen until everything is loaded. It's better to load your scripts at the bottom of the page, just before the close of the body tag. Page rendering and interaction will still be paused for the same amount of time, but at least people will have something to look at.
+</aside>
 
 <p>
   Adding code to an HTML page using &lt;script&gt; tags is convenient, but it means that we might sometimes get lost in large blocks of code. Sometimes we want to add comments to our code in English, in order to explain a particularly tricky line or even just to leave ourselves (and other programmers) a note about why we wrote it that way. There are two ways to leave comments in JavaScript. The first is to put a <var>//</var> in front of the line, and the second is to wrap the text in <var>/*</var> and <var>*/</var> markers.
@@ -106,6 +128,16 @@ var value = true;
 if (value) { console.log("We can test variables, in addition to literals."); }
 </code>
 
+<aside>
+
+  <h1>Whitespace</h1>
+
+  <p>
+    Unlike Python, Ruby, or several other languages, JavaScript does not care about your <mark>whitespace</mark>--the spaces, tabs, and line breaks that you put into your code. If you wanted to, you could write all your code on one line, as long as you included semicolons to tell JavaScript where each statement ends. In fact, there are <a href="http://alistapart.com/article/better-javascript-minification">many tools to remove whitespace from code</a>, because it makes for smaller files (and thus shorter downloads). But it's a good idea to use whitepace liberally, because it makes your code easier to read and understand, both for yourself and for others. Indentation is particularly important. As a rule of thumb, each time you write a curly brace, increase your indentation by one tab (or its equivalent in spaces).
+
+</aside>
+
+<p>
   The second line shows why it's so important to know the difference between a Boolean (<var>false</var>) and a string (<var>"false"</var>). The string will be considered truthy for the purpose of conditionals, so if you really mean <var>false</var>, be sure to leave out the quotes.
 
 <p>

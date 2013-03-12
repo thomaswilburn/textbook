@@ -27,6 +27,21 @@ var alphabet = ['a', 'b', 'c'];
 <p>
   To get values back out of the array, we use square brackets after the variable name, with a number between the brackets to say <i>which</i> item we want to pull out of the list. There's a catch, though: although we normally begin lists with #1, in JavaScript the first item in an array is #0, and we count up from there. The number associated with an item is its <mark>index</mark>. If you think of an array as a street of houses, the index is its house number--the number isn't the house itself, it simply tells us where to find what we're really interested in. 
 
+<aside>
+
+  <h1>Why Do Arrays Start at Zero?</h1>
+
+  <p>
+    The answer, like so many problems in JavaScript, is "blame Java." Although under the hood they have almost nothig in common, when JavaScript was invented one of the demands was that it should "look like Java" to catch the popularity of Sun's new programming language (hence the name). In Java, arrays start at zero.
+
+  <p>
+    Why do arrays start at zero in Java? Like so many problems in <i>that</i> language, the answer is "blame C," which Java was designed to mimic in order to make existing programmers more comfortable (sensing a pattern?). An early programming language, C allowed developers to work directly with memory, using something called a pointer. The array operator in C tells the computer to start at the memory address in the pointer, then move forward by some number of units. For the first item, you move forward zero units (because it's the first). It made sense at the time.
+
+  <p>
+    There are, of course, languages that start at 1 instead of 0, like Lua and Visual Basic. For various reasons, these languages have tended not to take off, although I doubt the choice of zero as the first array index has anything to do with it. And zero-indexing has some nice side effects for writing loops. But in the mean time, you might as well just get used to it.
+
+</aside>
+
 <code>
 alphabet[2]; //gets the third item, because the list starts at index 0
 </code>
@@ -149,10 +164,30 @@ for (var i = 0; i &lt; prices.length; i = i + 1) {
       <ol>
         <li> <var>var i = 0</var> (the setup): we define a variable <var>i</var> to keep track of our array location, starting at 0 (the first index of all arrays).
         <li> <var>i &lt; prices.length</var> (the condition): we say that we will keep going as long as our index-tracking variable <var>i</var> is less than the length of the array. That means it will go all the way to the last item, since the index of the last item is always one less than the <var>length</var> property of the array.
-        <li> <var>i = i + 1</var> (the change): after each repetition, we add one to <var>i</var>, meaning that we have moved up to the next item in the array. Adding one to a number variable is a common task in JavaScript, so the language provides a shortcut that you'll often see used in loops: instead of <var>i = i + 1</var>, just write <var>i++</var>.
+        <li> <var>i = i + 1</var> (the change): after each repetition, we add one to <var>i</var>, meaning that we have moved up to the next item in the array. 
       </ol>
     <li> Finally, we perform the actual process inside the loop block, between the curly braces. In this case, we've taken the code from above, but instead of using a literal number between the square brackets, we just use <var>i</var>. As the loop runs, we'll start at <var>prices[0]</var>, and work our way up until we trigger the condition by running out of array items (when the index is the same as the <var>length</var>).
   </ol>
+
+<aside>
+
+  <h1>Add One, Call Me in the Morning</h1>
+
+  <p>
+    It turns out that adding one to a number value is a very, very common task in programming. It's so common, there's even a special operator for it, which you'll see used in many of the examples below:
+
+  <code>
+//instead of writing
+i = i + 1;
+
+//you can write
+i++;
+  </code>
+
+  <p>
+    If you're interested, <var>++</var> is not the only useful arithmetic operator. The Mozilla Developer Network has <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Operators/Arithmetic_Operators">notes on a few more</a>.
+
+</aside>
 
 <p>
   I often find that it's helpful to think of loops and arrays using some kind of spatial metaphor, like a row of houses. Imagine that you're working as a pollster on a street of houses, starting with #0 and working your way to the end of the block. You'd like to know how many people answer true to a polling question. Unfortunately, you're not able to visit the houses yourself, but you have an assistant that you can send to each house, as long as you explain exactly what you want her to do. It might work something like this:

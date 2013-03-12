@@ -82,6 +82,16 @@ mark {
   background: transparent;
   font-weight: bold;
 }
+aside {
+  font-size: 14px;
+  width: 350px;
+  float: right;
+  margin-right: -375px;
+  border: 1px dotted #888;
+  padding: 1em;
+  background: white;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+}
 /* Pretty printing styles. Used with prettify.js. */
 /* Vim sunburst theme by David Leibovic */
 pre .str,
