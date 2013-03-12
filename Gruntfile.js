@@ -5,46 +5,6 @@ module.exports = function(grunt) {
     var path = require('path');
     var http = require('http');
 
-    var copyFile = function(from, to) {
-        var read = fs.readFileSync(from, 'utf8');
-        var dir = path.dirname(to);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
-        }
-        fs.writeFileSync(to, read);
-    };
-
-    var findFiles = function(paths) {
-        var found = [];
-        if (typeof paths == 'string') {
-            paths = [paths];
-        }
-
-        for (var i = 0; i < paths.length; i++) {
-            var files = paths[i];
-            var wildcard = files.indexOf('*');
-            var root = path.dirname(files);
-            var listing = fs.readdirSync(root);
-
-            //if this is a wildcard, find all the matching files
-            if (wildcard > -1) {
-                var filter = files.substr(wildcard);
-                filter = filter.replace('.', '\\.');
-                filter = filter.replace('*', '.*');
-                filter = new RegExp(filter);
-                listing = listing.filter(function(item) {
-                    return item.match(filter);
-                }).map(function(item) {
-                    return path.join(root, item);
-                });
-            }
-
-            found = found.concat(listing);
-        }
-
-        return found;
-    };
-
     grunt.initConfig({
         shorts: {
             paths: './src/*.html',
@@ -90,12 +50,12 @@ module.exports = function(grunt) {
       for (var i = 0; i < directories.length; i++) {
         var dir = directories[i];
         var filter = path.join(config.src, dir, '*.js');
-        var files = findFiles(filter);
+        var files = grunt.file.expand(filter);//findFiles(filter);
         var outputDir = path.join(config.build, dir);
 
         for (var j = 0; j < files.length; j++) {
             var slug = path.basename(files[j]);
-            copyFile(files[j], path.join(outputDir, slug));
+            grunt.file.copy(files[j], path.join(outputDir, slug));
         }
       }
     });
@@ -133,7 +93,7 @@ module.exports = function(grunt) {
     */
     grunt.registerTask('shorts', 'Simple shortcode templating', function() {
         var config = grunt.config('shorts');
-        var files = findFiles(config.paths);
+        var files = grunt.file.expand(config.paths);
         var outputDir = config.output;
 
         var parse = function(input) {
