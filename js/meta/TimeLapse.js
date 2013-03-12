@@ -64,7 +64,6 @@ define(['jquery'], function() {
         comments: comments,
         length: last + 1
       };
-      console.log(this.data);
       this.revisions = this.buildRevisions();
       return this.data;
     },
