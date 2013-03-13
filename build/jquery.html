@@ -1,0 +1,96 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie"><![endif]-->
+<!--[if gt IE 9]><!--><html><!--<![endif]-->
+<head>
+  <title>Beginning jQuery</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+  require.config({
+    baseUrl: '../js',
+    paths: {
+      jquery: 'jquery-1.9.min'
+    }
+  });
+  </script>
+</head>
+<body>
+  <h1>Beginning jQuery</h1>
+  <div class="content">
+
+<h2>Find, Do</h2>
+
+<p>
+  Technically speaking, the standard for JavaScript doesn't include any information on input and output. It's meant to be a hosted language, living inside another program--in this case, the browser. But since it has been used in browsers for so long, input and output in JavaScript usually means using functions that search and update web pages. The problem is that these functions are, in a word, terrible. They have long, confusing names. They return values that look like regular JavaScript values, but aren't. They have poor default settings.
+
+<p>
+  Almost immediately after interactive web pages became possible, people began writing helper scripts that would "wrap" these poorly-engineered browsers functions in more convenient forms. The most popular of these is jQuery, which was invented in 2005 by John Resig. It's not always the most advanced library, or the most comprehensive. But it has been one of the easiest to use, with a clean and fluent interface and a metric ton of plugins to cover a wide variety of use cases. For that reason, we'll be learning jQuery in this book, but you should also familiarize yourself with other popular helper libraries.
+
+<aside>
+
+  <h1>Everyone Else</h1>
+
+  <p>
+    JavaScript libraries are like opinions: everyone has one, and theirs is always the best. But beyond the jQuery bubble, there are a lot of really interesting, powerful ideas being written. Even if you don't commonly use them, it's worth checking out a few alternatives just to see what they do well, and what you can learn.
+
+    <ul>
+      <li> <a href="">YUI</a> - An incredibly comprehensive system created at Yahoo! that covers everything from basic page manipulation to large-scale application design. Somehow, YUI has never become popular, a fact I attribute to its slightly clumsy interface (and the fact that most coders are vaguely embarrassed by the name "Yahoo!").
+      <li> <a href="">Dojo</a> - Much like YUI, Dojo is an "everything-and-the-kitchen-sink" library organized into a wide range of modules.
+      <li> <a href="">Zepto</a> - A jQuery-compatible library meant to be smaller and faster on mobile devices. This library only works reliably on Webkit-based browsers.
+      <li> <a href="">Prototype</a> - One of the early competitors to jQuery, Prototype has fallen by the wayside, particularly as some of its innovations--namely, altering the built-in page objects to make them more user-friendly--have fallen out of fashion. 
+    </ul>
+
+</aside>
+
+<p>
+  jQuery is based on a "find tags, then do something to them" philosophy. Its primary innovation was the ability to look for elements on the page using CSS selectors. If you've done any CSS, you should be familiar with selectors: they're the rules that you set up to specify which parts of the page get a certain style. This book assumes that you know enough to write some simple selectors, but here's a basic review:
+
+<table id="selectors">
+  <tr>
+    <th width=170>Selector
+    <th>Meaning
+    <th>Example
+  <tr>
+    <td><var>tag</var>
+    <td>Finds all tags matching the selector
+    <td><code>li, div, h1</code>
+  <tr>
+    <td><var>.class</var>
+    <td>Finds all elements with a given class name
+    <td><code>.content, .external, .dialog-box</code>
+  <tr>
+    <td><var>#id</var>
+    <td>Finds a single element with the specified ID
+    <td><code>#main, #menu, #next</code>
+  <tr>
+    <td><var>parent > child</var>
+    <td>Finds child elements that are directly inside the parent
+    <td><code>body > h1</code>
+  <tr>
+    <td><var>ancestor child</var>
+    <td>Finds any child elements that are anywhere inside the ancestor element
+    <td><code>body a</code>
+</table>
+
+<p>
+  For more information on CSS and CSS selectors, you may want to check out <a href="https://developer.mozilla.org/en-US/docs/CSS/Getting_Started">this comprehensive guide</a> from Mozilla.
+
+<p>
+  In the last few chapters, we've been loading scripts using the script tag, either inline or external via the <var>src</var> attribute. Now it's time to open up the developer tools again, using both the console and the HTML views (Chrome currently calls this "Elements"). While still on this page, from the console, type the following code and press enter:
+
+<code>
+$('#selectors tr').hide().fadeIn('slow');
+</code>
+
+
+<script>
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code, pre').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
+  PR.prettyPrint();
+});
+</script>
+
+  </div>
+</body>
+</html>

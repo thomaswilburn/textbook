@@ -1,0 +1,273 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie"><![endif]-->
+<!--[if gt IE 9]><!--><html><!--<![endif]-->
+<head>
+  <title>Getting Started</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+  require.config({
+    baseUrl: '../js',
+    paths: {
+      jquery: 'jquery-1.9.min'
+    }
+  });
+  </script>
+</head>
+<body>
+  <h1>Getting Started</h1>
+  <div class="content">
+
+<h2>The Console</h2>
+
+<p>
+  Compared to other programming languages, getting started with JavaScript is incredibly easy. You don't need a special editor. You don't need a compiler or other complicated tools. In fact, you don't even need to create any files or web pages. We're going to complete this first section using nothing more than the browser window you've already got open.
+
+<p>
+  The modern web browser is an impressive beast, and it includes many of the tools that you need not just to run JavaScript, but also to write it. Let's take a look at the first of these tools by opening up the <mark>console</mark>. All browsers include a console, although they keep them in different locations:
+
+<aside>
+
+  <h1>Developer Tools: Your New Best Friend</h1>
+
+  <p>
+    As a new JavaScript programmer, the developer tools are going to be your new best friend. They can help you figure out your HTML/CSS, debug crashes and scripting bugs, and provide insight into performance problems. You should get to know them, whichever browser you prefer. Here are some links to the dev tool documentation for each major browser:
+
+  <ul>
+    <li> <a href="https://developers.google.com/chrome-developer-tools/docs/overview">Chrome Developer Tools</a>
+    <li> <a href="https://developer.mozilla.org/en-US/docs/Tools">Tools for Firefox</a>
+    <li> <a href="http://msdn.microsoft.com/en-us/library/gg589507%28v=vs.85%29.aspx">How to Use IE Developer Tools</a>
+  </ul>
+
+</aside>
+
+  <ul>
+    <li> In Firefox, you can find it under the Web Developer menu as "Web Console", or by pressing Ctrl-Shift-K.
+    <li> In Chrome, it's called the "JavaScript Console," and it's located under "Tools" in the Chrome menu, or by pressing Ctrl-Shift-J.
+    <li> Internet Explorer puts its console in one tab of the "Developer Tools" item of the browser menu, which you can launch by pressing F12.
+  </ul>
+
+<p>
+  The console should have a blinking cursor next to a ">", just waiting for you to start typing something. Type the following line, then press the "Enter" key.
+
+<code>
+2 + 2;
+</code>
+
+  You should see two more lines added to the console: first a line containing the command you just typed, and then the result (hopefully "4"). Congratulations! You've just become a JavaScript programmer!
+
+<p>
+  The code "2 + 2" is what we call an <mark>expression</mark>. An expression is any JavaScript code that can be reduced down into a value, like we did here. The simplest expression possible is just a number value on its own, without any kind of operation. Expressions can be built out of smaller expressions, like so:
+
+<code>
+1 + 2 * 3;
+</code>
+
+<p>
+  The <var>*</var> in this code sample means "multiply" (to divide, use <var>/</var>). JavaScript uses the same rules of mathematical order that you learned in grade school: parentheses, exponents, multiplication, division, addition, and subtraction, in that order. So when JavaScript evaluates that expression, it first multiplies 2 and 3, then adds 1, for a final result of 7. Try it in the console now, if you'd like to double-check my math. If you'd like to change the order so that the 1 and 2 are added together before multiplying by 3, just add parentheses:
+
+<code>
+(1 + 2) * 3;
+</code>
+
+<p>
+  At the end of our statements, we add a semicolon to let JavaScript know that we're done with that line. If you leave it off, the code will still work. But it's often helpful to explicitly let the browser know that you're done with that particular thought.
+
+<p>
+  Often, when we are working with expressions, we may want to store the result so that we can use it later. For example, when balancing your checkbook, you might keep track of several subtotals within your budget (entertainment, food, rent) in order to see where your money is going. You wouldn't want to have to add up each subtotal every time you compared rent money to gas money.
+
+<p>
+  We can hold onto a value in JavaScript by assigning it to a <mark>variable</mark>. A variable is like a nickname that we assign to that value. So we might keep track of our work so far using the following code:
+
+<code>
+var result = 1 + 2 * 3;
+</code>
+
+  In this statement, we do four things:
+
+  <ol>
+    <li> We use the <var>var</var> keyword to tell JavaScript that we are declaring a variable.
+    <li> Next we write the name of the variable (in this case, "result"). Variable names can be any combination of letters and numbers with no spaces between them, but they must start with a letter. Uppercase and lowercase letters mean different things, so <var>dog</var> and <var>Dog</var> are two different variables.
+    <li> We write an equals sign to assign the value. In JavaScript, = does not mean "equals." Instead, it means to take the value on the right, and assign it to the variable on the left.
+    <li> Finally, we write the expression that will have its value assigned to the variable.
+  </ol>
+
+<p>
+  Our variable <var>result</var> now contains the value 7. If we want to use that value, we can just write the variable name into a new expression, like so:
+
+<code>
+21 * 3 / result
+</code>
+
+  When JavaScript evaluates this line of code, it'll substitute the value of <var>result</var> into the expression, making it look like this:
+
+<code>
+21 * 3 / 7
+</code>
+
+<p>
+  Once it's assigned, a variable holds onto its value until we reassign it. To reassign it, just use the <var>=</var> operator again. You don't have to write <var>var</var> this time, only the first time that you declare a variable (after that, the browser knows that it exists). So we might decide we want our new result to be 8:
+
+<code>
+result = 8
+</code>
+
+  We can even reassign a variable to the value of an expression that includes itself, changing it relative to its previous value. For example, we might take the number that's currently in <var>result</var>, add some difference up or down, and save it back in the <var>result</var> for a running total.
+
+<code>
+result = result + .5;
+</code>
+
+<h2>Types</h2>
+
+<p>
+  So far, we've been working with numberical values exclusively, but JavaScript actually has several types of values that it can use in its expressions and store in variables. The most basic kinds of values JavaScript can store, otherwise known as the <mark>primitive</mark> types, are numbers, strings, and Booleans. We've already seen how numbers can work, so how about the others?
+
+<h3>Strings</h3>
+
+<p>
+  A <mark>string</mark> is the programming language name for a chunk of text. We write strings in JavaScript by surrounding them with quotes. The type of quote doesn't matter--you can use double or single--as long as it begins and ends with the same kind. The following example shows a pair of variables containing strings quoted in both ways.
+
+<code>
+var president = "Abraham Lincoln";
+var route = 'Lincoln Tunnel';
+</code>
+
+<p>
+  Sometimes, though, we need to use both types of quotes inside of a string. If that's the case, we can <mark>escape</mark> the quotes that we want to go inside of the text by putting a backslash in front of them. 
+
+<code>
+'"Four score and seven years ago," begins Lincoln\'s Gettysburg Address.'
+</code>
+
+<aside>
+
+  <h1>The Ever-Helpful Backslash</h1>
+
+  <p>
+    It's not just for taming wild quotation marks! In addition to making ' and " safe inside strings, the backslash can also be used to create special characters through "escape sequences," similar to the way that HTML allows embedding special characters through codes like <var>&amp;copy;</var> and <var>&amp;amp;</var>. Here's a few useful options:
+
+    <ul>
+      <li> \n - new line (like hitting return)
+      <li> \t - tab
+      <li> \\ - backslash (obviously, you can't write it on its own)
+      <li> \uXXXX - a Unicode character as specified by its four-digit code (\u2605 produces &#x2605;)
+    </ul>
+
+</aside>
+
+  Here, give it a try for yourself. In the following input boxes, there are some strings that haven't been escaped properly. As a result, they are going to break when the browser tries to run them. Add slashes before the quotes that need to be escaped, and the boxes will turn green.
+
+<div class="interactive escaping">
+  <input value="&apos;Who&apos;s going to be at the meeting?&apos;">
+  <input value="&quot;&quot;We have met the enemy, and he is us,&quot; said Pogo.&quot;">
+  <input value="&apos;&quot;Silence!&quot; screamed the Red Queen&apos;s guards.&apos;">
+  <input value="&quot;This &quot;string&quot; wasn&apos;t escaped properly.&quot;">
+  <div class="praise"></div>
+</div>
+<script>
+require(['interactives/StringEscaping']);
+</script>
+
+<p>
+  You can combine strings by using the <var>+</var> operator, just like adding numbers together. Obviously, this works with variables too, which can save you a lot of typing. But remember, the strings will be combined directly. JavaScript doesn't understand English or grammar. You'll have to be careful to include spaces if you want them.
+
+<code>
+var best = "It was the best of times.";
+var worst = "It was the worst of times.";
+var combined = best + " " + worst;
+</code>
+<samp>"It was the best of times. It was the worst of times."</samp>
+
+<p>
+  Unfortunately, none of the other math operators work on strings. It would be nice to be able to subtract text from a sentence, but if you try, you'll get the result <var>NaN</var>. Contrary to what you'd think, this is not a delicious form of Indian bread. It stands for Not a Number, and is the result of trying to do math on non-math variable types in JavaScript.
+
+<h3>Booleans</h3>
+
+<p>
+  Computers are binary machines: at the lowest level, everything is about on and off, ones and zeros. In JavaScript, we're pretty distant from that lowest level, and we rarely--if ever--interact with binary code. But there is a variable type that's a lot like binary, in that it's restricted to two states: <var>true</var> and <var>false</var>. This is the Boolean type, named after George Boole, who invented a kind of math that only works with true and false values.
+
+<code>
+var t = true;
+var f = false;
+</code>
+
+<p>
+  We'll deal more with Boolean values in the next section. For right now, what's important to remember is that when you're working with these, don't put <var>true</var> and <var>false</var> in quotes. They're not strings, they're real values in JavaScript, just like numbers are.
+
+<h2>Inspecting variables with <var>typeof</var></h2>
+
+<p>
+  We know what the type of a variable is when we create it, obviously. But after a few expressions and assignments, it may not be entirely clear, because JavaScript will try to convert values to be helpful. Many times, this is actually what we want. For example, let's say we want to combine a number with a string, which is not an uncommon thing to do.
+
+<code>
+var accountBalance = 123.45;
+var remaining = "You have $" + accountBalance + " remaining in your account.";
+</code>
+<samp>"You have $123.45 remaining in your account."</samp>
+
+  In this case, the number will be converted to a string for us, and combined with the other strings into a single sentence. That's good! But sometimes this automatic conversion isn't what we want. If we add two values together, thinking that they're both numbers, but one is a string, they'll get combined end-to-end instead of added together. In this case, we wanted the value 3, but we're not going to get it.
+
+<code>
+var numeric = 1;
+var text = "2";
+var added = numeric + text;</code>
+<samp>"12"</samp>
+
+<p>
+  This is more common than you might think, because many input functions in JavaScript return strings, even if the user types a number. So you may be asking for a numerical value, but what you have is a string of text instead. How do we know if a variable is the right type? We can ask using the <var>typeof</var> operator.
+
+<code>
+typeof "this is a string"
+</code>
+  <samp>"string"</samp>
+
+<code>
+typeof 1.234
+</code>
+<samp>"number"</samp>
+
+<code>
+typeof true
+</code>
+<samp>"boolean"</samp>
+
+<p>
+  <var>typeof</var> returns a string containing the type of the variable being inspected. Once we know that a variable isn't what we want it to be, we can convert it between types with some simple operations. To convert a number to a string, you can use the <var>String()</var> function. A <mark>function</mark> is a special kind of JavaScript command. For now, just know that functions are usually followed by parentheses, and you place your input value inside of them. The function then evaluates to a value just like any other expression--in this case, it converts the number value into a text string.
+
+<code>
+var num = 2;
+var text = String(num);
+</code>
+
+<p>
+  We can go the other way using the <var>Number()</var> function. You can also convert a string to a number by using the <var>parseFloat</var> function that's built-in to JavaScript ("float" refers to "floating point," meaning a number with a decimal point--some languages also use "fixed" point, where the decimal is always in the same place, but JavaScript isn't one of them).
+
+<code>
+var text = "2";
+num = Number(text);
+var float = parseFloat(text);
+</code>
+
+<p>
+  Converting items to booleans is a somewhat more involved topic, and one we'll address in the next chapter. But first, we need to learn how to write scripts into our web pages, not just using the console.
+
+<h2>Exercises and Discussion Questions</h2>
+
+<ol>
+  <li> What are the three primitive types in JavaScript that we've discussed in this chapter?
+  <li> What's the result of "typeof '12'"? What about "typeof 12"?
+  <li> What's the best way to convert from a number to a string, and vice versa?
+  <li> Say you typed the code "'one' - 2" into the console. What will you see as the result?
+</ol>
+
+<script>
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code, pre').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
+  PR.prettyPrint();
+});
+</script>
+  </div>
+</body>
+</html>

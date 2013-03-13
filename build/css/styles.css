@@ -1,0 +1,359 @@
+.inset {
+  -moz-box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.2);
+}
+.carved {
+  color: white;
+}
+:not(.ie) .carved {
+  color: transparent;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2), 0 0 0 #001122;
+}
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* basic document look and feel */
+html {
+  background: #f2f2f2;
+}
+body {
+  font-family: calibri, tahoma, verdana, sans-serif;
+  background: #ffffff;
+  width: 700px;
+  padding: 1em 0;
+  margin: 0;
+  -moz-box-shadow: 8px 0px 16px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 8px 0px 16px rgba(0, 0, 0, 0.1);
+  -ms-box-shadow: 8px 0px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 8px 0px 16px rgba(0, 0, 0, 0.1);
+  min-height: 800px;
+}
+body > h1 {
+  text-transform: uppercase;
+  background: #778899;
+  color: #ffffff;
+  color: white;
+  -moz-box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.2);
+  padding: 1em .5em;
+  margin: 0 0 1em;
+}
+:not(.ie) body > h1 {
+  color: transparent;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2), 0 0 0 #001122;
+}
+.content {
+  padding: 0 2em;
+}
+h2 {
+  border-bottom: 1px solid black;
+}
+a {
+  color: #456;
+}
+a:visited {
+  color: #789;
+}
+table {
+  border-collapse: collapse;
+  border: 1px solid #888;
+}
+td,
+th {
+  padding: 4px 1em;
+  border: 1px solid #888;
+}
+th {
+  color: white;
+  background: #555;
+}
+tr:nth-child(2n) {
+  background: #EEE;
+}
+input {
+  border: 1px solid #000000;
+}
+button {
+  border: 2px solid #495561;
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  padding: .5em;
+  background: #94a2af;
+  border-radius: 4px;
+  color: #07080a;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover {
+  background: #778899;
+}
+var,
+code {
+  font-family: consolas, monospace;
+  font-size: 14px;
+  font-style: normal;
+}
+var {
+  font-weight: bold;
+}
+h1 > var,
+h2 > var,
+h2 > var {
+  font-size: inherit;
+}
+mark {
+  background: transparent;
+  font-weight: bold;
+}
+aside {
+  font-size: 14px;
+  width: 350px;
+  float: right;
+  margin-right: -375px;
+  border: 1px dotted #888;
+  padding: 1em;
+  background: white;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+}
+aside h1 {
+  background: #ffffff;
+  color: #000000;
+}
+aside ul {
+  padding-left: 1em;
+  list-style-type: square;
+}
+code {
+  display: block;
+  padding: 1em 0 1em .5em;
+  background: #f8f8f8;
+  color: #223344;
+  margin: 1em 0;
+  white-space: pre;
+  border-radius: 8px;
+  border: 1px solid #778899;
+}
+samp {
+  display: block;
+  padding: .5em;
+  margin: 1em 0;
+}
+samp:before {
+  content: "> ";
+  color: #33A;
+}
+code + samp {
+  margin-top: -1em;
+  border-bottom: 1px dashed #888;
+}
+/* Pretty printing styles. Used with prettify.js. */
+pre .str,
+code .str {
+  color: #A33;
+}
+/* string */
+pre .kwd,
+code .kwd {
+  color: #808;
+}
+/* keyword */
+pre .com,
+code .com {
+  color: #446688;
+  font-style: italic;
+}
+/* comment */
+pre .typ,
+code .typ {
+  color: #F00;
+}
+/* type */
+pre .lit,
+code .lit {
+  color: #191;
+}
+/* literal */
+pre .pun,
+code .pun {
+  color: #223344;
+}
+/* punctuation */
+pre .pln,
+code .pln {
+  color: #000000;
+}
+/* plaintext */
+pre .tag,
+code .tag {
+  color: #446688;
+}
+/* html/xml tag */
+pre .atn,
+code .atn {
+  color: #293;
+}
+/* html/xml attribute name */
+pre .atv,
+code .atv {
+  color: #239;
+}
+/* html/xml attribute value */
+pre .dec,
+code .dec {
+  color: #3387CC;
+}
+/* decimal */
+pre.prettyprint,
+code.prettyprint {
+  background-color: #f8f8f8;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -o-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -khtml-border-radius: 8px;
+  border-radius: 8px;
+}
+pre.prettyprint {
+  width: 95%;
+  margin: 1em auto;
+  padding: 1em;
+  white-space: pre-wrap;
+}
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #446688;
+}
+/* IE indents via margin-left */
+li.L0,
+li.L1,
+li.L2,
+li.L3,
+li.L4,
+li.L5,
+li.L6,
+li.L7,
+li.L8 {
+  list-style-type: decimal-leading-zero;
+  background: black;
+  border-left: 1px solid #333;
+  padding-left: 4px;
+}
+/* Alternate shading for lines */
+li.L1,
+li.L3,
+li.L5,
+li.L7,
+li.L9 {
+  background: #111;
+}
+@media print {
+  pre .str,
+  code .str {
+    color: #060;
+  }
+  pre .kwd,
+  code .kwd {
+    color: #006;
+    font-weight: bold;
+  }
+  pre .com,
+  code .com {
+    color: #600;
+    font-style: italic;
+  }
+  pre .typ,
+  code .typ {
+    color: #404;
+    font-weight: bold;
+  }
+  pre .lit,
+  code .lit {
+    color: #044;
+  }
+  pre .pun,
+  code .pun {
+    color: #440;
+  }
+  pre .pln,
+  code .pln {
+    color: #000;
+  }
+  pre .tag,
+  code .tag {
+    color: #006;
+    font-weight: bold;
+  }
+  pre .atn,
+  code .atn {
+    color: #404;
+  }
+  pre .atv,
+  code .atv {
+    color: #060;
+  }
+}
+.interactive {
+  position: relative;
+}
+.interactive.escaping input {
+  display: block;
+  width: 80%;
+  margin: 1em;
+  padding: .5em;
+  font-family: consolas, monospace;
+}
+.interactive.escaping input.broken {
+  background: #FCC;
+}
+.interactive.escaping input.fixed {
+  background: #CFC;
+}
+.interactive.flowchart .flowbox {
+  position: absolute;
+  padding: 0 0 .5em 0;
+  margin: 0;
+  font-weight: bold;
+  font-family: consolas, monospace;
+}
+.interactive.flowchart .flowbox.start {
+  border-bottom: 4px solid #55cc55;
+}
+.interactive.flowchart .flowbox.end {
+  border-top: 4px solid #55cc55;
+}
+.interactive.houses button {
+  margin: 1em;
+}
+.interactive.houses .highlight {
+  background: #DFD;
+}
+.interactive.houses .last {
+  background: #F8F8F8;
+}
+.interactive.houses pre {
+  width: 420px;
+  float: left;
+  padding-right: 0;
+  margin: 0;
+}
+.interactive.houses .description {
+  width: 200px;
+  float: right;
+}
+.blank {
+  border: none;
+  border-bottom: 1px dashed #888;
+  text-align: center;
+}

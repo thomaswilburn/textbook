@@ -1,0 +1,336 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie"><![endif]-->
+<!--[if gt IE 9]><!--><html><!--<![endif]-->
+<head>
+  <title>Choose Your Own Adventure</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+  require.config({
+    baseUrl: '../js',
+    paths: {
+      jquery: 'jquery-1.9.min'
+    }
+  });
+  </script>
+</head>
+<body>
+  <h1>Choose Your Own Adventure</h1>
+  <div class="content">
+
+<h2>Script Tags</h2>
+
+<aside>
+
+  <h1>What's Up, Doctype?</h1>
+
+  <p>
+    We're going to be talking about placing scripts into HTML pages in this chapter, and that means we should talk about the doctype. A <mark>doctype</mark> is a tag that goes at the top of the document and identifies the vintage of HTML that the browser should use for this page. Having an old or incorrect doctype will result in the page being handled in non-standard ways, as detailed by <a href="http://hsivonen.iki.fi/doctype/">Henri Sivonen</a> in an excellent post.
+
+  <p>
+    I'll make this easy: for the purposes of writing good, modern JavaScript, you should always start your pages with the HTML5 doctype. Luckily, it is very short and easy to remember:
+
+  <code>
+&lt;!doctype html&gt;
+  </code>
+
+    15 characters and does exactly what it says. Think of it as your HTML5 seal of quality.
+
+</aside>
+
+<p>
+  So far we've been working with the JavaScript console, which is a great way to try out code and experiment, but obviously most web pages do not write their scripts this way. We need to learn how to embed scripts into web pages, which means using the <mark>&lt;script&gt;</mark> tag. But don't worry: the console is still going to be extremely useful to us.
+
+<p>
+  The &lt;script&gt; tag tells the browser to load and execute a piece of JavaScript code. There are two ways to do so, either by writing code directly on the page between the opening and closing tag, or using the <var>src</var> attribute to include it from an external file (pretty much exactly the same way as the &lt;img&gt; tag). Here's an example of each:
+
+<code>
+&lt;script&gt;
+  var x = 12;
+&lt;/script&gt;
+
+&lt;script src="external.js"&gt;&lt;/script&gt;
+</code>
+
+<p>
+  You may notice that in both cases, there's a closing tag, even if there is no code inside. This is an unfortunate quirk of the script tag. You <b>must</b> include a separate "&lt;/script&gt;" after opening the tag, and the tag cannot be self-closing (as in "&lt;script /&gt;"). Also, if you include an external script tag, don't try to write any extra code between the tags--the browser will just ignore it.
+
+<p>
+  Sometimes people include a type attribute on their tag (typically it's <var>type="text/javascript"</var> or something similar). This isn't necessary: the only language that runs in the browser is JavaScript, so it will automatically run anything with a &lt;script&gt; tag. More importantly, a typo in the type attribute may cause the browser to <i>not</i> run your code, so it's safer just to leave it off.
+
+<aside>
+  <h1>Script location</h1>
+
+  <p>
+    Traditionally, script tags were often loaded in the &lt;head&gt; tag of a document, but this is a bad idea. When browsers encounter the &lt;script&gt;, they stop all other tasks completely until it is downloaded (if external), parsed, and executed completely. The reason for the delay is that JavaScript can alter the structure of the page, and it's difficult for the browser to build the page for display while scripts are busy altering it. If scripts are loaded at the top of the page, that means the user has to stare at a blank screen until everything is loaded. It's better to load your scripts at the bottom of the page, just before the close of the body tag. Page rendering and interaction will still be paused for the same amount of time, but at least people will have something to look at.
+</aside>
+
+<p>
+  Adding code to an HTML page using &lt;script&gt; tags is convenient, but it means that we might sometimes get lost in large blocks of code. Sometimes we want to add comments to our code in English, in order to explain a particularly tricky line or even just to leave ourselves (and other programmers) a note about why we wrote it that way. There are two ways to leave comments in JavaScript. The first is to put a <var>//</var> in front of the line, and the second is to wrap the text in <var>/*</var> and <var>*/</var> markers.
+
+<code>
+// this is a code comment
+// I can write anything I want here, and it won't be run as JavaScript.
+
+var code = "JavaScript"; //I can add comments after lines of code
+
+/* 
+This is a multi-line comment. 
+Everything between the markers 
+on the outside will be a 
+comment as well.
+*/
+</code>
+
+<p>
+  Unfortunately, when we run code from inside of a script tag like this, we lose the ability to immediately see its evaluated result the way we can when we type each line into the console. We'll need a way to print information to the screen from our script, so that we can see the output of our scripts. For that, we're going to use a command that's attached to the built-in <var>console</var> variable, named <var>console.log()</var>. We can put any expression between the parentheses, and it will be evaluated and printed out on the console for us. Try making a script tag (embedded or external) and including a few log statements, like so:
+
+<code>
+console.log("Hello, world!");
+console.log(true);
+console.log(123.45);
+</code>
+
+<p>
+  Like the <var>String()</var> and <var>Number()</var> converters, <var>console.log()</var> is also a function (note the parentheses on the end). Remember, functions are special commands that take their inputs between their trailing parentheses. You can provide multiple inputs to <var>console.log()</var>, or any other function, by listing them one at a time, separated by commas. Not all functions will actually do something with the extra input, but this one will:
+
+<code>
+console.log("Hello", 123, true);
+//logs "Hello" 123 true
+</code>
+
+<p>
+  Using the console for logging will be an important way to check what your script is doing, even after we learn to write to the page for output, because it's not exposed to ordinary page visitors. You can log any errors or information you want to the console during development, and not worry that people using your site are seeing your debugging messages. In some older browsers, however, using the console log without having the developer tools open is an error, so you should remove your log messages before putting the page into public use.
+
+<h2>Conditionals</h2>
+
+<p>
+  So far, we have only written expressions, stored those values in variables, and used those variables in other expressions. These are good things to be able to do, but they're not much more than a very fancy calculator could do. For our scripts to be really useful, they should be able to make decisions based on those values. That's where conditional statements come in. Here's a very basic conditional:
+
+<code>
+if (expression) {
+  console.log("It's true!")
+  console.log(somethingTrue);
+}
+</code>
+
+<p>
+  It starts with the <var>if</var> keyword, which means exactly what it sounds like it means. Then, in parentheses, we've written an expression consisting of a single variable. If that variable is true, all the code between the curly braces will be executed (in this case, logging the string "It's true!" and the value of <var>somethingTrue</var>), and if it is false, it gets skipped (nothing happens). Curly braces indicate a "block" in JavaScript, collecting several lines of code into a single unit.
+
+<p>
+  The existence of Boolean values should start to make a bit more sense now: they're useful for making choices. But technically, JavaScript is not so picky about the values it considers "true"--or more specifically, what it considers "false." The following values are equivalent to <var>false</var> when evaluated inside the parentheses of an <var>if</var> statement:
+
+  <ul>
+    <li> "" (i.e., an "empty" string with nothing in it)
+    <li> <var>false</var>
+    <li> <var>0</var> (but only as a number, not "0" as a string)
+    <li> <var>null</var>
+    <li> <var>undefined</var>
+    <li> <var>NaN</var>
+  </ul>
+
+<p>
+  Three of these are values we're not terribly familiar with yet. We have not talked much about <var>null</var> so far, and we'll probably stay away from it in the future. It's a special value used to indicate a result of no value, which is uncommon. <var>NaN</var>, as we saw earlier, is an error value that results when you try to subtract a string or perform another math operation on a non-numerical value. <var>undefined</var> is another special value: it's the value that all variables start with before they're assigned a value. We haven't seen <var>undefined</var> before, because we've been assigning variables as soon as we create them, which is a good practice to get into, but we'll use it later when making lists.
+
+<p>
+  Anything that is not on this list is equivalent to <var>true</var> inside a conditional statement. So, for example, the following statements will all be truthy, even if they look like they shouldn't be at first glance:
+
+<code>
+if (true) { console.log("True, because it's a literal true value"); }
+if ("false") { console.log("True, because it's a string and not a Boolean"); }
+if (1) { console.log("True, because it's non-zero"); }
+
+var value = true;
+if (value) { console.log("We can test variables, in addition to literals."); }
+</code>
+
+<aside>
+
+  <h1>Whitespace</h1>
+
+  <p>
+    Unlike Python, Ruby, or several other languages, JavaScript does not care about your <mark>whitespace</mark>--the spaces, tabs, and line breaks that you put into your code. If you wanted to, you could write all your code on one line, as long as you included semicolons to tell JavaScript where each statement ends. In fact, there are <a href="http://alistapart.com/article/better-javascript-minification">many tools to remove whitespace from code</a>, because it makes for smaller files (and thus shorter downloads). But it's a good idea to use whitepace liberally, because it makes your code easier to read and understand, both for yourself and for others. Indentation is particularly important. As a rule of thumb, each time you write a curly brace, increase your indentation by one tab (or its equivalent in spaces).
+
+</aside>
+
+<p>
+  The second line shows why it's so important to know the difference between a Boolean (<var>false</var>) and a string (<var>"false"</var>). The string will be considered truthy for the purpose of conditionals, so if you really mean <var>false</var>, be sure to leave out the quotes.
+
+<p>
+  In addition to writing raw values, or single variables, into a conditional statement, we can also perform comparisons between two or more values. The comparison operators are generally straightforward, and when placed between two items they result in <var>true</var> or <var>false</var> as laid out in the following table.
+
+<table>
+  <tr>
+    <th>Operator
+    <th>Meaning
+    <th>Notes
+  <tr>
+    <td>==
+    <td>equal to
+    <td>Performs type conversion: <var>1 == "1"<var> is <var>true</var>
+  <tr>
+    <td>===
+    <td>equal to (strict)
+    <td>Does not convert types: <var>1 === "1"</var> is <var>false</var>
+  <tr>
+    <td>!=
+    <td>not equal to
+    <td>Performs type conversion: <var>1 != "1"</var> is <var>false</var>
+  <tr>
+    <td>!==
+    <td>not equal to (strict)
+    <td>Does not convert types: <var>1 !== "1"</var> is <var>true</var>
+  <tr>
+    <td>&gt;
+    <td>greater than
+    <td>
+  <tr>
+    <td>&gt;=
+    <td>greater than or equal to
+    <td>
+  <tr>
+    <td>&lt;
+    <td>less than
+    <td>
+  <tr>
+    <td>&lt;=
+    <td>less than or equal to
+    <td>
+</table>
+
+<p>
+  All the comparison operators work on both strings and numbers. In strings, the "greater than" and "less than" operators work according to alphabetical order. This can cause some problems, if the values you think are numbers are actually strings--after all, 2 is less than 11, but "2" is greater than "11"! Luckily, this doesn't come up too often, and you can always use the <var>parseInt()</var> function to make sure something is actually a number before the comparison.
+
+<code>
+var n = 12;
+
+if (n == 12) {
+  console.log("True!");
+}
+
+if (n === "12") {
+  console.log("Nope.");
+}
+
+if (n > 10) {
+  console.log("Yes, indeed.");
+}
+</code>
+
+<p>
+  In addition to being able to specify a block of code to be executed if the condition is true, we can also specify a block that runs if it is <i>not</i> true. To do so, we follow our <var>if</var> with an <var>else</var> and another section of code in curly braces.
+
+<code>
+if (name == "Thomas") {
+  console.log('This executes if the statement is true.');
+} else {
+  console.log("This executes if it's false.");
+}
+</code>
+
+  It may be easier to visualize <var>if</var> and <var>if/else</var> using a kind of flowchart. In the interactive graphic below, we represent the two branches of our code with lighbulbs that are wired to our <var>if</var> statement, and you can edit the condition that's written between the parentheses. If the condition is true, the first block executes, and its lightbulb will light up. If the condition is false, you'll see the second bulb light up as the <var>else</var> block executes. If your condition isn't valid, neither light will be turned on--in that case, try your JavaScript on the console.
+
+<div class="flowchart interactive">
+  <canvas width=640 height=320 id="flowchart"></canvas>
+  <pre class="flowbox start" style="top: 0; left: 1em"><span style="color: #888; color: rgba(0, 0, 0, .5);">console.log('Hello, world!');
+placeholder = placeholder + 12;</span>
+if (<input type="text" class="blank" style="width: 75px; background: #EEE" id="conditional" value="true">) {</pre>
+  <pre class="flowbox else" style="top: 150px; left: 1em">} else {</pre>
+  <pre class="flowbox end" style="bottom: 0; left: 1em">}
+<span style="color: #888; color: rgba(0, 0, 0, .5);">console.log("remaining code");
+//we now resume normal program flow</pre>
+</div>
+  <script>
+require(['interactives/LightIf']);
+  </script>
+
+<p>
+  So far, all the conditional statements we've created have had only two paths: the <var>if</var> (when the condition is true) and the <var>else</var> (when it's false). But by combining the <var>else</var> with another <var>if</var>, we can actually chain them together to create a more interesting set of conditions:
+
+<code>
+var x = 12;
+if (x &gt; 20) {
+  //first try one condition
+} else if (x &lt; 10) {
+  //try another condition
+} else {
+  //if all else fails, do this
+}
+</code>
+
+<p>
+  Finally, it's possible to combine or invert multiple conditions into one <var>if</var> statement, using a series of special operators.
+
+<table>
+  <tr>
+    <td>&amp;&amp;
+    <td>AND
+  <tr>
+    <td>||
+    <td>OR
+  <tr>
+    <td>!
+    <td>NOT
+</table>
+
+<p>
+  By putting the <var>&amp;&amp;</var> or <var>||</var> operators between two conditions, you can either require both of them to be true, or specify that either one can be true:
+
+<code>
+if (true &amp;&amp; false) {
+  //this will not execute, because &amp;&amp; means AND:
+  //both the first AND the second item must be true
+}
+
+if (false || true) {
+  //even thought the first item is false, this block will
+  //still execute, because either the first OR the second
+  //item must be true.
+}
+</code>
+
+  <var>&amp;&amp;</var> and <var>||</var> behave like our addition or subtraction operators: they go between two items to create an expression. The NOT operator is different. By placing a <var>!</var> in front of an expression, you flip it from true to false, or from false to true. Be careful with <var>!</var> as it can create some confusing code.
+
+<code>
+if (!false) {
+  //it's NOT false, so it's true
+}
+</code>
+
+<p>
+  These operators are very useful for writing compound conditions, but don't go too crazy with them. Abusing <var>&amp;&amp;</var> and <var>||</var> to create long chains of conditional if statements can end up being very hard to read, and sometimes you're better off just nesting <var>if</var> statements inside each other for the same effect.
+
+<h2>Practice</h2>
+
+<p>
+  The <var>prompt</var> function lets us ask the user for input, which will be returned as a string (even if they type in a number, so watch out!). For example, the following code asks the user to provide a value, and stores it in the variable named <var>answer</var>.
+
+<code>
+var answer = prompt('Please type a value');
+</code>
+
+<p>
+  Between <var>prompt()</var> and <var>console.log()</var>, we have the required inputs and outputs to write a simple text adventure, like the old "choose your own adventure" books. To practice using conditionals, try telling the user a story, with different outcomes depending on their response to the <var>prompt</var> questions. For example, here's a <i>very</i> brief story:
+
+<code>
+var raven = prompt('Quoth the raven:');
+if (raven == "nevermore") {
+  console.log("We're all doomed!");
+} else {
+  console.log("You just don't get the same quality of ravens these days.");
+}
+</code>
+
+<p>
+  See if you can give your user multiple "branches" to the story, by nesting other conditional statements inside the branches of the first.
+
+<script>
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code, pre').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
+  PR.prettyPrint();
+});
+</script>
+  </div>
+</body>
+</html>

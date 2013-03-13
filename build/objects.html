@@ -1,0 +1,235 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie"><![endif]-->
+<!--[if gt IE 9]><!--><html><!--<![endif]-->
+<head>
+  <title>Object Lesson</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+  require.config({
+    baseUrl: '../js',
+    paths: {
+      jquery: 'jquery-1.9.min'
+    }
+  });
+  </script>
+</head>
+<body>
+  <h1>Object Lesson</h1>
+  <div class="content">
+
+<h2>Objects as Simulation</h2>
+
+<p>
+  Imagine you wanted to write a computerized catalog for a library. You'd have a lot of information to manage, both for each book and for the total collection. Certainly you'd need some arrays, since you'll be adding new books all the time, and won't want to keep individual variables for each one. Even for the books themselves, it would be good to have all the information on each book grouped together. For example, you'll want to store:
+
+  <ul>
+    <li> Title
+    <li> Author
+    <li> Number of pages
+    <li> Call number
+    <li> Publication date
+    <li> Subjects
+    <li> Description
+  </ul>
+
+<p>
+  One way to keep these things collected would be to use an array, and use set indexes for each property. <var>book[0]</var> might be the title, for example, and <var>book[1]</var> would be the author, and so on. But this is pretty awkward: each time you need to get the title, you have to remember that the index for title is 0, which is easy to forget. Someone maintaining your code is not going to thank you for that!
+
+<p>
+  What you really need is a kind of array where, instead of using numbers, you could just name the values inside. Luckily, you can! An object, in JavaScript, is a collection like an array, but with string indexes instead of numerical ones. You declare an object using curly braces instead of the square braces that we use for arrays, and then the syntax is basically identical:
+
+<code>
+var book = {};
+book["author"] = "Frank Herbert";
+book["title"] = "Dune";
+book["pagecount"] = 567;
+book["subjects"] = ["Science Fiction", "Ecology", "Doom"];
+
+console.log(book["pagecount"]); //logs out 567;
+</code>
+
+<aside>
+
+  <h1>typeof object</h1>
+
+  <p>
+    Objects and arrays are collections that contain primitives, but they're also their own kind of value, as evidenced by the fact that they have a different result when fed to the <var>typeof</var> keyword. It's good to know that you can distinguish them from the primitive types if you need to.
+
+<code>
+typeof {};
+</code>
+<samp>
+'object'
+</samp>
+
+  <p>
+    Unfortunately, one casualty of the short timeframe under which JavaScript was created is the way <var>typeof</var> handles arrays. They don't return 'array'--instead, they masquerade as a different type.
+
+<code>
+typeof [];
+</code>
+<samp>
+'object'
+</samp>
+
+  <p>
+    There is not a great cross-browser answer, unfortunately, to the problem of distinguishing between objects and arrays if this is something that you really need to do. Both objects and arrays can have numbered properties and named properties. They share some of the same built-in functions. If you have a favorite JavaScript library, like jQuery or YUI, it may provide a method for checking between the two. Otherwise, I usually treat it as an array if it has a <var>length</var> property and hope for the best.
+
+
+</aside>
+
+<p>
+  In this case, we first define book as an empty object. Then we add <mark>properties</mark> to the object, specifying the <mark>key</mark> for each with a string in brackets instead of a number and setting it equal to the desired value. What we call "indexes" for arrays are called "keys" on objects, but they serve the same role: to serve as a lookup address for the value inside the list. For our book, the key "author" is set to "Frank Herbert", and so forth. Just as with arrays, we can put any value into an object, including other objects and (as in the <var>subjects</var> property) arrays.
+
+<p>
+  Object keys that are quoted this way can be any possible string. If you stick to the rules for variable names, though, there's a much shorter and easier way to talk about object properties. Properties that start with a letter and contain only letters, numbers, and the $ or _ characters, can be referenced using a dot instead of the square brackets.
+
+<code>
+var book = {};
+book.author = "Frank Herbert";
+book.title = "Dune";
+
+console.log(book.title + ", by " + book.author);
+//logs "Dune, by Frank Herbert"
+</code>
+
+<p>
+  This should start to look a little familiar, because we've used a few objects so far. For example, whenever we want to print something out to the console, we've been using <var>console.log()</var>: the <var>console</var> variable is an object that contains a number of useful functions--not just <var>log</var>, but also <var>error</var>, <var>warn</var>, and <var>info</var>, each of which prints a different kind of message to the console. If you type "console." (with the dot) into your console, most browsers will bring up a list of all the properties in the object that you can browse through.
+
+<p>
+  Other objects that are built-in to the browser include:
+
+  <ul>
+    <li><var>window</var> - contains all <mark>global</mark> variables, including ones you declare for yourself. All variables that you define from the console are actually properties on the window object, as though you're "inside" it.
+    <li><var>Math</var> - contains a bunch of useful functions like <var>round()</var> and <var>sqrt</var> for doing calculations, along with some handy values like Math.PI.
+    <li><var>document</var> - the current page as loaded into the browser. We'll do more stuff with the document in a bit.
+  </ul>
+
+<p>
+  Creating our own objects, however, is where the real action is for JavaScript. We can do so using the syntax above, where we create an empty object and add properties. But there's also a <var>literal</var> syntax for declaring objects in a single step, the same way that we declare other literal values like numbers, strings, and booleans by just writing them into our code. To define our book as an object literal, we'd do this:
+
+<code>
+var book = {
+  author: "Frank Herbert",
+  title: "Dune",
+  subjects: ["Science Fiction", "Ecology", "Doom"]
+};
+
+console.log(book.title); //prints "Dune"
+</code>
+
+  This syntax is a bit like declaring an array. In that case, we could add the starting values to the array by just listing them with commas between each item. In this case, we also list the object's properties separated by commas, but we have to specify the key for each value first, separated from its value with a colon. Be careful not to add a trailing comma after the last key:value pair--in some browsers, that will cause an error.
+
+<h2>Looping through Objects</h2>
+
+<p>
+  Objects are useful because they let us simulate real world objects easily, but they can also serve as "named lists" in contrast to the "numbered lists" of arrays. For example, you might create an object containing all the people in a group, using their first names as the keys and their lunch orders as the values:
+
+<code>
+var group = {
+  "Thomas": "Chicken salad sandwich",
+  "Belle": "Cobb salad",
+  "Wallace": "Cheese pizza"
+};
+</code>
+
+  Now, if we want to list out everyone's lunch order it's easy to do, as long as we know how to write a <var>for...in</var> loop for objects.
+
+<code>
+for (var key in group) {
+  console.log(key + " ordered " + group[key]);
+}
+</code>
+
+  This loop looks different, and with good reason. After all, arrays are predictable: they (mostly) start at 0 and (mostly) index their contents on ascending numbers. For objects, though, the key could be any string, and we can hardly be expected to start at "a" and work our way up through "zzzzzzzzzzzzz" to find them. 
+
+<p>
+  Instead, when we write a <var>for...in</var> loop, JavaScript will loop through the object for us and assign each key (<i>not</i> each value) to the variable we provide. You can name that variable anything you want, as long as it's followed by <var>in o</var>, where "o" is the name of the object you want to loop through. I always find it useful to create a new variable with a predictable name, as above (where I've named it "key" for self-evident reasons). 
+
+<p>
+  Remember, however, that this is not the value. It's the key--the string name of the property that we can use to find the actual value with the square brackets syntax, just as our array loops used <var>array[i]</var> to find the actual value of each item in <var>array</var>. Unfortunately, you can't use the dot syntax inside a loop. Only in the square brackets will the value of your key variable--and not its name--be used to look up a value from your object.
+
+<code>
+var movie = {
+  title: "Alien",
+  director: "Ridley Scott",
+  star: "Sigourney Weaver"
+};
+
+for (var prop in movie) {
+  console.log(prop); //"title", "director", "star"
+
+  //WRONG - this logs "undefined" because movie has no property named "prop"
+  console.log(movie.prop); 
+
+  //RIGHT - this logs the value of each property inside movie
+  console.log(movie[prop]); //"Alien", "Ridley Scott", "Sigourney Weaver"
+}
+</code>
+
+<h2>Construction with Objects</h2>
+
+<p>
+  Using objects gives us a way to create strongly-related values, by combining them under a single variable. By combining them with arrays and other objects, we can write code that is readable, elegant, and efficient. Let's work through an example using some real-world data that uses all the skills we've picked up over the last few chapters: <var>if/else</var>, <var>for</var> loops, arrays, and objects.
+
+<code>
+var quakes = [
+  {
+    magnitude: 4.3,
+    location: "Seattle"
+  },
+  {
+    magnitude: 2.7,
+    location: "San Francisco"
+  },
+  {
+    magnitude: 5.4,
+    location: "Las Vegas"
+  }
+  {
+    magnitude: 1.8,
+    location: "Washington, DC"
+  }
+];
+</code>
+
+<p>
+  The above code sets up an array full of earthquake data. There are only three quakes in our set, but there could easily be more. The advantage of using a loop over this information is that it would scale, whether it was three earthquakes or three thousand. Now, we're going to look through our data and find out where the largest quake took place. First, we'll set up a variable to contain the highest quake we've found so far. We'll go ahead and assign the first earthquake to the variable, since we need some starting values.
+
+<code>
+var highest = quakes[0];
+</code>
+
+<p>
+  Then we'll loop over the quakes array, checking each item in turn. If it's higher in magnitude than the quake stored in <var>highest</var>, we'll store it in <var>highest</var> instead and keep going.
+
+<code>
+for (var i = 0; i &lt; quakes.length; i++) {
+  var current = quakes[i]; //get the current quake object
+  if (current.magnitude &gt; highest.magnitude) { //check against highest
+    highest = current; //if higher, reassign highest
+  }
+}
+console.log("The biggest earthquake took place in " + highest.location);
+</code>
+
+<p>
+  Problems like this start to show how objects and loops can make many tough problems trivially solveable. Sure, it's easy to find the biggest quake when there are only three items. When there are many more, however, or the comparisons become more complicated, you'll be glad to let the computer handle this kind of manual labor.
+
+<h2>Exercises and Practice Questions</h2>
+
+<ol>
+  <li>
+</ol>
+
+<script>
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code, pre').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
+  PR.prettyPrint();
+});
+</script>
+  </div>
+</body>
+</html>
