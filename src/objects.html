@@ -1,5 +1,6 @@
 [@import snippets/head.html title="Object Lesson"]
-<h2>Simulation</h2>
+
+<h2>Objects as Simulation</h2>
 
 <p>
   Imagine you wanted to write a computerized catalog for a library. You'd have a lot of information to manage, both for each book and for the total collection. Certainly you'd need some arrays, since you'll be adding new books all the time, and won't want to keep individual variables for each one. Even for the books themselves, it would be good to have all the information on each book grouped together. For example, you'll want to store:
@@ -13,8 +14,6 @@
     <li> Subjects
     <li> Description
   </ul>
-
-  ...just to name a few.
 
 <p>
   One way to keep these things collected would be to use an array, and use set indexes for each property. <var>book[0]</var> might be the title, for example, and <var>book[1]</var> would be the author, and so on. But this is pretty awkward: each time you need to get the title, you have to remember that the index for title is 0, which is easy to forget. Someone maintaining your code is not going to thank you for that!
@@ -31,6 +30,36 @@ book["subjects"] = ["Science Fiction", "Ecology", "Doom"];
 
 console.log(book["pagecount"]); //logs out 567;
 </code>
+
+<aside>
+
+  <h1>typeof object</h1>
+
+  <p>
+    Objects and arrays are collections that contain primitives, but they're also their own kind of value, as evidenced by the fact that they have a different result when fed to the <var>typeof</var> keyword. It's good to know that you can distinguish them from the primitive types if you need to.
+
+<code>
+typeof {};
+</code>
+<samp>
+'object'
+</samp>
+
+  <p>
+    Unfortunately, one casualty of the short timeframe under which JavaScript was created is the way <var>typeof</var> handles arrays. They don't return 'array'--instead, they masquerade as a different type.
+
+<code>
+typeof [];
+</code>
+<samp>
+'object'
+</samp>
+
+  <p>
+    There is not a great cross-browser answer, unfortunately, to the problem of distinguishing between objects and arrays if this is something that you really need to do. Both objects and arrays can have numbered properties and named properties. They share some of the same built-in functions. If you have a favorite JavaScript library, like jQuery or YUI, it may provide a method for checking between the two. Otherwise, I usually treat it as an array if it has a <var>length</var> property and hope for the best.
+
+
+</aside>
 
 <p>
   In this case, we first define book as an empty object. Then we add <mark>properties</mark> to the object, specifying the <mark>key</mark> for each with a string in brackets instead of a number and setting it equal to the desired value. What we call "indexes" for arrays are called "keys" on objects, but they serve the same role: to serve as a lookup address for the value inside the list. For our book, the key "author" is set to "Frank Herbert", and so forth. Just as with arrays, we can put any value into an object, including other objects and (as in the <var>subjects</var> property) arrays.
@@ -54,7 +83,7 @@ console.log(book.title + ", by " + book.author);
   Other objects that are built-in to the browser include:
 
   <ul>
-    <li><var>window</var> - contains all <mark>global</mark> variables, including ones you declare for yourself. It's the object that we're "inside" when typing into the console.
+    <li><var>window</var> - contains all <mark>global</mark> variables, including ones you declare for yourself. All variables that you define from the console are actually properties on the window object, as though you're "inside" it.
     <li><var>Math</var> - contains a bunch of useful functions like <var>round()</var> and <var>sqrt</var> for doing calculations, along with some handy values like Math.PI.
     <li><var>document</var> - the current page as loaded into the browser. We'll do more stuff with the document in a bit.
   </ul>
@@ -168,7 +197,7 @@ console.log("The biggest earthquake took place in " + highest.location);
 </code>
 
 <p>
-  Problems like this start to show how objects and loops can make many tough problems trivially solveable. Sure, it's easy to find the biggest quake when there are only three items. When there are many more, however, or the comparisons become more complicated, you'll be glad to let the computer handle this kind of manual labor. It can be a little frustrating, having to explain your task to the computer in such painstaking detail. But that's the nature of programming, and the benefits are worth it.
+  Problems like this start to show how objects and loops can make many tough problems trivially solveable. Sure, it's easy to find the biggest quake when there are only three items. When there are many more, however, or the comparisons become more complicated, you'll be glad to let the computer handle this kind of manual labor.
 
 <h2>Exercises and Practice Questions</h2>
 

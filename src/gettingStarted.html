@@ -122,6 +122,22 @@ var route = 'Lincoln Tunnel';
 '"Four score and seven years ago," begins Lincoln\'s Gettysburg Address.'
 </code>
 
+<aside>
+
+  <h1>The Ever-Helpful Backslash</h1>
+
+  <p>
+    It's not just for taming wild quotation marks! In addition to making ' and " safe inside strings, the backslash can also be used to create special characters through "escape sequences," similar to the way that HTML allows embedding special characters through codes like <var>&amp;copy;</var> and <var>&amp;amp;</var>. Here's a few useful options:
+
+    <ul>
+      <li> \n - new line (like hitting return)
+      <li> \t - tab
+      <li> \\ - backslash (obviously, you can't write it on its own)
+      <li> \uXXXX - a Unicode character as specified by its four-digit code (\u2605 produces &#x2605;)
+    </ul>
+
+</aside>
+
   Here, give it a try for yourself. In the following input boxes, there are some strings that haven't been escaped properly. As a result, they are going to break when the browser tries to run them. Add slashes before the quotes that need to be escaped, and the boxes will turn green.
 
 [@import interactives/escaping.html]
