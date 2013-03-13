@@ -35,7 +35,13 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('default', 'shorts compileCSS watch'.split(' '));
+    grunt.registerTask('default', 'folders shorts compileCSS watch'.split(' '));
+
+    grunt.registerTask('folders', "Create the /build folder if it doesn't exist", function() {
+        if (!grunt.file.exists('./build')) {
+            grunt.file.mkdir('build');
+        }
+    });
 
     grunt.registerTask('serve', 'Serve using PHP simple server', function() {
         require('child_process').spawn('php', ['-S', 'localhost:80']);
