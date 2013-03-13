@@ -1,16 +1,31 @@
 /* basic document look and feel */
 
-body {
-  font-family: calibri, tahoma, verdana, sans-serif;
-  width: 700px;
-  padding: 0 2em;
+html {
+  background: darken(@background, 5%);
 }
 
-h1 {
-  text-transform: uppercase;
-  background: black;
-  color: white;
-  display: inline-block; 
+body {
+  font-family: calibri, tahoma, verdana, sans-serif;
+  background: @background;
+  width: 700px;
+  padding: 1em 0;
+  margin: 0;
+  .drop-shadow(8px, 0px, 16px, .1);
+  min-height: 800px;
+
+  & > h1 {
+    text-transform: uppercase;
+    background: @background-secondary;
+    color: @foreground-secondary;
+    .carved;
+    .inset;
+    padding: 1em .5em;
+    margin: 0 0 1em;
+  }
+}
+
+.content {
+  padding: 0 2em;
 }
 
 h2 {
@@ -18,10 +33,10 @@ h2 {
 }
 
 a {
-  color: #F00;
+  color: #456;
 
   &:visited {
-    color: #A00;
+    color: #789;
   }
 }
 
@@ -43,4 +58,23 @@ th {
 
 tr:nth-child(2n) {
   background: #EEE;
+}
+
+input {
+  border: 1px solid @foreground;
+}
+
+button {
+  border: 2px solid darken(@background-secondary, 20%);
+  .drop-shadow(2px, 2px, 2px, .2);
+  padding: .5em;
+  background: lighten(@background-secondary, 10%);
+  border-radius: 4px;
+  color: darken(@background-secondary, 50%);
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background: @background-secondary;
+  }
 }

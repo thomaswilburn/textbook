@@ -14,35 +14,35 @@ var {
   }
 }
 
-code {
-  display: block;
-  padding: 0 0 1em .5em;
-  background: black;
-  color: white;
-  margin: 1em 0;
-  white-space: pre;
-  border-radius: 4px;
-}
-
-samp {
-  display: block;
-  padding: .5em;
-  margin: 1em 0;
-
-  &:before {
-    content: "> ";
-    color: #33A;
-  }
-
-  code + & {
-    margin-top: -1em;
-    border-bottom: 1px dashed #888;
-  }
-
-}
-
 //definitions
 mark {
   background: transparent;
   font-weight: bold;
+}
+
+//structure 
+
+aside {
+
+  @width: 350px;
+
+  font-size: 14px;
+  width: @width;
+  float: right;
+  margin-right: -@width - 25;
+  border: 1px dotted #888;
+  padding: 1em;
+  background: white;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, .1);
+
+  h1 {
+    background: @background;
+    color: @foreground;
+  }
+
+  ul {
+    padding-left: 1em;
+    list-style-type: square;
+  }
+
 }

@@ -3,17 +3,17 @@
   <button id="next">Next step</button>
   <button id="reset">Reset</button>
   <canvas width=640 height=70></canvas>
-  <pre style="width: 400px; float: left;">
-  <span class="array">var houses = [true, false, true, true, false];</span>
-  <span class="counter">var counter = 0;</span>
-  for (<span class="setup">var i = 0</span>; <span class="condition">i &lt; houses.length</span>;  <span class="change">i = i + 1</span>) {
-    <span class="current">var current = houses[i];</span>
-    <span class="if">if (current) {</span>
-      <span class="increment">counter = counter + 1;</span>
-    }
+  <pre>
+<span class="array">var houses = [true, false, true, true, false];</span>
+<span class="counter">var counter = 0;</span>
+for (<span class="setup">var i = 0</span>; <span class="condition">i &lt; houses.length</span>;  <span class="change">i = i + 1</span>) {
+  <span class="current">var current = houses[i];</span>
+  <span class="if">if (current) {</span>
+    <span class="increment">counter = counter + 1;</span>
   }
-  <span class="finished">console.log("Total positive answers: " + counter)</span>
+}
+<span class="finished">console.log("Total: " + counter)</span>
   </pre>
-  <div class="description" style="width: 200px; float: right;"></div>
+  <div class="description"></div>
   <div style="clear: both;"></div>
 </div>

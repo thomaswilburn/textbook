@@ -12,16 +12,298 @@ require.config({
   }
 });
   </script>
+  <style>
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: calibri, sans-serif;
+}
+
+.editor {
+  width: 80%;
+  height: 500px;
+  border: 1px dashed #888;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.comments {
+  width: 20%;
+  height: 500px;
+  border: 1px solid #BBB;
+  display: inline-block;
+  margin: 0px;
+  vertical-align: top;
+}
+
+.revision-bar {
+  height: 120px;
+  background: #DDD;
+  box-shadow: inset 4px 4px 4px rgba(0, 0, 0, .2);
+  margin: 1em 0;
+  padding: 0;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.revision-bar li {
+  height: 80px;
+  margin: 10px;
+  width: 80px;
+  background: #EEE;
+  border: 4px solid white;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, .2);
+  padding: 4px;
+  display: inline-block;
+  font-family: monospace;
+  font-size: 60px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.revision-bar li.selected {
+  border-color: #ABC;
+  color: #ABC;
+}
+
+button {
+  color: white;
+  background: #789;
+  border: none;
+  margin: 4px 8px;
+  padding: 8px;
+}
+
+button:hover {
+  background: #678;
+}
+
+.dialog {
+  position: fixed;
+  width: 500px;
+  left: 50%;
+  top: 30%;
+  background: white;
+  padding: 1em;
+  border-radius: 8px;
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, .2);
+  z-index: 999;
+  margin-left: -250px;
+}
+
+a.close-dialog {
+  content: "[x]";
+  class: 'close-button';
+  position: absolute;
+  top: .5em;
+  right: .5em;
+  cursor: pointer;
+  color: #888;
+  font-family: monospace;
+}
+
+.import input {
+  width: 100%;
+  margin: 1em;
+}
+
+.export.dialog {
+  top: 1em;
+}
+
+.export textarea {
+  width: 100%;
+  height: 300px;
+  margin-top: 1em;
+  font-size: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+  </style>
 </head>
 <body>
 
+<ol class="revision-bar"></ol>
+<div class="ui">
+  <button class="add-revision">Add revision</button>
+  <button class="remove-revision">Remove current revision</button>
+  <button class="import-revision">Import</button>
+  <button class="export-revisions">Export</button>
+</div>
+<div id="editor" class="editor"></div><textarea id="comments" class="comments"></textarea>
+
+<div class="hidden import dialog">
+  <a class="close-dialog">[x]</a>
+  <h2>Choose a file</h2>
+  <p>
+    Select a timelapse file to import via the input below, or drag it from your computer onto this form.
+  <input class="file" type="file">
+</div>
+<div class="hidden export dialog">
+  <a class="close-dialog">[x]</a>
+  <textarea></textarea>
+</div>
+
 <script>
 
-require(['jquery','meta/Timelapse'], function($, TimeLapse) {
+//TODO: Add comment editing
+
+require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
+
+  var editor = ace.edit('editor');
+  editor.setTheme('ace/theme/tomorrow');
+  editor.getSession().setMode('ace/mode/javascript')
+  editor.getSession().setUseWorker(false);
+  window.editor = editor;
+
   var tl = new TimeLapse();
-  tl.load('./test.time').done(function() {
-    console.log(this.data);
+  /*tl.load('./test.time').done(function() {
+    app.revisions = this.revisions.map(function(item) { return item.text });
+    app.loadRevision(0);
+    app.updateUI();
+  });*/
+
+  var app = {
+    current: -1,
+    createRevision: function(){
+      var base = "";
+      if (this.current > -1) {
+        this.saveRevision();
+        base = editor.getValue();
+      }
+      var dest = this.current + 1;
+      var head = this.revisions.slice(0, dest);
+      var tail = this.revisions.slice(dest);
+      this.revisions = head.concat([{text: base}], tail);
+      this.current = dest;
+      this.updateUI();
+    },
+    loadRevision: function(from) {
+      editor.setValue(this.revisions[from].text, 1);
+      $('.comments').val(this.revisions[from].comment);
+      this.current = from;
+    },
+    saveRevision: function(to) {
+      to = to * 1 || this.current;
+      var text = editor.getValue();
+      if (!this.revisions[to]) this.revisions[to] = {};
+      this.revisions[to].text = text;
+      this.revisions[to].comment = $('.comments').val();
+    },
+    switchTo: function(rev) {
+      rev = rev * 1;
+      this.saveRevision();
+      this.loadRevision(rev);
+      this.updateUI();
+    },
+    removeRevision: function(index) {
+      index = index || this.current;
+      var filtered = this.revisions.filter(function(item, i) {
+        return i != index;
+      });
+      this.revisions = filtered;
+      this.loadRevision(this.current);
+      this.updateUI();
+    },
+    updateUI: function() {
+      var bar = $('.revision-bar');
+      bar.empty();
+      var self = this;
+      this.revisions.forEach(function(item, index) {
+        var li = $('<li>');
+        li.html(index);
+        li.attr('data-revision', index);
+        if (index == self.current) li.addClass('selected');
+        bar.append(li);
+      });
+    },
+    importFile: function(fileHandle) {
+      var loading = $.Deferred();
+      var reader = new FileReader();
+      reader.readAsText(fileHandle);
+      reader.onload = function() {
+        tl.parse(reader.result);
+        app.revisions = tl.revisions.slice();
+        app.loadRevision(0);
+        app.updateUI();
+        loading.resolve(reader.result);
+      }
+      return loading.promise();
+    },
+    revisions: [],
+    comments: []
+  };
+
+  $('.add-revision').on('click', function(e) {
+    app.createRevision();
   });
+
+  $('.remove-revision').on('click', function(e) {
+    app.removeRevision(this.getAttribute('data-revision'));
+  });
+
+  $('.export-revisions').on('click', function(e) {
+    app.saveRevision();
+    tl.revisions = app.revisions.slice();
+    var output = tl.serialize();
+    $('.export.dialog').removeClass('hidden').find('textarea').val(output);
+    if (console && console.log) console.log(output);
+  }); 
+
+  $('.revision-bar').on('click', 'li', function(e) {
+    var id = this.getAttribute('data-revision');
+    app.switchTo(id);
+  });
+
+  $(document).on('click', 'a.close-dialog', function(e) {
+    $(this).closest('.dialog').addClass('hidden');
+  });
+
+  $('.import-revision').on('click', function() {
+    $('.import.dialog').removeClass('hidden');
+  });
+
+  $('.import.dialog input[type=file]').on('change', function(e) {
+    var handle = this.files[0];
+    if (!handle) return;
+    app.importFile(handle).done(function() {
+      $('.import.dialog').addClass('hidden');
+    });
+  });
+
+  var cancel = function(e) {
+    e = e.originalEvent || e;
+    e.preventDefault();
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = 'copy';
+    }
+    return false;
+  };
+
+  $('.import.dialog').on('dragenter dragover', cancel);
+  $('.import.dialog').on('drop', function(e) {
+    e.preventDefault();
+    var handle = e.originalEvent.dataTransfer.files[0];
+    if (!handle) return;
+    app.importFile(handle).done(function() {
+      $('.import.dialog').addClass('hidden');
+    });
+  });
+
+  app.createRevision();
+  app.updateUI();
+
+  //window.app = app;
+
 });
 
 </script>
