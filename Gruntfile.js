@@ -21,7 +21,7 @@ module.exports = function(grunt) {
         },
         watch: {
             html: {
-                files: ['./src/*.html', './src/snippets/*.html'],
+                files: ['./src/*.html', './src/snippets/*.html', './src/interactives/*.html'],
                 tasks: ['shorts']
             },
             /*js: {
@@ -119,7 +119,8 @@ module.exports = function(grunt) {
                 var imported = parse(path.join(dir, importPath));
 
                 for (var key in params) {
-                    imported = imported.replace('[#' + key + ']', params[key]);
+                    var replacer = new RegExp("\\[#" + key + "\\]", "g");
+                    imported = imported.replace(replacer, params[key]);
                 }
 
                 file = file.replace(importCode, imported);

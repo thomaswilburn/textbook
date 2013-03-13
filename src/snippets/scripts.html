@@ -1,6 +1,6 @@
 <script>
 require(['jquery', 'google-code/prettify'], function($) {
-  $('code').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
+  $('code, pre').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
   PR.prettyPrint();
 });
 </script>
