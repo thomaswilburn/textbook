@@ -16,10 +16,10 @@
     JavaScript libraries are like opinions: everyone has one, and theirs is always the best. But beyond the jQuery bubble, there are a lot of really interesting, powerful ideas being written. Even if you don't commonly use them, it's worth checking out a few alternatives just to see what they do well, and what you can learn.
 
     <ul>
-      <li> <a href="">YUI</a> - An incredibly comprehensive system created at Yahoo! that covers everything from basic page manipulation to large-scale application design. Somehow, YUI has never become popular, a fact I attribute to its slightly clumsy interface (and the fact that most coders are vaguely embarrassed by the name "Yahoo!").
-      <li> <a href="">Dojo</a> - Much like YUI, Dojo is an "everything-and-the-kitchen-sink" library organized into a wide range of modules.
-      <li> <a href="">Zepto</a> - A jQuery-compatible library meant to be smaller and faster on mobile devices. This library only works reliably on Webkit-based browsers.
-      <li> <a href="">Prototype</a> - One of the early competitors to jQuery, Prototype has fallen by the wayside, particularly as some of its innovations--namely, altering the built-in page objects to make them more user-friendly--have fallen out of fashion. 
+      <li> <a href="http://yuilibrary.com">YUI</a> - An incredibly comprehensive system created at Yahoo! that covers everything from basic page manipulation to large-scale application design. Somehow, YUI has never become popular, a fact I attribute to its slightly clumsy interface (and the fact that most coders are vaguely embarrassed by the name "Yahoo!").
+      <li> <a href="http://dojotoolkit.org">Dojo</a> - Much like YUI, Dojo is an "everything-and-the-kitchen-sink" library organized into a wide range of modules.
+      <li> <a href="http://zeptojs.com">Zepto</a> - A jQuery-compatible library meant to be smaller and faster on mobile devices. This library only works reliably on Webkit-based browsers.
+      <li> <a href="http://prototypejs.org">Prototype</a> - One of the early competitors to jQuery, Prototype has fallen by the wayside, particularly as some of its innovations--namely, altering the built-in page objects to make them more user-friendly--have fallen out of fashion. 
     </ul>
 
 </aside>
@@ -120,7 +120,7 @@ var submenus = menu.find('ul');
 </code> 
 
 <p>
-  The complete list of functions for navigating around the document (or <mark>traversing</mark> it) this way are listed in jQuery's <a href="">traversal function documentation</a>, but the most useful ones include:
+  The complete list of functions for navigating around the document (or <mark>traversing</mark> it) this way are listed in jQuery's <a href="http://api.jquery.com/category/traversing/">traversal function documentation</a>, but the most useful ones include:
 
 <table>
   <tr>
@@ -145,6 +145,88 @@ var submenus = menu.find('ul');
     <td><var>prev()</var>
     <td>Same as <var>next()</var>, but working in the opposite direction (up the page instead of down).
 </table>
+
+<aside>
+
+  <h1>Refresh to Revert</h1>
+
+  <p>
+    In this chapter, we'll be doing our fair share of page manipulation, and there's always a chance with that kind of thing that you could hide or remove something you needed--like, perhaps, this text! If that happens, don't worry and don't panic. Changes made with JavaScript only alter the page in the browser's memory, not on your hard drive or on the server. If something goes wrong, just refresh the page, and it'll be reverted back to its original state, good as new.
+
+</aside>
+
+<h2>Manipulation</h2>
+
+<p>
+  Finding elements with jQuery is very, very simple, but what do we do with them once we have them? The answer comes in the form of the <a href="http://api.jquery.com/category/manipulation/">manipulation</a> functions. The simplest form of manipulation is just to replace the contents of an element using <var>html()</var>. For example, there's an element after this paragraph with an ID of "substitute." Let's change its contents by running the following code from the console.
+
+  <div id="substitute"></div>
+
+<code>
+$('#substitute').html('This space intentionally left blank.');
+</code>
+
+<p>
+  The <var>html()</var> function is, like many of jQuery's functions, both what we call a <mark>getter</mark> and a <mark>setter</mark>. By this, I mean that it can either get the inner HTML of an element, or it can set it. If you call <var>html()</var> without providing any input, as below, you'll get back the contents of the element.
+
+<code>
+$('#substitute').html(); //should be what you previously inserted here
+</code>
+
+<p>
+  You can type any string you want into the <var>html()</var> function, including other HTML tags. While that's not the most efficient way to construct a page, it's a useful ability to have. We can already imagine being able to create a large numbered list using a loop and some jQuery:
+
+<code>
+var list = "";
+for (var i = 0; i &lt; 100; i++) {
+  list = list + "&lt;li&gt; #" + i;
+}
+$('#substitute').html(list);
+</code>
+
+  You can also feed a jQuery object into <var>html()</var>, which will remove those objects from their current location and insert them into the selected element or elements. For example, we might grab the first code example off this page, and insert it into our substitute element:
+
+<code>
+var code = $('code:first');
+$('#substitute').html(code);
+</code>
+
+<p>
+  If you want to keep the current contents, but add to them, you might consider using <var>append()</var> instead of <var>html()</var>. The former works the same way, but it supplements an element's inner HTML instead of replacing it. <var>append()</var> makes our list-generation loop quite a bit simpler, because we don't have to generate all the HTML in one big string.
+
+<code>
+for (var i = 0; i &lt; 100; i++) {
+  var item = "&lt;li&gt; #" + i;
+  $('#substitute').append(item);
+}
+</code>
+
+<p>
+  Finally, let's look at a few methods for changing the appearance of an item. If you'd like to alter the inline style for an element, you can use the <var>css()</var> function, which takes as its inputs the name of the CSS property you want to change, followed by the value you'd like to give it. Try it out on the <var>blockquote</var> element that follows:
+
+<blockquote>
+  "I don't have to forgive my enemies. I've had them all killed."<br>
+  --General Ramon Maria Naraez
+</blockquote>
+
+<code>
+var quote = $('blockquote');
+quote.css('border', '8px dotted #CCC');
+quote.css('color', 'red');
+quote.css('background-color', 'green');
+</code>
+
+<p>
+  Like <var>html()</var>, <var>css()</var> is both a getter and a setter. If you don't provide a value as the second input to the function, it will retrieve the current value of that property. The best part of using this function to get CSS properties is that it's not limited to only inline styles. It will pull whatever the current computed style for the element is--meaning inline, stylesheet, and built-in styles. You can see this if you try to get the text-decoration style for our blockquote, which I have not set in any way on this page.
+
+<code>
+$('blockquote').css('text-decoration'); // should return "none"
+</code>
+
+  Be careful, though. The format that you get a property back from <var>css()</var> may not match the way you set it, or the way you expect. Asking for the <var>color</var> style of an element in Firefox currently gets formatted as an "rgb(0, 0, 0)"-style string, even if it was set with a regular color string like "black." It can also vary from browser to browser. Be sure to test your code as widely as possible, to make sure you handle differences in CSS implementation.
+
+
+
 
 
 [@import snippets/scripts.html]
