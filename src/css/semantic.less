@@ -2,7 +2,7 @@
 //code
 var, code {
   font-family: consolas, monospace;
-  font-size: 14px;
+  .font-size(14);
   font-style: normal;
 }
 
@@ -24,18 +24,18 @@ mark {
 
 aside {
 
-  @width: 350px;
+  @width: 25em;
 
-  font-size: 14px;
+  .font-size(14);
   width: @width;
   float: right;
   clear: right;
-  margin-right: -@width - 25;
+  margin-right: -@width - 1.75;
   margin-bottom: 1em;
   border: 1px dotted #888;
   padding: 1em;
   background: white;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, .1);
+  box-shadow: .25em .25em .5em rgba(0, 0, 0, .1);
 
   h1 {
     background: @background;
@@ -45,6 +45,13 @@ aside {
   ul {
     padding-left: 1em;
     list-style-type: square;
+  }
+
+  @media screen and (max-width: 69em) {
+    float: none;
+    clear: none;
+    width: auto;
+    margin-right: 0;
   }
 
 }

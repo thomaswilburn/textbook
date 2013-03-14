@@ -4,6 +4,15 @@
 @foreground-secondary: white;
 @background-secondary: #789;
 
+@base-font-size: 16;
+
+.font-size(@target) {
+  @pxValue: @target;
+  @remValue: @target / @base-font-size;
+  font-size: ~"@{pxValue}px"; 
+  font-size: ~"@{remValue}rem";
+}
+
 .drop-shadow(@x: 4px, @y: 4px, @distance: 8px, @alpha: .2) {
   -moz-box-shadow: @x @y @distance rgba(0, 0, 0, @alpha);
   -webkit-box-shadow: @x @y @distance rgba(0, 0, 0, @alpha);
