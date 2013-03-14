@@ -2,16 +2,19 @@
 
 html {
   background: darken(@background, 5%);
+  font-size: @base-font-size;
 }
 
 body {
   font-family: calibri, tahoma, verdana, sans-serif;
   background: @background;
-  width: 700px;
+  //Context = 16px font size
+  min-width: 20em;
+  width: 44em;
   padding: 1em 0;
-  margin: 0 0 0 1em;
-  .drop-shadow(8px, 0px, 16px, .1);
-  min-height: 800px;
+  margin: 0 1em;
+  .drop-shadow(.5em, 0px, 1em, .1);
+  min-height: 50em;
 
   & > h1 {
     text-transform: uppercase;
@@ -23,15 +26,24 @@ body {
     margin: 0 0 1em;
   }
 
-  @media (min-width: 1100px) {
+  //1100px
+  @media screen and (min-width: 69em) {
     margin: auto;
     position: relative;
-    left: -180px;
+    left: -11.25em;
+  }
+
+  @media screen and (max-width: 46em) {
+    width: auto;
   }
 }
 
 .content {
   padding: 0 2em;
+
+  @media screen and (max-width: 46em) {
+    padding: 0 1em;
+  }
 }
 
 h2 {
