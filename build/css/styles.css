@@ -9,7 +9,7 @@
 }
 :not(.ie) .carved {
   color: transparent;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2), 0 0 0 #001122;
+  text-shadow: 1px 1px rgba(255, 255, 255, 0.2), 0 0 #001122;
 }
 * {
   -webkit-box-sizing: border-box;
@@ -21,18 +21,20 @@
 /* basic document look and feel */
 html {
   background: #f2f2f2;
+  font-size: 16;
 }
 body {
   font-family: calibri, tahoma, verdana, sans-serif;
   background: #ffffff;
-  width: 700px;
+  min-width: 20em;
+  width: 44em;
   padding: 1em 0;
-  margin: 0;
-  -moz-box-shadow: 8px 0px 16px rgba(0, 0, 0, 0.1);
-  -webkit-box-shadow: 8px 0px 16px rgba(0, 0, 0, 0.1);
-  -ms-box-shadow: 8px 0px 16px rgba(0, 0, 0, 0.1);
-  box-shadow: 8px 0px 16px rgba(0, 0, 0, 0.1);
-  min-height: 800px;
+  margin: 0 1em;
+  -moz-box-shadow: 0.5em 0px 1em rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0.5em 0px 1em rgba(0, 0, 0, 0.1);
+  -ms-box-shadow: 0.5em 0px 1em rgba(0, 0, 0, 0.1);
+  box-shadow: 0.5em 0px 1em rgba(0, 0, 0, 0.1);
+  min-height: 50em;
 }
 body > h1 {
   text-transform: uppercase;
@@ -48,10 +50,27 @@ body > h1 {
 }
 :not(.ie) body > h1 {
   color: transparent;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2), 0 0 0 #001122;
+  text-shadow: 1px 1px rgba(255, 255, 255, 0.2), 0 0 #001122;
+}
+@media screen and (min-width: 69em) {
+  body {
+    margin: auto;
+    position: relative;
+    left: -11.25em;
+  }
+}
+@media screen and (max-width: 46em) {
+  body {
+    width: auto;
+  }
 }
 .content {
   padding: 0 2em;
+}
+@media screen and (max-width: 46em) {
+  .content {
+    padding: 0 1em;
+  }
 }
 h2 {
   border-bottom: 1px solid black;
@@ -101,6 +120,7 @@ var,
 code {
   font-family: consolas, monospace;
   font-size: 14px;
+  font-size: 0.875rem;
   font-style: normal;
 }
 var {
@@ -117,13 +137,16 @@ mark {
 }
 aside {
   font-size: 14px;
-  width: 350px;
+  font-size: 0.875rem;
+  width: 25em;
   float: right;
-  margin-right: -375px;
+  clear: right;
+  margin-right: -26.75em;
+  margin-bottom: 1em;
   border: 1px dotted #888;
   padding: 1em;
   background: white;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0.25em 0.25em 0.5em rgba(0, 0, 0, 0.1);
 }
 aside h1 {
   background: #ffffff;
@@ -132,6 +155,14 @@ aside h1 {
 aside ul {
   padding-left: 1em;
   list-style-type: square;
+}
+@media screen and (max-width: 69em) {
+  aside {
+    float: none;
+    clear: none;
+    width: auto;
+    margin-right: 0;
+  }
 }
 code {
   display: block;
@@ -142,6 +173,11 @@ code {
   white-space: pre;
   border-radius: 8px;
   border: 1px solid #778899;
+}
+@media screen and (max-width: 41em) {
+  code {
+    white-space: pre-wrap;
+  }
 }
 samp {
   display: block;
@@ -356,4 +392,13 @@ li.L9 {
   border: none;
   border-bottom: 1px dashed #888;
   text-align: center;
+}
+#substitute {
+  border: 1px solid #ABC;
+  min-height: 3em;
+  padding: 1em;
+}
+.awesome {
+  border: 8px dotted #0F0;
+  outline: 8px solid magenta;
 }

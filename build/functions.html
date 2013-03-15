@@ -1,0 +1,119 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie"><![endif]-->
+<!--[if gt IE 9]><!--><html><!--<![endif]-->
+<head>
+  <title>Javascript for the Web Savvy &bull; Functions</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+  require.config({
+    baseUrl: '../js',
+    paths: {
+      jquery: 'jquery-1.9.min'
+    }
+  });
+  </script>
+</head>
+<body>
+  <h1>Functions</h1>
+  <div class="content">
+
+<h2>Do Something</h2>
+
+<p>
+  Imagine that JavaScript is a language--not a computer language, filled with unfamiliar concepts, but a natural human language like English or Spanish. It has nouns, by way of the primitive and object values. It has adjectives, via object properties (see: <var>array.length</var>). It has verbs, in functions, and adverbs, in the values that we may write between the parentheses of a function to change how that verb acts. Libraries like jQuery even strive to make this comparison more true: a line of jQuery or well-written JavaScript, when read aloud, should be easy to translate into your native language because it should follow a similar subject-verb-object progression.
+
+<p>
+  But while we have been able to create our own nouns, adjectives, and adverbs by putting together variables, we haven't been able to define our own verbs yet. To torture the metaphor just a bit more, this is something we should want to do for brevity's sake. After all, we don't say that someone "lifted their foot, moved it forward, placed it on the ground, and shifted their weight" to the grocery store. We way that they <i>walked</i>. In JavaScript, by defining our own functions (in addition to those that are built-in), we can wrap complex operations up into simple commands, which makes it much easier to reason at a high leve about what our program is doing.
+
+<p>
+  For this chapter, we're going to use templating as an example of building a function. Templates make it much easier to manage and build HTML from JavaScript, in part because JavaScript lacks multi-line strings. Another reason it's not a good idea to mix text and JavaScript is that it mixes up your content and your page behavior. By keeping them separate, you make maintenance much easier, because all of your code is in one place, and all of your content in another. It also makes it much easier to build a translated version of your page.
+
+<p>
+  But first, let's talk about the anatomy of a function definition. At first glance, it won't look too much like other control structures, such as loops or conditional statements.
+
+<aside>
+
+  <h1>Synonyms</h1>
+
+  <p>
+    In addition to this method of declaring functions, you may see variations that use the <var>function</var> keyword only and do not use <var>var</var>:
+
+<code>
+function x() {
+  
+}
+</code>
+
+    For top-level functions, this is acceptable: it actually creates a "named" function, one with a <var>name</var> property. In the browser, named functions can be easier to debug. It will also "lift" the function definition to the top of its section. Writing a named function this way is discouraged in modern browsers, and will actually cause an error in the so-called "strict" mode. If you use a debugger often, and want the best of both worlds, you're better off writing your function definitions this way:
+
+<code>
+var f = function f() {
+  
+};
+</code>
+
+    Given that this requires you to give the function a name twice, however, it may be easiest to hold off on this composite definition until debugging actually becomes difficult.
+
+</aside>
+
+<code>
+var greeting = function(name) {
+  var combined = "Hello, " + name;
+  console.log(combined);
+}
+
+greeting("Thomas"); // logs "Hello, Thomas"
+</code>
+
+<p>
+  The first part of this code should look familiar, since it's just declaring a variable and setting it equal to a value. Functions are first-class values in JavaScript, which means that just like strings and numbers, we can store them and pass them around in variables. The next part is the <mark>function literal</mark>: also like numbers and strings, functions have a "literal" form, meaning their value as written out (and not accessed through a variable). It begins with the <var>function</var> keyword to let JavaScript know what we're creating, followed by parentheses containing zero or more inputs, and a block of code that will be run when the function is called.
+
+<p>
+  Let's talk about those inputs for a second. Where the condition goes in an <var>if</var> statement, functions have a list of inputs to the function, which we call its <mark>arguments</mark>. When you call a function, you provide those inputs by putting them between the parentheses of the function expression. Arguments act like variable definitions. In this case, we are declaring that inside the function, we'll have an input variable called <var>name</var>. If we provide a value (above, we provide the string "Thomas"), the argument starts the function with that value. If we don't, the argument is <var>undefined</var>, just like any variable that's declared but not assigned a value.
+
+<h2>template()</h2>
+
+<p>
+  INSERT TIMELINE PLAYER FOR CONSTRUCTING A TEMPLATE FUNCTION HERE.
+
+<p>
+  Our template function is pretty good, and serves as a great example of a useful function. Now, instead of writing code for each JavaScript object that we want to represent as HTML, we can just feed the template string and the data to our function, and we get back a jQuery object ready to be added to the page.
+
+<p>
+  But you may have noticed that we're still keeping our text inside of JavaScript, and we're still forced to deal with JavaScript's lack of support for multiline strings. Building bigger chunks of HTML this way would be painful. How do we get around this problem? By hiding our templates in plain sight.
+
+<p>
+  You may remember, way back when we first learned about <var>&lt;script&gt;</var> tags, that I recommended leaving the <var>type</var> attribute off, because it doesn't make any difference. It turns out that was a half-truth: if the attribute is left off, the browser will indeed assume that the script is written in JavaScript. But if you specify a <var>type</var> that is radically different from the old-school "text/javascript", such as "text/html", the browser <i>will skip the tag entirely</i>. It'll still be a part of the document, but it isn't interpreted as code, and it's still completely hidden from readers. This trick lets us hide big blocks of text in our document, and then pull them out with jQuery.
+
+<code>
+&lt;script type="text/html"&gt;
+This will be ignored by the browser, but is still present in the page.
+&lt;/script&gt;
+
+&lt;script&gt;
+//here is our actual script code
+
+var script = $('script[type="text/html"]'); //find the above tag
+var contents = script.html(); //get the text inside
+console.log(contents); //log out its content
+
+&lt;/script&gt;
+</code>
+
+<p>
+  With this in mind, here's the final version of our template function. Instead of taking a text string as the first argument, we'll ask for an element ID, and find a hidden script tag with the template inside.
+
+
+<script>
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code, pre').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
+  PR.prettyPrint();
+});
+</script>
+  </div>
+</body>
+</html>
