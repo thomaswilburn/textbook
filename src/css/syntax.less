@@ -12,6 +12,10 @@ code {
   white-space: pre;
   border-radius: @codeRadius;
   border: @codeBorder;
+
+  @media screen and (max-width: 41em) {
+    white-space: pre-wrap;
+  }
 }
 
 samp {
