@@ -12,7 +12,7 @@
   For this chapter, we're going to use templating as an example of building a function. Templates make it much easier to manage and build HTML from JavaScript, in part because JavaScript lacks multi-line strings. Another reason it's not a good idea to mix text and JavaScript is that it mixes up your content and your page behavior. By keeping them separate, you make maintenance much easier, because all of your code is in one place, and all of your content in another. It also makes it much easier to build a translated version of your page.
 
 <p>
-  But first, let's talk about the anatomy of a function definition. At first glance, it won't look too much like other control structures, such as loops or conditional statements.
+  But first, let's talk about the anatomy of a function definition. At first glance, it won't look too different from other control structures, such as loops or conditional statements.
 
 <aside>
 
@@ -23,7 +23,7 @@
 
 <code>
 function x() {
-  
+  // stuff goes here
 }
 </code>
 
@@ -31,7 +31,7 @@ function x() {
 
 <code>
 var f = function f() {
-  
+  // stuff goes here
 };
 </code>
 
@@ -52,7 +52,29 @@ greeting("Thomas"); // logs "Hello, Thomas"
   The first part of this code should look familiar, since it's just declaring a variable and setting it equal to a value. Functions are first-class values in JavaScript, which means that just like strings and numbers, we can store them and pass them around in variables. The next part is the <mark>function literal</mark>: also like numbers and strings, functions have a "literal" form, meaning their value as written out (and not accessed through a variable). It begins with the <var>function</var> keyword to let JavaScript know what we're creating, followed by parentheses containing zero or more inputs, and a block of code that will be run when the function is called.
 
 <p>
-  Let's talk about those inputs for a second. Where the condition goes in an <var>if</var> statement, functions have a list of inputs to the function, which we call its <mark>arguments</mark>. When you call a function, you provide those inputs by putting them between the parentheses of the function expression. Arguments act like variable definitions. In this case, we are declaring that inside the function, we'll have an input variable called <var>name</var>. If we provide a value (above, we provide the string "Thomas"), the argument starts the function with that value. If we don't, the argument is <var>undefined</var>, just like any variable that's declared but not assigned a value.
+  Let's talk about those inputs for a second. Where the condition goes in an <var>if</var> statement, functions have a list of inputs to the function, which we call its <mark>arguments</mark>. When you call a function, you provide those inputs by putting them between the parentheses of the function expression. Arguments act like variable definitions. In this case, we are declaring that inside the function, we'll have an input variable called <var>name</var>. If we provide a value (above, we provide the string "Thomas"), the argument starts the function with that value. If we don't, the argument is <var>undefined</var>, just like any variable that's declared but not assigned a value. You can have as many arguments as you like, just by separating them with commas:
+
+<code>
+var manyArgs = function(one, two, three, four, five, andSoOn, andSoForth) {
+  //so many arguments!
+}
+</code>
+
+<p>
+  Inside of a function, you can also declare new variables, or do any of the other things that we've done in JavaScript so far. You can also use variables that were declared outside the function. Any variable that you declare inside, however, is only available inside that function. Running the function again gives you a new version of the variable, unrelated to the old one. Being in a function is like being in one of those exploratory submarines, the ones with the robot arms attached for taking samples. You can interact with the outside world, and there's a whole bunch of gadgets inside the submarine, but the fish can't reach in to fiddle with the controls, and when the trip is over all of the gauges and settings are put back in their default positions.
+
+<p>
+  Along with inputs, functions can also have output (but just one). The output of a function is the value that's used when it is evaluated in an expression, and is called the <mark>return</mark> value. Here's a simple function that adds two numbers together and returns their sum:
+
+<code>
+var adder = function(a, b) {
+  return a + b;
+}
+
+var x = adder(1, 2) + 3; //becomes 3 + 3, and x equals 6
+</code>
+
+  When a function reaches a return statement, it immediately exits. You can write <var>return;</var> without a value to immediately bail out of a function without executing the remainder. 
 
 <h2>template()</h2>
 
