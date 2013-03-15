@@ -88,6 +88,30 @@ console.log(book.title + ", by " + book.author);
     <li><var>document</var> - the current page as loaded into the browser. We'll do more stuff with the document in a bit.
   </ul>
 
+<aside>
+
+  <h1>Everything's an Object</h1>
+
+  <p>
+    Although we're talking here about uppercase-o Objects as a specific data type, everything in JavaScript is an object, or is capable of being treated like an object. Strings, for example, have a <var>length</var> property just like arrays.
+
+<code>
+var test = "abcd";
+console.log(test.length); // 4
+</code>
+
+  <p>
+    All the primitive types have a number of properties and helper functions attached to them. Many of these, particularly in the case of strings, can be very helpful: you can convert a string <var>toUpperCase()</var>, run a <var>search()</var> for a sub-string, or <var>split()</var> it into its component parts. For more information on these helper functions, check out the Mozilla documentation:
+
+    <ul>
+      <li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String#String_instances">Strings</a>
+      <li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Number#Number_instances">Numbers</a>
+      <li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array#Array_instances">Arrays</a>
+      <li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object#Object_instances">Objects</a>
+    </ul>
+
+</aside>
+
 <p>
   Creating our own objects, however, is where the real action is for JavaScript. We can do so using the syntax above, where we create an empty object and add properties. But there's also a <var>literal</var> syntax for declaring objects in a single step, the same way that we declare other literal values like numbers, strings, and booleans by just writing them into our code. To define our book as an object literal, we'd do this:
 
