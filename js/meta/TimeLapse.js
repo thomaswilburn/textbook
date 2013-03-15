@@ -18,7 +18,7 @@ define(['jquery'], function() {
     },
     parse: function(text) {
       //find comments first, because they're multiline
-      var isComment = /[\n\r]*@@(\d)+:([\s\S]*?)@@[\n\r]*/gm;
+      var isComment = /\r?\n\r?@@c:(\d)+;([^@]*)@@/;
       var comment;
       var comments = [];
       while (comment = isComment.exec(text)) {
