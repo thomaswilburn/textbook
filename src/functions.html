@@ -9,10 +9,7 @@
   But while we have been able to create our own nouns, adjectives, and adverbs by putting together variables, we haven't been able to define our own verbs yet. To torture the metaphor just a bit more, this is something we should want to do for brevity's sake. After all, we don't say that someone "lifted their foot, moved it forward, placed it on the ground, and shifted their weight" to the grocery store. We way that they <i>walked</i>. In JavaScript, by defining our own functions (in addition to those that are built-in), we can wrap complex operations up into simple commands, which makes it much easier to reason at a high leve about what our program is doing.
 
 <p>
-  For this chapter, we're going to use templating as an example of building a function. Templates make it much easier to manage and build HTML from JavaScript, in part because JavaScript lacks multi-line strings. Another reason it's not a good idea to mix text and JavaScript is that it mixes up your content and your page behavior. By keeping them separate, you make maintenance much easier, because all of your code is in one place, and all of your content in another. It also makes it much easier to build a translated version of your page.
-
-<p>
-  But first, let's talk about the anatomy of a function definition. At first glance, it won't look too different from other control structures, such as loops or conditional statements.
+  But before we worry about those kinds of architectural concerns, let's talk about the anatomy of a function definition. At first glance, it won't look too different from other control structures, such as loops or conditional statements.
 
 <aside>
 
@@ -74,12 +71,17 @@ var adder = function(a, b) {
 var x = adder(1, 2) + 3; //becomes 3 + 3, and x equals 6
 </code>
 
-  When a function reaches a return statement, it immediately exits. You can write <var>return;</var> without a value to immediately bail out of a function without executing the remainder. 
+  When a function reaches a return statement, it immediately exits. You can write <var>return;</var> without a value to immediately bail out of a function without executing the remainder, but we usually use it because we want to get access to the result of the function's execution. In this way, we can treat functions as essentially black boxes: write them once, and then all we have to care about is the inputs and outputs. If the function doesn't return a value, or doesn't reach a <var>return</var> statement at all, its value in an expression is <var>undefined</var>.
 
 <h2>template()</h2>
 
 <p>
-  INSERT TIMELINE PLAYER FOR CONSTRUCTING A TEMPLATE FUNCTION HERE.
+  For this chapter, we're going to use templating as an example of building a function. Templates make it much easier to manage and build HTML from JavaScript, in part because JavaScript lacks multi-line strings. Another reason it's not a good idea to mix text and JavaScript is that it mixes up your content and your page behavior. By keeping them separate, you make maintenance much easier, because all of your code is in one place, and all of your content in another. It also makes it much easier to build a translated version of your page. All in all, templates are one of the most important parts of writing modern websites, both on the server and in the browser.
+
+<p>
+  In the interactive section below, you can see each revision on our way from a simple block of code all the way up to a completed template function. You should feel free to load the final version of the code (or any of the intermedia versions)
+
+[@import interactives/timelapse.html src="../../js/interactives/data/template.time" id="template-function"]
 
 <p>
   Our template function is pretty good, and serves as a great example of a useful function. Now, instead of writing code for each JavaScript object that we want to represent as HTML, we can just feed the template string and the data to our function, and we get back a jQuery object ready to be added to the page.

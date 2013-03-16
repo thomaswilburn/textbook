@@ -102,17 +102,25 @@ module.exports = function(grunt) {
         var files = grunt.file.expand(config.paths);
         var outputDir = config.output;
 
-        var parse = function(input) {
+        var parse = function(input, data) {
+            data = data || {};
             var file = fs.readFileSync(input, 'utf-8');
+
+            for (var key in data) {
+                var replacer = new RegExp("\\[#" + key + "\\]", "g");
+                file = file.replace(replacer, data[key]);
+            }
+
             var dir = path.dirname(input);
             var importTest = /\[@import(?: [^\s\]]+)*\]/g;
             var match;
             while (match = importTest.exec(file)) {
 
-                var importCode = match[0];
+                var importCode = match[0];//.replace(/\[@import|\]/g, '');
                 //chunker finds the attributes within the shortcode
-                var chunker = /(?:\s)[^=\s\]]+(?:=?([^'"\s\]]+|(['"])[^\2\]]+\2)?)/g;;
+                var chunker = /\s([\w\/.]+)(?:=(['"]{0,1}).*?\2)?/g
                 var attributes = importCode.match(chunker);
+                if (attributes == null) continue;
                 var importPath = attributes.shift().trim();
                 var params = {};
                 for (var i = 0; i < attributes.length; i++) {
@@ -122,12 +130,8 @@ module.exports = function(grunt) {
                     }
                     params[split[0]] = split[1] || "";
                 }
-                var imported = parse(path.join(dir, importPath));
 
-                for (var key in params) {
-                    var replacer = new RegExp("\\[#" + key + "\\]", "g");
-                    imported = imported.replace(replacer, params[key]);
-                }
+                var imported = parse(path.join(dir, importPath), params);
 
                 file = file.replace(importCode, imported);
             }
