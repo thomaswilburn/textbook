@@ -79,9 +79,8 @@ define(['jquery', 'dom/Delay', 'meta/Evil', 'dom/Stage'], function($, Delay, Evi
     drawWire([
       {x: 200, y: startPos.top + start.outerHeight()},
       {x: 200, y: midPos.top - 4},
-      {x: midPos.left + middle.outerWidth() + 10, y: midPos.top - 4},
-      {x: midPos.left + middle.outerWidth() + 10, y: midPos.top + middle.outerHeight()},
-      {x: elseBulb.x + 20, y: midPos.top + middle.outerHeight()},
+      {x: midPos.left + 200, y: midPos.top - 4},
+      {x: midPos.left + 200, y: elseBulb.y + 45},
       {x: elseBulb.x + 20, y: elseBulb.y + 45},
       {x: elseBulb.x + 20, y: endPos.top}
     ], elseBulb.on);

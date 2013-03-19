@@ -90,7 +90,10 @@ $('table > td'); //finds td tags that are direct children of the table
   That last query tells us something interesting: there are no <var>&lt;td&gt;</var> tags that are direct children of the table tag, because they're all contained in a <var>&lt;tr&gt;</var> tag and <i>then</i> in the table (sometimes there's also a <var>&lt;tbody&gt;</var> between the two as well). In that case, jQuery doesn't throw an error, even if you try to call functions like <var>hide()</var> or <var>fadeIn</var> on the resulting object. Instead, the result is an empty array, and the functions are simply ignored. Since jQuery objects are "array-like," the way to test whether or not you've found something is (just as with arrays) to check the <var>length</var> property.
 
 <code>
-$('table > td').length == 0; //true
+if ($('table > td').length > 0) {
+  //do something with the query here
+  //you can also just test the length by itself--non-zero numbers are truthy
+}
 </code>
 
 <aside>
@@ -128,7 +131,7 @@ var submenus = menu.find('ul');
     <th>Role
   <tr>
     <td><var>find()</var>
-    <td>Given a selector, find any elements matching it
+    <td>Given a selector, find any elements matching it inside the current selection
   <tr>
     <td><var>children()</var>
     <td>If called with a selector, finds all direct child elements matching it. If called without, returns all child elements.
@@ -158,7 +161,7 @@ var submenus = menu.find('ul');
 <h2>Manipulation</h2>
 
 <p>
-  Finding elements with jQuery is very, very simple, but what do we do with them once we have them? The answer comes in the form of the <a href="http://api.jquery.com/category/manipulation/">manipulation</a> functions. The simplest form of manipulation is just to replace the contents of an element using <var>html()</var>. For example, there's an element after this paragraph with an ID of "substitute." Let's change its contents by running the following code from the console.
+  Finding elements with jQuery is all well and good, but what do we do with them once we have them? The answer comes in the form of the <a href="http://api.jquery.com/category/manipulation/">manipulation</a> functions. The simplest form of manipulation is just to replace the contents of an element using <var>html()</var>. For example, there's an element after this paragraph with an ID of "substitute." Let's change its contents by running the following code from the console.
 
   <div id="substitute"></div>
 
@@ -242,7 +245,7 @@ headline.removeClass('awesome');
 </code>
 
 <p>
-  By using classes instead of CSS properties, we keep our JavaScript separate from the look and feel of our site. Now, if we decide to give the page a style makeover, we don't have to hunt through many lines of JavaScript to find places where we might be setting styles via code. It's much easier to maintain this way, so whenever possible keep each language restricted to the problem domain that it's best able to hande:
+  By using classes instead of CSS properties, we keep our JavaScript separate from the look and feel of our site. Now, if we decide to give the page a style makeover, we don't have to hunt through many lines of JavaScript to find places where we might be setting styles via code. Whenever possible, use each web language only for the problems it's designed for:
 
   <ul>
     <li> <b>HTML</b>: structure and content
@@ -250,7 +253,7 @@ headline.removeClass('awesome');
     <li> <b>JavaScript</b>: interaction and behavior
   </ul>
 
-  While it's sometimes frustrating that to develop web pages, we need to know (at least) three separate, different languages, when they're broken out this way it's much easier to see how we benefit from this arrangement. Each of the three front-end web languages is well-suited to its task in a way that the others are not: it would be painful to write and style a page using only JavaScript, just as it is slow and difficult to do all your styling in your HTML, or write all of your interactions using CSS transitions. Using the right language for the right task makes our code simpler--and in the next chapter, we'll learn about ways that JavaScript can create interactive elements that would be <i>impossible</i> in the other two.
+  While it's sometimes frustrating that to develop web pages, we need to know (at least) three different languages, when they're broken out this way it's easy to see how we also benefit from this arrangement. Each of the three front-end web languages is well-suited to its task in a way that the others are not: it would be painful to write and style a page using only JavaScript, just as it is slow and difficult to do all your styling in your HTML, or write all of your interactions using CSS transitions. Using the right language for the right task makes our code simpler--and in a few chapters chapter, we'll learn about ways that JavaScript can create interactive elements that would be <i>impossible</i> in the other two.
 
 [@import snippets/scripts.html]
 
