@@ -167,6 +167,9 @@ $('#substitute').html('This space intentionally left blank.');
 </code>
 
 <p>
+  Note that when we change the page using jQuery, for most change, jQuery will apply our alteration to all of the objects you selected--whether that's just one element (as above) or a long list. For example, <var>$('p').html('replaced')</var> will change the contents of every &lt;p&gt; tag on the page. You don't have to write a loop to affect each selected element, because jQuery will do it for you. Just make sure your selectors are accurate, since it will also happily affect elements that you didn't intend to target.
+
+<p>
   The <var>html()</var> function is, like many of jQuery's functions, both what we call a <mark>getter</mark> and a <mark>setter</mark>. By this, I mean that it can either get the inner HTML of an element, or it can set it. If you call <var>html()</var> without providing any input, as below, you'll get back the contents of the element.
 
 <code>
@@ -224,6 +227,30 @@ $('blockquote').css('text-decoration'); // should return "none"
 </code>
 
   Be careful, though. The format that you get a property back from <var>css()</var> may not match the way you set it, or the way you expect. Asking for the <var>color</var> style of an element in Firefox currently gets formatted as an "rgb(0, 0, 0)"-style string, even if it was set with a regular color string like "black." It can also vary from browser to browser. Be sure to test your code as widely as possible, to make sure you handle differences in CSS implementation.
+
+<h2>Stay Classy, jQuery</h2>
+
+<p>
+  When you call the <var>css()</var> function as a setter, it sets the styles inline. Of course, we're always taught that inline styles are a bad idea when writing HTML: they're repetitive, break up your code, and if you ever change the look of your site you have to go through each line of HTML to update the style attributes. It's much better practice to use a CSS class, thus separating the appearance of your site from its structure. The same is true of JavaScript, and jQuery's got your back:
+
+<code>
+var headline = $('h1');
+headline.addClass('awesome');
+//in addition to classes it already had, now has a class of "awesome"
+headline.removeClass('awesome');
+//and now just the "awesome" class has been removed, leaving others untouched
+</code>
+
+<p>
+  By using classes instead of CSS properties, we keep our JavaScript separate from the look and feel of our site. Now, if we decide to give the page a style makeover, we don't have to hunt through many lines of JavaScript to find places where we might be setting styles via code. It's much easier to maintain this way, so whenever possible keep each language restricted to the problem domain that it's best able to hande:
+
+  <ul>
+    <li> <b>HTML</b>: structure and content
+    <li> <b>CSS</b>: look and feel
+    <li> <b>JavaScript</b>: interaction and behavior
+  </ul>
+
+  While it's sometimes frustrating that to develop web pages, we need to know (at least) three separate, different languages, when they're broken out this way it's much easier to see how we benefit from this arrangement. Each of the three front-end web languages is well-suited to its task in a way that the others are not: it would be painful to write and style a page using only JavaScript, just as it is slow and difficult to do all your styling in your HTML, or write all of your interactions using CSS transitions. Using the right language for the right task makes our code simpler--and in the next chapter, we'll learn about ways that JavaScript can create interactive elements that would be <i>impossible</i> in the other two.
 
 [@import snippets/scripts.html]
 

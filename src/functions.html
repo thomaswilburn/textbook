@@ -84,7 +84,7 @@ var x = adder(1, 2) + 3; //becomes 3 + 3, and x equals 6
 [@import interactives/timelapse.html src="../../js/interactives/data/template.time" id="template-function"]
 
 <p>
-  Our template function is pretty good, and serves as a great example of a useful function. Now, instead of writing code for each JavaScript object that we want to represent as HTML, we can just feed the template string and the data to our function, and we get back a jQuery object ready to be added to the page.
+  Our template function is pretty good, and serves as a great example of a useful function. Now, instead of writing code for each JavaScript object that we want to represent as HTML, we can just feed the template string and the data to our function, and we get back a complete HTML string that we can feed to jQuery.
 
 <p>
   But you may have noticed that we're still keeping our text inside of JavaScript, and we're still forced to deal with JavaScript's lack of support for multiline strings. Building bigger chunks of HTML this way would be painful. How do we get around this problem? By hiding our templates in plain sight.
@@ -110,6 +110,79 @@ console.log(contents); //log out its content
 <p>
   With this in mind, here's the final version of our template function. Instead of taking a text string as the first argument, we'll ask for an element ID, and find a hidden script tag with the template inside.
 
+<code>
+var template = function(id, data) {
+  //find our script tag by its ID
+  var scriptTag = $('#' + id);
+  //retrieve its contents as a multiline string
+  var code = scriptTag.html();
+  //loop through the data
+  for (var key in data) {
+    //get the value for each key
+    var value = data[key]
+    //replace the matching tag with that value
+    code = code.replace('{{' + key + '}}', value);
+  }
+  //output our filled-in template
+  return code;
+}
+</code>
+
+<h2><var>this</var> Gets Confusing</h2>
+
+<p>
+  One more thing about functions: since they're just values, like numbers or strings, it follows that they too can be placed in arrays or as the properties of objects just like those primitive values. A function that's attached to an object is called a <mark>method</mark>, and it has a special ability: when called as an object property, it can access the parent object through a special variable named <var>this</var>.
+
+<code>
+var cat = {
+  noise: 'meow',
+  speak: function() {
+    console.log(this.noise);
+  }
+}
+
+cat.speak(); //logs "meow"
+</code>
+
+<p>
+  Even if you assign a function to many objects, so that it's shared between them, the value of <var>this</var> will always be the object on which it was called--the one before the dot operator (or square brackets, if you're using array-style property notation in a loop). It's a dynamic value, determined at run-time. <var>this</var> can be confusing (and hard to write about), but it's extremely useful for writing objects that have their own verbs, and affect their own internal values.
+
+<p>
+  Although you haven't been aware of how it works, you've been using an object that works exactly this way: jQuery objects make extensive use of <var>this</var> in order to let you affect the elements they've found on the page. Although it's extremely simplified, jQuery's CSS setter function might look internally a bit like this:
+
+<code>
+var $jquery = {
+  element: DivElement, //reference to a &lt;div&gt; on the page
+  css: function(name, value) {
+    //look up the CSS property by name in the element style list
+    //then assign it the value passed in
+    this.element.style[name] = value;
+  }
+}
+
+$jquery.css('background-color', 'black');
+
+</code>
+
+<p>
+  jQuery also returns <var>this</var> from most of its methods, which means that in expressions, they evaluate to their parent object. If you <var>console.log()</var> the result of a jQuery change function, you'll see the jQuery object that you changed. The practical upshot of this is that since it keeps returning itself, you can keep calling methods on the return value, <mark>chaining</mark> them into one long expression.
+
+<code>
+var paragraphs = $('p');
+
+//getters obviously return the value you're getting
+paragraphs.css('background-color'); //"", since no style is set on this page
+
+//setters, though, return themselves
+paragraphs.css('background-color', 'black');
+//returns paragraphs, so we can call more of its methods
+
+//ultimately, as long as all you do is call setters, you can do this:
+paragraphs.css('color', 'green').html('hello').addClass('chained');
+</code>
+
+<p>
+  Just because you <i>can</i> chain jQuery methods this way doesn't mean that you <i>should</i>. When abused, it can be confusing and hard to update. But if you need to change one or two simple things about an element, chaining function calls on the object can be a <mark>fluent</mark> interface for doing so without needing an entirely new line for each change.
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
