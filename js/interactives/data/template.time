@@ -44,6 +44,7 @@ var link = {
 @8,@for (var i = 0; i < menus.length; i++) { //loop through the menus
 @8,@    var menuItem = template(menuTemplate, menus[i]); //create each from data
 @8,@    $('#main-menu').append(menuItem); //add to the main menu element
+@8,@}
 @1,6@}
 @2,7@console.log(fillMe);
 @3,7@var template = function() {

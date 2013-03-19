@@ -1,16 +1,54 @@
-<div class="interactive timelapse" id="[#src]">
+<div class="interactive timelapse" id="[#id]">
   <div class="controls">
-    <a class="first">&lArr;</a>
+    <a class="first">First</a>
+    <a class="previous">Previous</a>
     <ul class="revision-list"></ul>
-    <a class="last">&rArr;</a>
+    <a class="next">Next</a>
+    <a class="last">Last</a>
   </div>
-  <div class="comments-container">
-    <div class="comments-bar">COMMENTS</div>
+  <aside class="comments-container">
+    <h1 class="comments-bar">COMMENTS</h1>
     <div class="comments"></div>
-  </div>
+  </aside>
   <code class="revision"></code>
 <script type="text/timelapse">[@import [#src]]</script>
-  <script>
-    console.log([#src]);
-  </script>
 </div>
+<script>
+require(['jquery', 'meta/TLPlayer'], function($, Player) {
+  var element = $('#[#id]');
+  var player = new Player();
+  var diff = element.find('script[type="text/timelapse"]');
+  var revUL = element.find('ul.revision-list');
+  player.load(diff.html()).done(function() {
+    player.timelapse.revisions.forEach(function(item, i) {
+      var li = $('<li>');
+      li.html(i + 1);
+      li.attr('data-revision', i);
+      revUL.append(li);
+    });
+    player.connect({
+      code: element.find('code.revision'),
+      comments: element.find('.comments')
+    })
+    player.switch(0);
+    element.find('li:first').addClass('active');
+    element.find('.controls').on('click', 'li', function() {
+      var $this = $(this);
+      element.find('.active').removeClass('active');
+      $this.addClass('active');
+      player.switch($this.attr('data-revision'));
+    });
+    /*element.find('.comments').slideUp();
+    element.find('.comments-bar').on('click', function() {
+      element.find('.comments').slideToggle();
+    });*/
+    ['first', 'previous', 'next', 'last'].forEach(function(jump) {
+      element.find('.' + jump).click(function() {
+        player[jump]();
+        element.find('.active').removeClass('active');
+        element.find('li[data-revision=' + player.current + ']').addClass('active');
+      });
+    });
+  });
+});
+</script>
