@@ -388,6 +388,33 @@ li.L9 {
   width: 200px;
   float: right;
 }
+.interactive.timelapse .controls ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+.interactive.timelapse .controls a,
+.interactive.timelapse .controls li {
+  display: inline-block;
+  margin: 0 3px;
+  background: #778899;
+  padding: 4px;
+  color: #ffffff;
+}
+.interactive.timelapse .controls a:hover,
+.interactive.timelapse .controls li:hover {
+  background: #94a2af;
+}
+.interactive.timelapse .controls a.active,
+.interactive.timelapse .controls li.active {
+  border: 3px solid #5f6e7e;
+}
+.interactive.timelapse .new {
+  background: white;
+  border: 1px dotted rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
 .blank {
   border: none;
   border-bottom: 1px dashed #888;
