@@ -5,22 +5,32 @@ var link = {
     text: "This space intentionally left blank"
 };
 @1,@
-@1,7@for (var key in link) {
-@1,7@    
-@2,7@    var value = link[key]; //get the value of each item
-@2,7@    //now we substitute each tag with its value
-@2,7@    fillMe = fillMe.replace('{{' + key + '}}', value);
-@8,@var template = function(text, data) {
-@8,@    for (var key in data) {
-@8,@        var value = data[key]; //get the value of each item
-@8,@        //now we substitute each tag with its value
-@8,@        text = text.replace('{{' + key + '}}', value);
-@8,@    }
-@8,@    return text;
-@8,@};
-@8,@
-@8,@var output = template(fillMe, link);
-@8,@console.log(output);
+@1,2@for (var key in link) {
+@1,2@    
+@2,2@    var value = link[key]; //get the value of each item
+@2,2@    //now we substitute each tag with its value
+@2,2@    fillMe = fillMe.replace('{{' + key + '}}', value);
+@1,2@}
+@2,2@console.log(fillMe);
+@3,4@var template = function() {
+@5,@var template = function(text, data) {
+@3,5@    for (var key in link) {
+@3,5@        var value = link[key]; //get the value of each item
+@6,@    for (var key in data) {
+@6,@        var value = data[key]; //get the value of each item
+@3,@        //now we substitute each tag with its value
+@3,5@        fillMe = fillMe.replace('{{' + key + '}}', value);
+@6,@        text = text.replace('{{' + key + '}}', value);
+@3,@    }
+@3,4@    console.log(fillMe);
+@5,5@    return fillMe;
+@6,@    return text;
+@3,@};
+@4,@
+@4,5@template();
+@6,6@template(fillMe, link);
+@7,@var output = template(fillMe, link);
+@7,@console.log(output);
 @8,@
 @8,@var menuTemplate = '<li class="{{classname}}"> <a href="{{href}}">{{label}}</a>';
 @8,@var menus = [
@@ -45,27 +55,6 @@ var link = {
 @8,@    var menuItem = template(menuTemplate, menus[i]); //create each from data
 @8,@    $('#main-menu').append(menuItem); //add to the main menu element
 @8,@}
-@1,6@}
-@2,7@console.log(fillMe);
-@3,7@var template = function() {
-@5,7@var template = function(text, data) {
-@3,7@    for (var key in link) {
-@3,7@        var value = link[key]; //get the value of each item
-@6,7@    for (var key in data) {
-@6,7@        var value = data[key]; //get the value of each item
-@3,7@        //now we substitute each tag with its value
-@3,7@        fillMe = fillMe.replace('{{' + key + '}}', value);
-@6,7@        text = text.replace('{{' + key + '}}', value);
-@3,7@    }
-@3,7@    console.log(fillMe);
-@5,7@    return fillMe;
-@6,7@    return text;
-@3,7@};
-@4,7@
-@4,7@template();
-@6,7@template(fillMe, link);
-@7,7@var output = template(fillMe, link);
-@7,7@console.log(output);
 @@c:0;Much like sculpting, programmers write code by starting with broad shapes and then adding detail. In this case, we start out with just two items: a string that will act as our template, and an object that we'll use to fill the template with data.@@
 @@c:1;Inside of our template, we've inserted placeholder tags wherever we want to insert data. The keys on these tags match to keys on the <var>link</var> object. So if we loop through that object...@@
 @@c:2;...we can replace them with the values from the object.

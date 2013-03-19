@@ -90,87 +90,83 @@ define(['jquery'], function() {
       return revisions;
     },
     serialize: function() {
-      var id = 0;
-      var corpus = this.revisions.map(function(item,revision) {
-        var split = item.text.split(/\r?\n\r?/);
-        for (var i = 0; i < split.length; i++) {
-          split[i] = {
-            line: i,
-            text: split[i],
-          }
+      var revisions = this.revisions;
+      var source = revisions[0].text;
+      source = source.split('\n').map(function(line) {
+        return {
+          text: line,
+          start: 0,
+          end: Infinity
         }
-        return split;
       });
-      //create starter array from source, adding revision stamps
-      var list = corpus[0].slice();
-      list.forEach(function(item) {
-        item.start = 0;
-        item.end = Infinity;
-      });
-      /*
-      We continually iterate over and recreate the source array. It's not
-      efficient, but the linked list I tried earlier was kind of a drag to
-      update correctly.
-      */
-      for (var rev = 1; rev < corpus.length; rev++) {
-        var merged = [];
-        var revision = corpus[rev];
-        var target = 0;
-        list.forEach(function(item) {
-          //go through the revision looking for matches
-          var source = item.text;
+      //loop over each new revision
+      for (var i = 1; i < revisions.length; i++) {
+        var integrated = [];
+        var target = revisions[i].text.split('\n');
+        var start = 0; //don't backtrack in target revision
+        //match against each line of source
+        for (var j = 0; j < source.length; j++) {
+          var sourceLine = source[j];
+          if (sourceLine.end < i) {
+            integrated.push(sourceLine);
+            continue;
+          }
+          var line = sourceLine.text;
           var found = false;
-          for (var i = target; i < revision.length; i++) {
-            var line = revision[i].text;
-            //if we find a match...
-            if (line == source) {
-              found = true;
-              //merge in skipped lines as additions
-              while (i > target) {
-                var addition = revision[target];
-                addition.start = rev;
-                addition.end = Infinity;
-                merged.push(addition);
-                target++;
+          for (var k = start; k < target.length; k++) {
+            var targetLine = target[k];
+            if (targetLine == line) {
+              //skipped lines are additions
+              while (start < k) {
+                integrated.push({
+                  start: i,
+                  text: target[start],
+                  end: Infinity
+                });
+                start++;
               }
-              target++;
+              start++;
+              console.log('match', sourceLine);
+              integrated.push(sourceLine);
+              found = true;
               break;
             }
           }
-          //if not found, it was deleted
           if (!found) {
-            item.end = rev - 1;
+            sourceLine.end = i - 1;
+            integrated.push(sourceLine);
           }
-          merged.push(item);
-        });
-        //if there's still stuff left in the revision, it's added
-        while (target < revision.length) {
-          var line = revision[target];
-          line.start = rev;
-          line.end = Infinity;
-          //console.log('add', line.text);
-          merged.push(line);
-          target++;
         }
-        list = merged;
+        while (start < target.length) {
+          integrated.push({
+            start: i,
+            text: target[start],
+            end: Infinity
+          });
+          start++;
+        }
+        source = integrated;
       }
-      var tagged = list.map(function(item) {
-        var tag = "";
-        if (item.start > 0 || item.end < Infinity) {
-          tag = "@" + item.start + ',';
-          tag += item.end == Infinity ? '' : item.end;
-          tag += "@";
+      //build tagged version
+      var tagged = source.map(function(item) {
+        if (item.start == 0 && item.end == Infinity) return item.text;
+        var line = "@";
+        if (item.start) {
+          line += item.start;
         }
-        return tag + item.text;
+        line += ','
+        if (item.end < Infinity) {
+          line += item.end
+        }
+        line += "@" + item.text;
+        return line;
       });
-      for (var i = 0; i < this.revisions.length; i++) {
-        var comment = this.revisions[i].comment;
-        if (comment) {
-          tagged.push('@@c:' + i + ';' + comment + '@@');
+      for (var i = 0; i < revisions.length; i++) {
+        if (revisions[i].comment) {
+          tagged.push('@@c:' + i + ';' + revisions[i].comment + '@@');
         }
       }
-      var output = tagged.join('\n');
-      return $.trim(output);
+      return tagged.join('\n');
     }
   };
 
