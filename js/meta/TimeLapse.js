@@ -126,7 +126,6 @@ define(['jquery'], function() {
                 start++;
               }
               start++;
-              console.log('match', sourceLine);
               integrated.push(sourceLine);
               found = true;
               break;
