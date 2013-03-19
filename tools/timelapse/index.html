@@ -150,6 +150,9 @@ a.close-dialog {
 </div>
 <div class="hidden export dialog">
   <a class="close-dialog">[x]</a>
+  <h2>Export your revisions</h2>
+  <p>
+    Copy the code below and paste it into a .time file, or <a href="" class="uri-save" download="revisions.time">right click this link and choose "save as"</a>.
   <textarea></textarea>
 </div>
 
@@ -255,7 +258,10 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
     app.saveRevision();
     tl.revisions = app.revisions.slice();
     var output = tl.serialize();
-    $('.export.dialog').removeClass('hidden').find('textarea').val(output);
+    var dialog = $('.export.dialog');
+    dialog.removeClass('hidden').find('textarea').val(output);
+    var data = "data:text/timelapse," + encodeURIComponent(output);
+    dialog.find('a.uri-save').attr('href', data);
     if (console && console.log) console.log(output);
   }); 
 
@@ -298,6 +304,8 @@ require(['jquery','meta/Timelapse', 'ace/ace'], function($, TimeLapse) {
       $('.import.dialog').addClass('hidden');
     });
   });
+
+  $('.drag-out').on('')
 
   app.createRevision();
   app.updateUI();

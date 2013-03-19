@@ -1,0 +1,68 @@
+var fillMe = '<a href="{{url}}" title="{{title}}">{{text}}</a>';
+var link = {
+    url: "http://example.com",
+    title: "Just another link",
+    text: "This space intentionally left blank"
+};
+@1,@
+@1,2@for (var key in link) {
+@1,2@    
+@2,2@    var value = link[key]; //get the value of each item
+@2,2@    //now we substitute each tag with its value
+@2,2@    fillMe = fillMe.replace('{{' + key + '}}', value);
+@1,2@}
+@2,2@console.log(fillMe);
+@3,4@var template = function() {
+@5,@var template = function(text, data) {
+@3,5@    for (var key in link) {
+@3,5@        var value = link[key]; //get the value of each item
+@6,@    for (var key in data) {
+@6,@        var value = data[key]; //get the value of each item
+@3,@        //now we substitute each tag with its value
+@3,5@        fillMe = fillMe.replace('{{' + key + '}}', value);
+@6,@        text = text.replace('{{' + key + '}}', value);
+@3,@    }
+@3,4@    console.log(fillMe);
+@5,5@    return fillMe;
+@6,@    return text;
+@3,@};
+@4,@
+@4,5@template();
+@6,6@template(fillMe, link);
+@7,@var output = template(fillMe, link);
+@7,@console.log(output);
+@8,@
+@8,@var menuTemplate = '<li class="{{classname}}"> <a href="{{href}}">{{label}}</a>';
+@8,@var menus = [
+@8,@    {
+@8,@        classname: 'about',
+@8,@        href: '#about-us',
+@8,@        label: "About us"
+@8,@    },
+@8,@    {
+@8,@        classname: 'buy',
+@8,@        href: 'buy.html',
+@8,@        label: 'Buy Tickets'
+@8,@    },
+@8,@    {
+@8,@        classname: 'news',
+@8,@        href: 'news.php',
+@8,@        label: "Recent News"
+@8,@    }
+@8,@];
+@8,@
+@8,@for (var i = 0; i < menus.length; i++) { //loop through the menus
+@8,@    var menuItem = template(menuTemplate, menus[i]); //create each from data
+@8,@    $('#main-menu').append(menuItem); //add to the main menu element
+@8,@}
+@@c:0;Much like sculpting, programmers write code by starting with broad shapes and then adding detail. In this case, we start out with just two items: a string that will act as our template, and an object that we'll use to fill the template with data.@@
+@@c:1;Inside of our template, we've inserted placeholder tags wherever we want to insert data. The keys on these tags match to keys on the <var>link</var> object. So if we loop through that object...@@
+@@c:2;...we can replace them with the values from the object.
+
+The console should log out a completed link now.@@
+@@c:3;Of course, we haven't made a function yet, but that's fine. We wanted to make sure we had the basics working first. So let's just wrap our existing code in a function definition.@@
+@@c:4;Writing a function is like writing a recipe: useful, but it's not the same as a cake. Now that our code is wrapped up as a function, if we want it to run we have to call it.@@
+@@c:5;Of course, our new function has no inputs or outputs. It's not very flexible, because it only ever acts on a single link object, and it just logs to the console. Let's change that, by adding some arguments and a return statement.@@
+@@c:6;We can replace the previous references to our global variables, <var>fillMe</var> and <var>link</var>, with our new arguments, <var>text</var> and <var>data</var>. That means we need to pass in our values as arguments now.@@
+@@c:7;Finally, we can capture our template's output by storing its return value in a new variable. We'll log that, just to make sure that it works.@@
+@@c:8;To see it in action, let's create a new template and data object (in this case, a list of menu items to be dynamically created), and feed those to the function. With this templating system, we can create new HTML structures very easily, without having to construct them out of either string addition or (even worse) building one element at a time.@@

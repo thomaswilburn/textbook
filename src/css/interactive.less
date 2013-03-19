@@ -73,6 +73,37 @@
     }
   }
 
+  &.timelapse {
+    .controls ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: inline;
+    }
+
+    .controls a, .controls li {
+      display: inline-block;
+      margin: 0 3px;
+      background: @background-secondary;
+      padding: 4px;
+      color: @foreground-secondary;
+
+      &:hover {
+        background: lighten(@background-secondary, 10%);
+      }
+
+      &.active {
+        border: 3px solid darken(@background-secondary, 10%);
+      }
+    }
+
+    .new {
+      background: white;
+      border: 1px dotted rgba(0, 0, 0, .1);
+      font-weight: bold;
+    }
+  }
+
 }
 
 .blank {
