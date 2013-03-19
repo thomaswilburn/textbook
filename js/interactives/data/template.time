@@ -32,20 +32,20 @@ var link = {
 @7,@var output = template(fillMe, link);
 @7,@console.log(output);
 @8,@
-@8,@var menuTemplate = '<li class="{{classname}}"> <a href="{{href}}">{{label}}</a>';
+@8,@var menuTemplate = '<li class="{{classes}}"> <a href="{{href}}">{{label}}</a>';
 @8,@var menus = [
 @8,@    {
-@8,@        classname: 'about',
+@8,@        classes: 'about',
 @8,@        href: '#about-us',
 @8,@        label: "About us"
 @8,@    },
 @8,@    {
-@8,@        classname: 'buy',
+@8,@        classes: 'buy',
 @8,@        href: 'buy.html',
 @8,@        label: 'Buy Tickets'
 @8,@    },
 @8,@    {
-@8,@        classname: 'news',
+@8,@        classes: 'news',
 @8,@        href: 'news.php',
 @8,@        label: "Recent News"
 @8,@    }
