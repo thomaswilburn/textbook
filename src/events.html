@@ -122,5 +122,51 @@ $('a').on('click', function(e) {
 
   Browsers don't let you cancel every event, since that can be a security risk or annoying to users, but they'll let you cancel many of them, which can be handy if you're creating your own custom version of the browser's normal behavior (such as a right-click menu).
 
+<h2>Getting Meta with Events</h2>
+
+<p>
+  In addition to listening for events, you can also create fake events using jQuery. You might want to execute your own event handler, for example, as a part of its setup process, or take advantage of the browser's default behavior. One common trick is to hide the submit button on a form, put up a dummy button, and only click the real one if the form checks out, since JavaScript can click on elements that the user can't see or interact with. To create a fake event, you can use the <var>trigger()</var> function.
+
+<code>
+$('a:first').trigger('click');
+</code>
+
+  Any event can be triggered, using the same event type string that's used for registering event listeners.
+
+<p>
+  jQuery also includes a set of shortcut functions that call <var>on()</var> or <var>trigger()</var> with a preset event type. For example:
+
+<code>
+//register for a click listener
+$('a').click(function() {
+  console.log("Clicked a link!");
+});
+
+//trigger a fake click
+$('a:first').click();
+</code>
+
+  Registering for events this way can save a little typing, but it's limited to the events that jQuery has traditionally known about. New events, like the "touchstart" and "touchend" events used by smartphones and tablets, aren't available as shortcuts. <var>on()</var> also has a clever trick up its sleeve: it can listen to events on elements that don't even exist yet, using <mark>delegation</mark>.
+
+<p>
+  To understand how event delegation works, it's important to know a little bit more about how events are actually triggered in the document. When you click on something, for example, the event first targets the element where you directly clicked. That element has the option of handling it and telling the browser "I've taken care of it." But if there's no handler or default behavior for the event, or the element doesn't consider the action "final," the event "bubbles up" (or <mark>propagates</mark>) to the parent element and the process starts again, until the event is halted or it hits the top-level element in the document. This behavior is really important to the way we expect web pages to work--if it didn't, an image inside of an &lt;a&gt; tag wouldn't be clickable because the parent tag's behavior wouldn't apply.
+
+<p>
+  We can take advantage of the event propagation by attaching our listeners to elements higher up in the page, such as the root &lt;ul&gt; of a menu, and then telling jQuery that we want to listen for events on specific children. To do so, we just have to add another parameter to our <var>on()</var> call, right after the event type but before the actual listener function.
+
+<code>
+$('ul.menu').on('click', 'li', function() {
+  console.log(this); //will be the &lt;li&gt; tags, not the &lt;ul&gt;
+});
+</code>
+
+<p>
+  You can pass any selector as the second parameter to <var>on()</var> in order to delegate events intead of attaching listeners directly. This way, you can add or remove elements from inside the original target ("ul.menu", in this case) as you want, and they'll still trigger your listener function. Dynamic lists, menus, and tables of data can all benefit from this technique, and it's also faster during setup, since jQuery doesn't have to loop over every matched element and add the listener to each one.
+
+<h2>Example Code</h2>
+
+<p>
+  In the following demo, we're going to create a tabbed information panel using jQuery events. The interesting part about our tab interface is that the same approach will also work for a number of other common web tasks, like a thumbnail gallery or an in-page navigation menu. Each of these connects a set of options (thumbnails, menu items, tabs) to a set of display items (images, page sections, tab panels), and shows only one of the latter at a time. It is also a useful example of the way that we must leave ourselves clues in JavaScript, which we later redeem in our event listener to direct its actions.
+
 [@import snippets/scripts.html]
 [@import snippets/foot.html]

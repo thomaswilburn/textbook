@@ -291,7 +291,7 @@ if (!false) {
 <p>
   These operators are very useful for writing compound conditions, but don't go too crazy with them. Abusing <var>&amp;&amp;</var> and <var>||</var> to create long chains of conditional if statements can end up being very hard to read, and sometimes you're better off just nesting <var>if</var> statements inside each other for the same effect.
 
-<h2>Practice</h2>
+<h2>Example Code</h2>
 
 <p>
   The <var>prompt</var> function lets us ask the user for input, which will be returned as a string (even if they type in a number, so watch out!). For example, the following code asks the user to provide a value, and stores it in the variable named <var>answer</var>.
@@ -301,19 +301,20 @@ var answer = prompt('Please type a value');
 </code>
 
 <p>
-  Between <var>prompt()</var> and <var>console.log()</var>, we have the required inputs and outputs to write a simple text adventure, like the old "choose your own adventure" books. To practice using conditionals, try telling the user a story, with different outcomes depending on their response to the <var>prompt</var> questions. For example, here's a <i>very</i> brief story:
+  We can also use the <var>confirm()</var> function to get an answer in true/false form (although the dialog box will usually be labeled with buttons reading "OK" and "Cancel").
 
 <code>
-var raven = prompt('Quoth the raven:');
-if (raven == "nevermore") {
-  console.log("We're all doomed!");
-} else {
-  console.log("You just don't get the same quality of ravens these days.");
-}
+var confirmation = confirm("Press OK to set confirmation to 'true.'");
 </code>
 
 <p>
-  See if you can give your user multiple "branches" to the story, by nesting other conditional statements inside the branches of the first.
+  Between <var>prompt()</var>, <var>confirm()</var> and <var>console.log()</var>, we have the required inputs and outputs to write a simple text adventure, like the old "choose your own adventure" books. By nesting our conditional statements inside each other, we can given the story multiple paths and endings. In the following example, we'll retell a well-known fable using JavaScript. 
+
+[@import interactives/timelapse.html src="../../js/interactives/data/goldilocks.time" id="fable"]
+
+<h2>Practice</h2>
+
+
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
