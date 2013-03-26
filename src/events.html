@@ -166,7 +166,9 @@ $('ul.menu').on('click', 'li', function() {
 <h2>Example Code</h2>
 
 <p>
-  In the following demo, we're going to create a tabbed information panel using jQuery events. The interesting part about our tab interface is that the same approach will also work for a number of other common web tasks, like a thumbnail gallery or an in-page navigation menu. Each of these connects a set of options (thumbnails, menu items, tabs) to a set of display items (images, page sections, tab panels), and shows only one of the latter at a time. It is also a useful example of the way that we must leave ourselves clues in JavaScript, which we later redeem in our event listener to direct its actions.
+  In the following demo, we're going to create a tabbed information panel using jQuery events. The interesting part about our tab interface is that the same approach will also work for a number of other common web tasks, like a thumbnail gallery or an in-page navigation menu. Each of these connects a set of options (thumbnails, menu items, tabs) to a set of display items (images, page sections, tab panels), and shows only one of the latter at a time. It is also a useful example of the way that we must leave ourselves clues in JavaScript, which we later redeem in our event listener to direct its actions. In this case, we'll be using the <var>href</var> attribute of each link, which would normally jump within the page, to double as an ID selector for selecting and showing the chosen tab.
+
+[@import interactives/timelapse.html src="../../js/interactives/data/tabs.time" id="tab-demo"]
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
