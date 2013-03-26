@@ -18,6 +18,9 @@
   </script>
 </head>
 <body>
+  <!--<div class="navigation">
+    <a href="./">&laquo; Table of Contents</a>
+  </div>-->
   <h1>Functions</h1>
   <div class="content">
 
@@ -324,6 +327,11 @@ paragraphs.css('color', 'green').html('hello').addClass('chained');
 
 <p>
   Just because you <i>can</i> chain jQuery methods this way doesn't mean that you <i>should</i>. When abused, it can be confusing and hard to update. But if you need to change one or two simple things about an element, chaining function calls on the object can be a <mark>fluent</mark> interface for doing so without needing an entirely new line for each change.
+
+<h2>Example Code</h2>
+
+<p>
+  In this example, we'll show how functions can be used to clean up, or <mark>refactor</mark> existing code that has grown too large and unwieldy. By taking repetitive tasks, and pulling them out into separate functions, it becomes much easier to wrap our heads around a script. [Example: building dynamic parts of the page for a table or menu, without crafting each part individually.]
 
 <script>
 require(['jquery', 'google-code/prettify'], function($) {

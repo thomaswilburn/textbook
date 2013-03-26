@@ -18,6 +18,9 @@
   </script>
 </head>
 <body>
+  <!--<div class="navigation">
+    <a href="./">&laquo; Table of Contents</a>
+  </div>-->
   <h1>Loops and Arrays</h1>
   <div class="content">
 
@@ -261,6 +264,101 @@ while (index &lt; names.length) {
 
 <p>
   You can think of a <var>while</var> loop as an <var>if</var> statement that repeats, which gives them a kind of elegance. <var>for</var> loops require us to use a slightly more awkward syntax: you have to remember which part is the setup, which is the conditional, and which is the change. You also have to remember the semicolons that separate those individual parts. But I find that in practice, <var>for</var> loops are harder to mess up. Because they must have all three parts, they encourage you to write loops that will eventually end--whereas, in a <var>while</var> loop, a math error or a forgotten line can lead to infinite looping. Still, they have their uses, and it's good to be familiar with them.
+
+<h2>Example Code</h2>
+
+<p>
+  Processing lists is a common task in every programming language, and JavaScript is no different. In the following code, we'll use a series of loops to find the highest, lowest, and total of the items in a list of numbers.
+
+<div class="interactive timelapse" id="loops">
+  <div class="controls">
+    <a class="first">First</a>
+    <a class="previous">Previous</a>
+    <ul class="revision-list"></ul>
+    <a class="next">Next</a>
+    <a class="last">Last</a>
+  </div>
+  <aside class="comments-container">
+    <h1 class="comments-bar">COMMENTS</h1>
+    <div class="comments"></div>
+  </aside>
+  <code class="revision"></code>
+<script type="text/timelapse">var numbers = [1, 17, 23, 5, 68, 4, 3, 2, 100, 31];
+@1,@
+@2,@var sum = 0;
+@2,@var highest = -Infinity;
+@2,@var lowest = Infinity;
+@2,@
+@1,@for (var i = 0; i < numbers.length; i++) {
+@1,2@    
+@3,4@    sum = sum + numbers[i];
+@5,@    var item = numbers[i];
+@5,@    sum = sum + item;
+@5,@    if (item > highest) {
+@5,@        highest = item;
+@5,@    }
+@6,@    if (item < lowest) {
+@6,@        lowest = item;
+@6,@    }
+@1,@}
+@3,@
+@4,4@for (var i = 0; i < highest.length; i++) {
+@4,4@    var item = numbers[i];
+@4,4@    if (item > highest) {
+@4,4@        highest = item;
+@4,4@    }
+@4,4@}
+@4,4@
+@3,@console.log('The total is: ' + sum);
+@4,@console.log('The highest number is: ' + highest);
+@6,@console.log('The lowest number is: ' + lowest);
+@@c:0;The variable numbers contains a list of random values between 1 and 100. Our job is to find the highest, the lowest, and the sum of these numbers.@@
+@@c:1;Almost every time that you loop over an array, the same form is used--the version shown here, which uses i as a counter variable and moves through the array until we run out of values (by way of its length).@@
+@@c:2;We'll also need some starting values for our three results. Sum starts at zero, for obvious reasons. For highest and lowest, we need to have values that will be way out of bounds of the array, so that anything we find will be higher or lower, respectively. We could also use the first value in the array, particularly in a non-numeric list, but the Infinity special value is helpful on numeric arrays like this.@@
+@@c:3;Let's start with the easiest of the three, the sum. For each item in the array, we'll add its value (extracted via numbers[i]) to the running total in sum. By the end, we'll have add all of the values together.@@
+@@c:4;For the highest, we have to introduce a conditional statement. For each number, if it is higher than the previously-found highest value, we'll store it as the new highest. In this way, we're always keeping track of our maximum value for comparisons, and for output.@@
+@@c:5;We could keep the highest (and lowest) logic in separate loops like this, but there's really no point--they do exactly the same things in terms of visiting each array item in turn. We might as well merge them into a single loop.@@
+@@c:6;The search for the minimum value is just the opposite of looking for the maximum: at each array index, compare its value with the previously-found minimum, and replace the latter with the former if we locate a lesser value.@@</script>
+</div>
+<script>
+require(['jquery', 'meta/TLPlayer'], function($, Player) {
+  var element = $('#loops');
+  var player = new Player();
+  var diff = element.find('script[type="text/timelapse"]');
+  var revUL = element.find('ul.revision-list');
+  player.load(diff.html()).done(function() {
+    player.timelapse.revisions.forEach(function(item, i) {
+      var li = $('<li>');
+      li.html(i + 1);
+      li.attr('data-revision', i);
+      revUL.append(li);
+    });
+    player.connect({
+      code: element.find('code.revision'),
+      comments: element.find('.comments')
+    })
+    player.switch(0);
+    element.find('li:first').addClass('active');
+    element.find('.controls').on('click', 'li', function() {
+      var $this = $(this);
+      element.find('.active').removeClass('active');
+      $this.addClass('active');
+      player.switch($this.attr('data-revision'));
+    });
+    /*element.find('.comments').slideUp();
+    element.find('.comments-bar').on('click', function() {
+      element.find('.comments').slideToggle();
+    });*/
+    ['first', 'previous', 'next', 'last'].forEach(function(jump) {
+      element.find('.' + jump).click(function() {
+        player[jump]();
+        element.find('.active').removeClass('active');
+        element.find('li[data-revision=' + player.current + ']').addClass('active');
+      });
+    });
+  });
+});
+</script>
 
 <h2>Exercises and Practice Questions</h2>
 

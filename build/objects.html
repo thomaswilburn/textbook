@@ -18,13 +18,16 @@
   </script>
 </head>
 <body>
+  <!--<div class="navigation">
+    <a href="./">&laquo; Table of Contents</a>
+  </div>-->
   <h1>Object Lesson</h1>
   <div class="content">
 
 <h2>Objects as Simulation</h2>
 
 <p>
-  Imagine you wanted to write a computerized catalog for a library. You'd have a lot of information to manage, both for each book and for the total collection. Certainly you'd need some arrays, since you'll be adding new books all the time, and won't want to keep individual variables for each one. Even for the books themselves, it would be good to have all the information on each book grouped together. For example, you'll want to store:
+  Let's say you wanted to write a computerized catalog for a library. You'd have a lot of information to manage, both for each book and for the total collection. Certainly you'd need some arrays, since you'll be adding new books all the time, and won't want to keep individual variables for each one. Even for the books themselves, it would be good to have all the information on each book grouped together. For example, you'll want to store:
 
   <ul>
     <li> Title
@@ -222,7 +225,7 @@ var quakes = [
 </code>
 
 <p>
-  The above code sets up an array full of earthquake data. There are only three quakes in our set, but there could easily be more. The advantage of using a loop over this information is that it would scale, whether it was three earthquakes or three thousand. Now, we're going to look through our data and find out where the largest quake took place. First, we'll set up a variable to contain the highest quake we've found so far. We'll go ahead and assign the first earthquake to the variable, since we need some starting values.
+  The above code sets up an array full of earthquake data. There are only four quakes in our set, but there could easily be more. The advantage of using a loop over this information is that it would scale, whether it was four earthquakes or four thousand. Now, we're going to look through our data and find out where the largest quake took place. First, we'll set up a variable to contain the highest quake we've found so far. We'll go ahead and assign the first earthquake to the variable, since we need some starting values.
 
 <code>
 var highest = quakes[0];
@@ -243,6 +246,120 @@ console.log("The biggest earthquake took place in " + highest.location);
 
 <p>
   Problems like this start to show how objects and loops can make many tough problems trivially solveable. Sure, it's easy to find the biggest quake when there are only three items. When there are many more, however, or the comparisons become more complicated, you'll be glad to let the computer handle this kind of manual labor.
+
+<h2>Example Code</h2>
+
+<p>
+  For this chapter's sample, we'll combine objects and arrays again to examine another interesting data set (for certain values of interesting). In the code below, we define an array containing a series of on-screen objects from a video game, and we're going to filter it down to only those that match certain criteria. For exapmle, we may only want the monsters, or power-ups. We might want to do this in order to determine if the player is in contact with anything that would hurt or help her, or to do collision detection for the level structure itself. Filtering down a large, diverse collection into smaller subsets is a common task in programming, from video games to word-processing.
+
+<div class="interactive timelapse" id="game-objects">
+  <div class="controls">
+    <a class="first">First</a>
+    <a class="previous">Previous</a>
+    <ul class="revision-list"></ul>
+    <a class="next">Next</a>
+    <a class="last">Last</a>
+  </div>
+  <aside class="comments-container">
+    <h1 class="comments-bar">COMMENTS</h1>
+    <div class="comments"></div>
+  </aside>
+  <code class="revision"></code>
+<script type="text/timelapse">var gameObjects = [{
+    type: "Monster",
+    health: 10,
+    x: 20,
+    y: 30
+}, {
+    type: "Bonus",
+    score: 1000,
+    x: 45,
+    y: 10
+}, {
+    type: "Fence",
+    height: 20,
+    x: 10,
+    y: 0
+}];
+@1,@
+@2,@var notFence = [];
+@3,@var lowAltitude = [];
+@4,@var typeCounter = {};
+@2,@
+@1,@for (var i = 0; i < gameObjects.length; i++) {
+@1,1@    
+@2,@    var item = gameObjects[i]; //get each item
+@2,@    if (item.type !== "Fence") {
+@2,@        notFence.push(item); //add qualifying items to array
+@2,@    }
+@3,@    if (item.y < 10) {
+@3,@        lowAltitude.push(item);
+@3,@    }
+@5,@    var type = item.type;
+@6,@    if (typeof typeCounter[type] == "undefined") {
+@6,@        typeCounter[type] = 0;
+@6,@    }
+@5,@    typeCounter[type]++;
+@1,@}
+@7,@
+@7,@console.log("All non-fence items: ", notFence);
+@7,@console.log("All low-altitude items: ", lowAltitude);
+@8,@
+@8,@for (var type in typeCounter) {
+@8,@    var count = typeCounter[type];
+@8,@    console.log(count + " items of type " + type);
+@8,@}
+@@c:0;We'll start by defining our array of game objects. We have only three, and we're going to filter on fairly broad terms, but this would easily scale to much larger data sets.
+
+In this code, we're going to try to assemble three pieces of data: an array containing only non-Fence items, an array of anything positioned close to the floor (y < 20), and a count of each item type.@@
+@@c:1;Although we're working with objects, the actual collection that we're looping over is an array. Even with the new kinds of loops we've learned, the old-fashioned array loop never goes out of style.@@
+@@c:2;We'll first create a filtered list of items that are not scenery, using the aptly-named notFence variable. As we run through the list, if an item matches our requirements, we'll push it into this list.@@
+@@c:3;We can do the same thing for items that are close to the ground, just by checking their y property and pushing them into the lowAltitude array. Some items will end up in both places--that's okay. You can have an item stored in multiple arrays, just as you can have the same value in multiple variables.@@
+@@c:4;Our third question, counting the individual object types, is more difficult. For this, we're going to use an object as a named collection. We'll call it typeCounter;@@
+@@c:5;Inside our loop, we're going to get the item type, and use that as a key for lookup inside typeCounter.@@
+@@c:6;Of course, this code is not going to work very well, since we haven't create anything at typeCounter[type] yet, whatever that may be. We can check to see if we've encountered that type before by testing for undefined. If the property hasn't been defined yet, we'll set it equal to 0 before performing our addition.@@
+@@c:7;Finally, we have to log these out. The notFence and lowAltitude arrays are pretty easy to log out via console.log().@@
+@@c:8;Our list of item counts by type is a little more complex. We could log it out by just passing it to console.log(), as we did with the arrays, but let's loop over the object and extract a more readable count instead.@@</script>
+</div>
+<script>
+require(['jquery', 'meta/TLPlayer'], function($, Player) {
+  var element = $('#game-objects');
+  var player = new Player();
+  var diff = element.find('script[type="text/timelapse"]');
+  var revUL = element.find('ul.revision-list');
+  player.load(diff.html()).done(function() {
+    player.timelapse.revisions.forEach(function(item, i) {
+      var li = $('<li>');
+      li.html(i + 1);
+      li.attr('data-revision', i);
+      revUL.append(li);
+    });
+    player.connect({
+      code: element.find('code.revision'),
+      comments: element.find('.comments')
+    })
+    player.switch(0);
+    element.find('li:first').addClass('active');
+    element.find('.controls').on('click', 'li', function() {
+      var $this = $(this);
+      element.find('.active').removeClass('active');
+      $this.addClass('active');
+      player.switch($this.attr('data-revision'));
+    });
+    /*element.find('.comments').slideUp();
+    element.find('.comments-bar').on('click', function() {
+      element.find('.comments').slideToggle();
+    });*/
+    ['first', 'previous', 'next', 'last'].forEach(function(jump) {
+      element.find('.' + jump).click(function() {
+        player[jump]();
+        element.find('.active').removeClass('active');
+        element.find('li[data-revision=' + player.current + ']').addClass('active');
+      });
+    });
+  });
+});
+</script>
 
 <h2>Exercises and Practice Questions</h2>
 

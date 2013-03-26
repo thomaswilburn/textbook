@@ -64,6 +64,11 @@ body > h1 {
     width: auto;
   }
 }
+.navigation {
+  font-size: 12px;
+  padding-bottom: 1em;
+  padding-left: 1em;
+}
 .content {
   padding: 0 2em;
 }
@@ -401,6 +406,7 @@ li.L9 {
   background: #778899;
   padding: 4px;
   color: #ffffff;
+  cursor: pointer;
 }
 .interactive.timelapse .controls a:hover,
 .interactive.timelapse .controls li:hover {
