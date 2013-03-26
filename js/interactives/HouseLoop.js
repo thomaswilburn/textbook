@@ -2,6 +2,7 @@ define(['jquery', 'dom/Stage'], function($, Stage) {
   var answers = [true, false, true, true, false];
   var siding = ['#CFC', '#FCC', '#CCF', '#FFC', '#FCF'];
   var houses = [];
+  var interactive = $('.interactive.houses');
 
   var stage = new Stage('.interactive.houses canvas');
   var assistant = new stage.Sprite();
@@ -97,9 +98,9 @@ define(['jquery', 'dom/Stage'], function($, Stage) {
       case "reset": at = 0;
     }
     var step = steps[at];
-    $('.last').removeClass('last');
-    $('.highlight').removeClass('highlight').addClass('last');
-    $('.' + step.highlight).addClass('highlight');
+    interactive.find('.last').removeClass('last');
+    interactive.find('.highlight').removeClass('highlight').addClass('last');
+    interactive.find('.' + step.highlight).addClass('highlight');
     if (typeof step.i != 'undefined') i = step.i;
     if (typeof step.counter != 'undefined') counter = step.counter;
     $('.description').html(step.description + "<ul><li>i = " + i + "<li>counter = " + counter + "</ul>");

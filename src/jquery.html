@@ -255,6 +255,62 @@ headline.removeClass('awesome');
 
   While it's sometimes frustrating that to develop web pages, we need to know (at least) three different languages, when they're broken out this way it's easy to see how we also benefit from this arrangement. Each of the three front-end web languages is well-suited to its task in a way that the others are not: it would be painful to write and style a page using only JavaScript, just as it is slow and difficult to do all your styling in your HTML, or write all of your interactions using CSS transitions. Using the right language for the right task makes our code simpler--and in a few chapters chapter, we'll learn about ways that JavaScript can create interactive elements that would be <i>impossible</i> in the other two.
 
+<h2>Example Code</h2>
+
+<p>
+  It's time to practice on the console again. The following lines of code will help you explore <a href="http://api.jquery.com">the jQuery interface</a> a bit more, including its many handy functions for interacting with elements and their properties. Try typing each line into the console, and see what you get back, or what changes.
+
+<code>
+//Let's start with some animations
+$('p').slideUp();
+$('p').slideDown();
+
+//Note that animations stack--by default, they don't overlap.
+$('code').slideUp().slideDown();
+
+//Let's mess with our links
+$('a');
+
+//Of course, it would be more fun to only mess with the sidebar links
+$('aside').find('a');
+
+//You can do that with a selector as well
+$('aside a');
+
+//But you can't go the other way: starting from links and finding asides
+$('a').closest('aside');
+
+//You can get information about an element's attribute using attr()
+//Let's get the href for our links:
+$('a').attr('href');
+
+//Note that you only get the value from the first link.
+//Setting an attribute, however, affects all elements.
+$('a').attr('href', 'http://example.com');
+
+//likewise, we can get the html for the first paragraph...
+$('p').html();
+
+//...or we can replace it for all of them.
+$('p').html('This space intentionally left blank.');
+
+//Remember to refresh to reset everything!
+
+//Let's practice setting some styles
+$('li').css('background', 'green');
+
+//Many functions in jQuery will set multiple properties if you
+//provide an object instead of individual arguments.
+$('li').css({
+  background: 'green',
+  'margin-left': "40px", //you can set hyphenated properties by quoting them
+  marginTop: '10px' //alternately, you can camelCase them
+});
+</code>
+
+<p>
+  These are some common uses of jQuery, but they're by no means exhaustive. One of the best ways to learn the library better is to decide on something you want to do--hide only links to certain domains! add a class to all elements inside another type of element! find elements that contain a certain word!--and then look through the <a href="http://api.jquery.com">jQuery Application Programming Interface (API) documentation</a> for functions that will help you accomplish that task. The API also includes information on what arguments are required, and which are optional for any given call. For example, <var>fadeOut()</var> has a default speed, but by calling <var>fadeOut('slow');</var>, we can change how fast the element disappears.
+
 [@import snippets/scripts.html]
 
 [@import snippets/foot.html]

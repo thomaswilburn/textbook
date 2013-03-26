@@ -1,0 +1,174 @@
+[@import snippets/head.html title="jQuery Events"]
+
+<h2>Event-Driven Programming</h2>
+
+<p>
+  All of the scripts we've written have been run as soon as the browser encounters them on the page. This has value, but there's another way that our scripts can run, which is to respond to <mark>events</mark> in the browser. Whenever the user does anything on the page--moves the mouse, presses a key, navigates forward or backward--or whenever the page itself changes, the browser notifies any interested scripts by triggering functions that they register as <mark>event listeners</mark>. By adding our own event listener functions, a process that jQuery makes very easy, we can create all kinds of interactive elements: slideshows, animated menus, even games and full applications.
+
+<p>
+  The most important thing to understand is that an event listener is just a function, written just like any other, but instead of calling it ourselves we hand it over to the browser and ask for it to be called when an event happens. Different browsers have had a lot of different methods for registering events and event properties over the years, and although parts of the process have become more standard, one of the most important things that a library can do for you is paper over the differences. All you need to know, in order to register for any event in jQuery, is its <var>on()</var> function.
+
+<code>
+var buttons = $('button');
+buttons.on('click', function() {
+  console.log('You rang?');
+});
+</code>
+
+<aside>
+
+  <h1>Register ALL THE EVENTS</h1>
+
+  <p>
+    Curious about all the different event types that we can register for? I don't blame you. There are a lot of events in the browser environment, covering everything from user input to image loading to copy and paste. There are even new events being specified as a part of new HTML standards, such as battery status, gamepads, and CSS transitions. If you want all of them, the Mozilla Development Network has a huge table <a href="https://developer.mozilla.org/en-US/docs/DOM/Mozilla_event_reference">here</a>. The most common events, however, are pretty self-explanatory:
+
+    <ul>
+      <li> click
+      <li> dblclick
+      <li> mouseover
+      <li> mousemove
+      <li> mouseup
+      <li> mousedown
+      <li> keypress
+      <li> keyup
+      <li> keydown
+      <li> change
+      <li> submit
+      <li> load
+    </ul>
+
+    <p>
+      Some of these may seem a little repetitive--why do we need click, mousedown, and mouseup?--but it is good to have them. Drag and drop, for example, would be impossible if we couldn't listen for mouse buttons separate from "click" events.
+
+</aside>
+
+<p>
+  In this code sample, we find all the &lt;button&gt; elements on the page as usual. Then, we use the jQuery <var>on()</var> function to ask the browser to notify us when "click" events happen on those buttons. <var>on()</var> takes two arguments: first, a string specifying the type of event (see the sidebar for more examples), and then a function to be called when the event occurs. Now, when you click any button on a page with this JavaScript, the console will log out a note.
+
+<p>
+  For this listener, we've written our listener as a <mark>function listeral</mark> without a name directly into the function arguments. But we can also write our listener function as a named variable, then pass that variable in to be registered.
+
+<code>
+var buttons = $('button');
+
+var clicked = function() {
+  console.log("You've got events!");
+};
+
+buttons.on('click', clicked);
+</code>
+
+  Note that when we pass the function in to <var>on()</var> for registration, we don't include the parentheses after it like we do for most functions. If we did that, the function would run right away, and its return value would be given to <var>on()</var> in its place. Since we're not trying to run the function immediately--we want the browser to run it later--we just pass it in like any other variable. It may be helpful again to think of functions as being like recipes: when we run them, we get some kind of delicious treat, but the recipe itself is not edible. In this case, we're handing the recipe to the browser, and asking for it to be baked when the event occurs. If only JavaScript supported a "birthday" event...
+
+<p>
+  Unfortunately, our example has a flaw: how do we know which button was pressed? Our listener was registered for events across all the buttons, but we might want to do something to the specific button that was clicked, or take different actions depending on its value. Luckily, there's an easy way to answer this question. When the browser calls the event listener, the special <var>this</var> variable will be set to the object where the event took place (the <mark>event target</mark>). 
+
+<code>
+$('.menu li').on('click', function() {
+  //add a special class only to the item that was clicked
+  $(this).addClass('clicked');
+});
+</code>
+
+<p>
+  <var>this</var> is usually a raw document element, which does not have all the handy jQuery methods we've been using, so we usually want to wrap it up in a jQuery object first: hence, <var>$(this)</var>. Very often, if you need to work with the target element across many lines of code, it's simpler to go ahead and save the jQuery version in a variable with a similar name, but with a dollar sign on the front. You can't reassign <var>this</var> directly: doing so would be an error. Don't worry about accidentally double-wrapping a jQuery object--it'll just return the original if it detects that the argument you pass in is already in jQuery form.
+
+<code>
+//a function that hides the elements you click
+var shyTags = function() {
+  var $this = $(this);
+  var contents = $this.html();
+  $this.addClass('clicked');
+  $this.hide();
+  console.log(this, contents);
+}
+</code>
+
+<p>
+  We have one other way of getting information about an event, and that's through the event object itself. The browser calls our function with an object containing lots of useful data, although we've been ignoring it so far. To get access to it, just add an argument to your listener (here, I've named it <var>e</var> for simplicity's sake). I definitely recommend running the following code from your console, and then wiggling the mouse, but be ready for a serious flood of events...
+
+<code>
+$('body').on('mousemove', function(e) {
+  console.log(e);
+});
+</code>
+
+<p>
+  As you can see, the event object contains lots of useful properties about the event--where the mouse was exactly when the event occurred, which mouse buttons were pressed, which modifier keys were pressed, the key code for any keyboard events, and more. Not all of these event properties are the same from browser to browser, but jQuery does its best to normalize the most common events, such as clicks and keys. Here are some of the event properties you probably want to pay attention to:
+
+<table>
+  <tr>
+    <th>Property
+    <th>Description
+  <tr>
+    <td><a href="http://api.jquery.com/event.which/">which</a>
+    <td>The keyboard key or mouse button that created the event for key or mouse events, respectively. 
+  <tr>
+    <td><a href="http://api.jquery.com/event.type/">type</a>
+    <td>The type of event that was triggered, e.g. "click" or another event string. You can attach a single listener function to multiple event types, so this is sometimes good to know.
+  <tr>
+    <td><a href="http://api.jquery.com/event.pageX/">pageX</a> and <a href="http://api.jquery.com/event.pageY/">pageY</a>
+    <td>The location of mouse event, relative to the upper-left hand corner of the document. The <var>pageY</var> values get larger moving down the page.
+</table>
+
+<p>
+  Event objects also come with some important functions attached to them, the most important of which is <var>preventDefault()</var>. The browser will trigger your event listener before taking its default action on any event. By calling the event's <var>preventDefault()</var> method, it asks the browser to simply ignore the event. The following code is very rude, and cancels any links that the user tries to click.
+
+<code>
+$('a').on('click', function(e) {
+  e.preventDefault();
+});
+</code>
+
+  Browsers don't let you cancel every event, since that can be a security risk or annoying to users, but they'll let you cancel many of them, which can be handy if you're creating your own custom version of the browser's normal behavior (such as a right-click menu).
+
+<h2>Getting Meta with Events</h2>
+
+<p>
+  In addition to listening for events, you can also create fake events using jQuery. You might want to execute your own event handler, for example, as a part of its setup process, or take advantage of the browser's default behavior. One common trick is to hide the submit button on a form, put up a dummy button, and only click the real one if the form checks out, since JavaScript can click on elements that the user can't see or interact with. To create a fake event, you can use the <var>trigger()</var> function.
+
+<code>
+$('a:first').trigger('click');
+</code>
+
+  Any event can be triggered, using the same event type string that's used for registering event listeners.
+
+<p>
+  jQuery also includes a set of shortcut functions that call <var>on()</var> or <var>trigger()</var> with a preset event type. For example:
+
+<code>
+//register for a click listener
+$('a').click(function() {
+  console.log("Clicked a link!");
+});
+
+//trigger a fake click
+$('a:first').click();
+</code>
+
+  Registering for events this way can save a little typing, but it's limited to the events that jQuery has traditionally known about. New events, like the "touchstart" and "touchend" events used by smartphones and tablets, aren't available as shortcuts. <var>on()</var> also has a clever trick up its sleeve: it can listen to events on elements that don't even exist yet, using <mark>delegation</mark>.
+
+<p>
+  To understand how event delegation works, it's important to know a little bit more about how events are actually triggered in the document. When you click on something, for example, the event first targets the element where you directly clicked. That element has the option of handling it and telling the browser "I've taken care of it." But if there's no handler or default behavior for the event, or the element doesn't consider the action "final," the event "bubbles up" (or <mark>propagates</mark>) to the parent element and the process starts again, until the event is halted or it hits the top-level element in the document. This behavior is really important to the way we expect web pages to work--if it didn't, an image inside of an &lt;a&gt; tag wouldn't be clickable because the parent tag's behavior wouldn't apply.
+
+<p>
+  We can take advantage of the event propagation by attaching our listeners to elements higher up in the page, such as the root &lt;ul&gt; of a menu, and then telling jQuery that we want to listen for events on specific children. To do so, we just have to add another parameter to our <var>on()</var> call, right after the event type but before the actual listener function.
+
+<code>
+$('ul.menu').on('click', 'li', function() {
+  console.log(this); //will be the &lt;li&gt; tags, not the &lt;ul&gt;
+});
+</code>
+
+<p>
+  You can pass any selector as the second parameter to <var>on()</var> in order to delegate events intead of attaching listeners directly. This way, you can add or remove elements from inside the original target ("ul.menu", in this case) as you want, and they'll still trigger your listener function. Dynamic lists, menus, and tables of data can all benefit from this technique, and it's also faster during setup, since jQuery doesn't have to loop over every matched element and add the listener to each one.
+
+<h2>Example Code</h2>
+
+<p>
+  In the following demo, we're going to create a tabbed information panel using jQuery events. The interesting part about our tab interface is that the same approach will also work for a number of other common web tasks, like a thumbnail gallery or an in-page navigation menu. Each of these connects a set of options (thumbnails, menu items, tabs) to a set of display items (images, page sections, tab panels), and shows only one of the latter at a time. It is also a useful example of the way that we must leave ourselves clues in JavaScript, which we later redeem in our event listener to direct its actions. In this case, we'll be using the <var>href</var> attribute of each link, which would normally jump within the page, to double as an ID selector for selecting and showing the chosen tab.
+
+[@import interactives/timelapse.html src="../../js/interactives/data/tabs.time" id="tab-demo"]
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]
