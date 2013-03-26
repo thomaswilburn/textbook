@@ -1,4 +1,4 @@
-<!doctype html&gt;
+&lt;!doctype html&gt;
 &lt;html&gt;
 @9,@&lt;head&gt;
 @9,@    &lt;style&gt; /* YOUR STYLES HERE */ &lt;/style&gt;
@@ -39,9 +39,9 @@
 @@c:0;Since we're working with jQuery events, for this example we'll show the script in the context of the page. As you can see, we start out with the HTML5 doctype to trigger the newest JavaScript versions and HTML features, and we put the scripts at the bottom so that loading will be visually faster for our users.
 
 In the middle, we have an unordered list to use as our tab set, followed by three &lt;div&gt; tags with matching IDs. In non-JavaScript browsers, this will still work via in-page links to those IDs.@@
-@@c:1;First things first, let's stub out our click listener and attach it to the tabs. We're going to select the links inside the menu, instead of the list items, because we want to use their <var&gt;href</var&gt; attributes for selecting the correct tab.@@
-@@c:2;Inside the listener, the element that was clicked will be assigned to <var&gt;this</var&gt; before our function is called. We'll make a jQuery version of it for easy manipulation.@@
-@@c:3;The <var&gt;href</var&gt; attributes of each link are in-page links, but (in a rare example of good design in CSS) they are also valid ID selectors. We'll extract them from the clicked link by using jQuery's <var&gt;attr()</var&gt; function, which gets or sets an element's attributes.@@
+@@c:1;First things first, let's stub out our click listener and attach it to the tabs. We're going to select the links inside the menu, instead of the list items, because we want to use their &lt;var&gt;href&lt;/var&gt; attributes for selecting the correct tab.@@
+@@c:2;Inside the listener, the element that was clicked will be assigned to &lt;var&gt;this&lt;/var&gt; before our function is called. We'll make a jQuery version of it for easy manipulation.@@
+@@c:3;The &lt;var&gt;href&lt;/var&gt; attributes of each link are in-page links, but (in a rare example of good design in CSS) they are also valid ID selectors. We'll extract them from the clicked link by using jQuery's &lt;var&gt;attr()&lt;/var&gt; function, which gets or sets an element's attributes.@@
 @@c:4;Once we have that selector, we can use it to find the tab that we want to show.@@
 @@c:5;Now we'll hide all the tabs (including the one we want) and show the selected tab. There's a little bit of waste here, but browsers are fast enough that hiding an element and then showing it on the next line will be imperceptible, and the code remains elegant.@@
 @@c:6;There's only one problem remaining: the tabs work once you click on them, but when the page first loads, all the &lt;div&gt; tags are visible. We could hide all the tabs after the first one, like so...@@
