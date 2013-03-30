@@ -231,23 +231,10 @@ bax.test('baseball'); //true, for both "bas" and "bal"
 <p>
   First, we need to write our regular expression patterns to attach to our elements. Regular expressions can be difficult to write, but there are lots of tools that let us test them in an interactive fashion. The box below contains two inputs: an input area for typing your regular expression, and a text area containing some sample text. Any complete regular expressions will be run against the sample text, and matches will be highlighted. Try to write two patterns: one that matches all the phone numbers in the sample, and one that matches all the e-mail addresses.
 
-<div class="interactive regex-tester">
-<input class="pattern" placeholder="/your pattern here/"></input>
-<div class="status"></div>
-<code contenteditable class="matched prettyprinted">Phone numbers:
-(555) 012-1234
-555.012.1234
-5550121234
-
-Email:
-a@b.com
-a@b.co.uk
-a.b@c.com
-a.b+c@d.com</code>
+[@import interactives/regex.html]
 <script>
 require(['interactives/Regex']);
 </script>
-</div>
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]

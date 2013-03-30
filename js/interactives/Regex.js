@@ -12,7 +12,11 @@ define(['jquery'], function() {
       var extracted = input.val().match(extract);
       if (!extracted) {
         sample.html(sample.text());
-        status.html("Doesn't look valid--did you forget the slashes?");
+        if (input.val() == "") {
+          status.html("Ready");
+        } else {
+          status.html("Doesn't look valid--did you forget the slashes?");
+        }
         return;
       }
       var pattern = extracted[1];
@@ -43,6 +47,6 @@ define(['jquery'], function() {
       status.html("Not a valid regular expression");
       sample.html(sample.text());
     }
-  });
+  }).trigger('keyup');
 
 });
