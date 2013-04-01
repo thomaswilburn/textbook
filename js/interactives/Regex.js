@@ -20,8 +20,8 @@ define(['jquery'], function() {
         return;
       }
       var pattern = extracted[1];
-      var flags = extracted[2] ? extracted[2].replace('g', '') : '';
-      var re = new RegExp(pattern, flags + 'g');
+      var flags = extracted[2] ? extracted[2].replace(/g|m/g, '') : '';
+      var re = new RegExp(pattern, flags + 'gm');
       status.html("Searching for: " + extracted[1]);
 
       var match;
@@ -48,5 +48,14 @@ define(['jquery'], function() {
       sample.html(sample.text());
     }
   }).trigger('keyup');
+
+  var timeout;
+
+  sample.on('keyup', function() {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      input.trigger('keyup');
+    }, 500);
+  });
 
 });
