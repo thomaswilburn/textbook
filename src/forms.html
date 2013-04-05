@@ -322,7 +322,11 @@ $
   Using these two regular expressions, we're going to write a function that provides form validation for older browsers that don't support the HTML5 pattern. Adding features this way is called a <mark>polyfill</mark> if it works the same way as the standard feature, and a <mark>shim</mark> if it provides a new API (you can think of jQuery as a shim for the low-level page functions). Normally, you would want to test for the existence of the feature, similar to the way <a href="http://modernizr.com/">Modernizr</a> does, before adding your functionality. In this case, since the UI for <var>pattern</var> tends to be poor, we'll just run our code no matter what.
 
 <p>
-  From a high level, here's our plan. We want to blend in with HTML features, so we'll use the same <var>pattern</var> attribute to store our regular expressions, but we'll hide the real submit button and create a fake one in its place. When that button is clicked, we'll loop through the input elements and check for <var>pattern</var> and <var>required</var> attributes. If we find the former, we'll use the <var>RegExp()</var> function to create a regular expression and test it against the value of the input. If we find the latter, we'll check that there's something in the input. Only if all of the tests pass will we use <var>trigger()</var> to "click" on the real, hidden submit button and send the form to our server.
+  From a high level, here's our plan. We want to blend in with HTML features, so we'll use the same <var>pattern</var> attribute to store our regular expressions. When the submit button is clicked, we'll loop through the input elements with <var>pattern</var> attributes, creating regular expressions from the pattern and checking it against the input value. If an input fails, we'll cancel the click event on the submit button and put up a helpful error message for our user. If they all check out, the event goes through and the form submits without a problem.
+
+[@import interactives/timelapse.html src="../../js/interactives/data/formValidation.time" id="template-function"]
+
+<h2>Exercises and Practice Questions</h2>
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]

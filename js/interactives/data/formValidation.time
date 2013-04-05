@@ -1,0 +1,61 @@
+&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;form action="/post.php"&gt;
+        &lt;label&gt;Phone&lt;/label&gt;
+        &lt;input pattern="[^a-zA-Z]+" name="phone" 
+            data-error="Please enter only numbers and punctuation"&gt;
+        &lt;span class="error"&gt;&lt;/span&gt;
+        
+        &lt;label&gt;Email&lt;/label&gt;
+        &lt;input pattern=".+@.+\..+" id="email" 
+            data-error="Please enter a valid e-mail address."&gt;
+        &lt;span class="error"&gt;&lt;/span&gt;
+        
+        &lt;input type="submit"&gt;
+    &lt;/form&gt;
+    
+    &lt;script src="http://code.jquery.com/jquery-1.9.1.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+
+@1,@$('input[type=submit]').on('click', function(e) {
+@2,@    
+@2,@    var $this = $(this);
+@2,@    var form = $this.closest('form');
+@2,@    var inputs = form.find('input[pattern]');
+@3,@    
+@3,@    for (var i = 0; i &lt; inputs.length; i++) {
+@3,@        input = inputs.eq(i);
+@4,@        var pattern = input.attr('pattern');
+@4,@        var regex = RegExp(pattern);
+@5,@        var valid = regex.test(input.val());
+@5,@        if (!valid) {
+@5,@            e.preventDefault();
+@6,@            var error = input.attr('data-error');
+@6,@            input.next('.error').html(error);
+@8,@            input.addClass('invalid');
+@7,@        } else {
+@7,@            input.next('.error').html('');
+@8,@            input.removeClass('invalid');
+@5,@        }
+@3,@    }
+@5,@});
+@2,@
+@1,4@    e.preventDefault();
+@1,4@});
+@,4@
+@,0@
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+@@c:0;We'll start with our basic HTML page, with two form inputs waiting to be filled in: one with a phone number, the other with an e-mail address. Because we want to take advantage of HTML5-compliant browsers, we're using the pattern attribute on each, and we'll supplement that with our script.
+
+In addition to the pattern, each input has a data-error attribute that we'll use for more friendly error messages than the browser provides by default, and a span following it that we can use to show that message.@@
+@@c:1;We'll start by attaching a listener to our submit button, and calling the <var>preventDefault()</var> method on the event that's passed in. This will stop the form from actually being submitted. This puts us in control of the form submission process. If anything is invalid, we call <var>preventDefault</var>. If everything checks out, we do nothing, the event goes through, and the browser will submit the form for us.@@
+@@c:2;We want to apply our validation to inputs in the surrounding form. First, we'll store a jQuery version of the <var>this</var> value (which is the submit button that was clicked). Then we'll use that as a starting place, and work our way up the DOM using jQuery's <var>closest()</var> method. Once there, we can get all the other inputs by searching for elements with a pattern attribute. The '[attribute]' selector is extremely handy when working with forms.@@
+@@c:3;We'll loop through all of the selected inputs, using the <var>eq()</var> function to extract them from the jQuery collection. We could also use the square brackets, as with an array, but that would give us the raw DOM element and we want a jQuery-wrapped version, which <var>eq()</var> provides.@@
+@@c:4;For each input, we will get the value of its pattern attribute, then use the <var>RegExp()</var> function to turn that string into a regular expression.@@
+@@c:5;From here, it's a simple matter to use the regex's <var>test()</var> method and check the input's value. If it fails, we'll prevent the default event action--remember, our event is a click on the submit button, which means that we're cancelling that click.@@
+@@c:6;Error messages in browsers for the pattern attribute are usually terrifically vague, however. We'd like to make things more clear. By using the <var>data-error</var> attribute that we added to each input, we can give better feedback by setting the contents of the next error span.@@
+@@c:7;When someone corrects their mistake and presses submit again, we don't want to leave old errors hanging. So we'll remove it in the else clause for our validation.@@
+@@c:8;Most browsers that support validation will add some sort of visual feedback to form elements that don't satisfy their pattern requirements. But just to be safe, as a final touch, let's add a class to each input that fails the test, and remove it from inputs that pass. How you style that class is, of course, up to you. By treating it as a class, and not styling it in JavaScript, we separate behavior and content, which will keep our code cleaner and make maintenance simpler.@@
