@@ -1,5 +1,152 @@
 [@import snippets/head.html title="Canvas"]
 
+<h2>Unleashing Your Inner Code Artist</h2>
+
+<p>
+  After all that form drudgery, we deserve to have some fun as well, and the HTML5 &lt;canvas&gt; element certainly counts. Unlike the other elements, which we style with CSS and fill with text, &lt;canvas&gt; lets us draw anything we want inside its borders. That opens up a whole world for us that wasn't previously available: games, artwork, animations, rich interactive elements, graphs, and more.
+
+<p>
+  Using &lt;canvas&gt; requires us to do a little bit of setup first. We'll need to create a canvas element, and assign it a height and width. You can style the element however you'd like, but the height and width will be used for the internal drawing space of the canvas, and stretch to fit its onscreen size. This can make your drawings blurry or out-of-proportion if the CSS size doesn't match the element size, so it's a good idea to start just sizing the element manually. Like a script tag, you must always close your &lt;canvas&gt; tag. Unlike a script tag, you can put fallback text between the opening and closing tags, and it will be shown in browsers that don't support canvas.
+
+<code>
+&lt;canvas id="picasso" height=640 width=480&gt;&lt;/canvas&gt;
+</code>
+
+<p>
+  Now that we have the element, we need to get a <mark>drawing context</mark> for it. The context is the object on which you actually issue drawing commands--the browser then takes those commands and handles painting them into the element. We want to get the 2D context. There is also a 3D context, which uses WebGL for creating graphics, but we'll stick to 2D for now. The function to get the context only works on the raw DOM element, and can't be called through jQuery, so we're going to use a regular DOM function to get it. <var>document.querySelector</var> works basically the same way as jQuery, but its selectors are limited only to valid CSS (no ":checked" or ":visible") and it will only grab one element.
+
+<code>
+var canvas = document.querySelector('#picasso');
+var context = canvas.getContext('2d');
+</code>
+
+<aside>
+
+  <h1>Canvas Coordinates</h1>
+
+  <p>
+    Inside the &lt;canvas&gt; tag, all drawing commands take place relative to the upper-left corner of the canvas. The X values start at 0 and get larger to the right, and the Y values start with 0 at the top and get larger toward the bottom. Canvas pixels also do not necessarily match screen pixels, if its height and width attributes are set differently from its height and width in CSS. This can all be a bit confusing.
+
+  <p>
+    Scaling the canvas involves some interesting (but confusing) math that we won't get into here. But if the size of the canvas hasn't been tampered with, it's relatively easy to convert a mouse event's X and Y into canvas-relative X and Y, just by using the jQuery <var>offset</var> function, as below:
+
+<code>
+var offset = $(canvas).offset();
+//offset provides a "top" and "left"
+//relative to the document
+$(canvas).on('mousemove', function(e) {
+  var x = e.pageX - offset.left;
+  var y = e.pageY - offset.top;
+  console.log(x, y);
+}
+</code>
+
+  <p>
+    You can see this in action in the following canvas, which draws lines to follow the mouse in canvas coordinates, but also shows the position in page coordinates.
+  
+  <div style="text-align: center">
+    <canvas id="coordinate-demo" style="border: 1px solid #888;" width=200 height=200></canvas>
+    <pre id="coordinate-position"></pre>
+  </div>
+
+  <script>
+require(['jquery'], function($) {
+
+  var canvas = document.querySelector('#coordinate-demo');
+  var context = canvas.getContext('2d');
+  var pre = $('#coordinate-position');
+
+  $(canvas).on('mousemove', function(e) {
+    //erase the previous drawing
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    var offset = $(canvas).offset();
+    var x = e.pageX - offset.left;
+    var y = e.pageY - offset.top;
+    //draw blue lines
+    context.strokeStyle = "#08F";
+    //draw vertical
+    context.beginPath();
+    context.moveTo(x, 0);
+    context.lineTo(x, canvas.height);
+    context.stroke();
+    //draw horizontal
+    context.beginPath();
+    context.moveTo(0, y);
+    context.lineTo(canvas.width, y);
+    context.stroke();
+
+    //list out coordinates
+    pre.html('Page X: ' + e.pageX + '\nPage Y: ' + e.pageY + '\nLocal X: ' + x + '\nLocal Y: ' + y);
+  });
+
+});
+  </script>
+
+</aside>
+
+  Now that we have the context, we can actually start drawing some pictures.
+
+<p>
+  Imagine that the canvas element is a robot arm, like in a factory, but instead of a claw or a welding attachment it has a pen at the end. The person running the robot programs it with a series of moves on a screen--some with the pen down on the paper, some with it lifted for repositioning--and then presses a big green button and watches it perform the actual drawing. That's basically how canvas works: we start a drawing sequence with the <var>beginPath()</var> instruction, tell it where we want the pen to draw (<var>lineTo()</var>) and where we want it to lift (<var>moveTo</var>), and then we finally ask the robot to either outline the path we've described (<var>stroke()</var>), or fill it with color (<var>fill()</var>). 
+
+<p>
+  Here's an example that draws an X on the canvas. This code is live: changes in the JavaScript will be reflected in the canvas drawing on the right, so feel free to play with it and add your own drawing instructions.
+
+<div class="interactive canvas" id="x">
+  <canvas width=200 height=200 style="position: absolute; right: 0px; top: 0px; background: rgba(255, 255, 255, .5); border: 1px dotted #888;"></canvas>
+  <code class="prettyprinted" contenteditable>
+//start a sequence of drawing commands
+context.beginPath();
+
+//move to the upper-left corner
+context.moveTo(20, 20);
+//draw down and over to the coordinates 100, 100
+context.lineTo(100, 100);
+//move to the upper-right part of the X
+context.moveTo(100, 20);
+//draw down to the lower-left
+context.lineTo(20, 100);
+
+//now that we have our plan, we ask the canvas to ink this path
+context.stroke();
+  </code>
+  <script>
+require(['jquery', 'meta/Evil'], function($, Evil) {
+  var canvas = document.querySelector("#x canvas");
+  var context = canvas.getContext('2d');
+  var code = $('#x code');
+
+  var checkTimer = function() {
+    var now = Date.now();
+    if (now - then > 500) throw "This script takes too long to run.";
+  }
+  var then = 0;
+  var evaluate = function() {
+    var source = code.text();
+    source = source.replace(/(for|while)\s*\((.*?)\)\s*\{/gmi, "$1 ($2) { checkTimer();");
+    then = Date.now();
+    window.context = context;
+    window.canvas = canvas;
+    window.checkTimer = checkTimer;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    var result = Evil(source);
+    if (result && result.error) console.error(result.error);
+    try {
+      delete window.context;
+      delete window.canvas;
+      delete window.checkTimer;
+    } catch (e) {};
+  };
+
+  var timeout;
+  code.on('keyup', function() {
+    if (timeout) clearTimeout(timeout);
+    setTimeout(evaluate, 250);
+  }).trigger('keyup');
+});
+</script>
+</div>
+
 
 
 [@import snippets/scripts.html]
