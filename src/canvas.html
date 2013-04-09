@@ -93,7 +93,7 @@ require(['jquery'], function($) {
   Here's an example that draws an X on the canvas. This code is live: changes in the JavaScript will be reflected in the canvas drawing on the right, so feel free to play with it and add your own drawing instructions.
 
 <div class="interactive canvas" id="x">
-  <canvas width=200 height=200 style="position: absolute; right: 0px; top: 0px; background: rgba(255, 255, 255, .5); border: 1px dotted #888;"></canvas>
+  <canvas width=200 height=200></canvas>
   <code class="prettyprinted" contenteditable>
 //start a sequence of drawing commands
 context.beginPath();
@@ -111,11 +111,43 @@ context.lineTo(20, 100);
 context.stroke();
   </code>
   <script>
-require(['interactives/MetaCanvas'], function(MC) {
-  MC('x');
-});
+require(['interactives/MetaCanvas'], function(MC) { MC('x'); });
   </script>
 </div>
+
+<p>
+  We can change the color of the line by altering the <var>strokeStyle</var> property of the drawing context (<var>fillStyle</var> affects filled shapes). Any valid CSS color is valid here: You can use color names ("green"), hex values ("#FC8CA3"), RGB and RGBA values ("rgba(255, 195, 200, .5)"), or HSL in browsers that support it. You can also change the width of the line using the <var>lineWidth</var> property. Here's the interesting thing about these properties: you can set them as many times as you want, but the only one that matters is the last one you set before calling <var>stroke()</var> or <var>fill()</var>. You can think of our artistic robot as using only a single marker per path: if you want to change colors, call <var>stroke()</var> to finish in the old color and <var>beginPath()</var> to start a new path before changing the stroke style.
+
+<div class="interactive canvas" id="strokeState">
+  <canvas width=200 height=200></canvas>
+  <code class="prettyprinted" contenteditable>
+context.beginPath();
+context.moveTo(20, 20);
+context.lineTo(20, 180);
+context.strokeStyle = "red";
+context.lineWidth = 6;
+
+//un-comment the next two lines to create a new path
+//context.stroke();
+//context.beginPath();
+
+context.moveTo(180, 20);
+context.lineTo(180, 180);
+context.strokeStyle = "#ABC";
+context.lineWidth = 2;
+
+context.stroke();
+
+  </code>
+  <script>
+require(['interactives/MetaCanvas'], function(MC) { MC('strokeState'); });
+  </script>
+</div>
+
+<h2>More Than Just Lines</h2>
+
+<p>
+
 
 
 
