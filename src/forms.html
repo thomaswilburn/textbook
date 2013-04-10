@@ -1,0 +1,332 @@
+[@import snippets/head.html title="Forms"]
+
+<h2>Forms and Functions</h2>
+
+<p>
+  If you've grasped the basics of listening for page events with jQuery, working with forms should be a piece of cake. Most of the same skills are involved: finding form elements, using <var>on()</var> to register for events, and processing the results. Unfortunately, forms are one of the oldest parts of HTML, and they can be a little quirky. jQuery provides a set of specialized methods for dealing with those quirks.
+
+<p>
+  Normally, for HTML to interact with a server, we write a form element and put some elements inside to capture user input. It might look a little something like this:
+
+<code>
+&lt;form action="feedback.php"&gt;
+  &lt;h2&gt;Submit your feedback!&lt;/h2&gt;
+  &lt;textarea name="comments"&gt;&lt;/textarea&gt;
+  &lt;input type="submit"&gt;
+&lt;/form&gt;
+</code>
+
+  Forms written this way have a number of usability flaws. They don't provide feedback to the user, if one of the form elements is required or if the input needs to be in a certain format. They require a server to process the input, even if it's not something that needs to be stored or sent elsewhere. And of course, the entire page has to be refreshed whenever the form is submitted, losing all the other state on the page.
+
+<aside>
+
+  <h1>HTML5 Forms</h1>
+
+  <p>
+    If programming can be said to have a golden rule, it's "be lazy." Lazy programmers try to minimize wasted time for themselves and for users, which is good, because time is something we can't really buy. You'll never get back wasted hours that could have been prevented with a little up-front effort. And of course, the fastest and safest code is the JavaScript you never write. That's why the developments in forms for HTML5 are so exciting.
+
+  <p>
+    For example, we're going to be doing a lot of validation in this chapter: checking to make sure that form inputs have been filled in correctly and in all the required places. Both of these are available for free from HTML5-compliant browsers, through the <var>required</var> and <var>pattern</var> attributes permitted on all form elements.
+
+  <p>
+    That's not to say that these are not valuable exercises--the skills you learn will be useful for other form applications, and older browsers may still need JavaScript to trigger this behavior. The built-in behaviors are also still a little user-unfriendly at times. But when working on a new web project, check your minimum browser requirements, and see if you can rely on the browser instead of writing your own. You won't regret having the time for something else.
+
+</aside>
+
+<p>
+  We won't learn how to submit forms without a page refresh until we reach our chapter on AJAX, but the other issues we can certainly address with JavaScript. As a result, our forms will be much friendlier and easier to use. We can also write client-side applications that use form elements for input, but never try to submit those elements to a server. They can do everything through JavaScript in the browser, while levering the rich set of building blocks that forms give us for user interaction.
+
+<h2>The Value of <var>val()</var></h2>
+
+<p>
+  Across all the elements that we can put in a form, they express their value in very different ways. &lt;input&gt; and &lt;button&gt; tags have a <var>value</var> attribute, although it's sometimes used in odd ways (as in radio buttons and checkboxes, which combine it with the <var>checked</var> attribute). &lt;textarea&gt; elements have a value attribute that they use, but they get their initial value from the content between the opening and closing tags, instead. Select boxes (&lt;select&gt;) don't intrinsically have a value themselves, but they contain &lt;option&gt; tags that do, and the selected option donates its value to the select box as a whole.
+
+<p>
+  We should also distinguish between <mark>attributes</mark> and <mark>properties</mark> when it comes to elements. Technically, only tags have attributes--they are the <var>x="y"</var> that you write into your HTML. When the tag is parsed by the browser and converted into an element in the <mark>Document Object Model</mark>, or DOM, some of those attributes are converted to properties on the element object. Changing the property sometimes changes the attribute as well, but in many cases--and the <var>value</var> attribute used by a number of form elements is one of these--it doesn't.
+
+<p>
+  Confused yet? Most of the time, this won't actually matter, because we can let jQuery's <var>val()</var> method do the heavy lifting. <var>val()</var> handles the differences between various elements, and makes sure that you get the right information regardless of how screwy it is under the hood (most of the time--there are a few exceptions). Let's see how this works in practice.
+
+<code>
+&lt;input type="text" id="first-name" value="Thomas"&gt;
+&lt;input name="last-name" value="Wilburn"&gt;
+&lt;select id="selection"&gt;
+  &lt;option value="one" selected=true&gt;One&lt;/option&gt;
+  &lt;option value="two"&gt;Two&lt;/option&gt;
+&lt;/select&gt;
+&lt;textarea&gt;Hello, World&lt;/textarea&gt;
+
+&lt;script&gt;
+
+$('#first-name').val(); //Thomas
+$('input[name="last-name"]').val(); //Wilburn
+$('#selection').val(); //one
+$('textarea').val(); //Hello, World
+
+//like css(), html(), and other jQuery functions, val() is a getter
+//and a setter, depending on whether or not you feed it a value.
+
+$('textarea').val('Fnord'); //we've set the value of the textarea
+
+&lt;/script&gt;
+</code>
+
+<p>
+  By using jQuery's <var>val()</var> function, we can sidestep some of the messiness involved in working with HTML form elements. The real exceptions, however, are checkboxes and radio buttons. These elements are linked by a shared <var>name</var> attribute, and you should use jQuery's custom <var>:checked</var> selector to find the selected item and <i>then</i> get its value.
+
+<code>
+&lt;input type="checkbox" name="pets" value="socks"&gt;Socks
+&lt;input type="checkbox" name="pets" value="bo" checked=true&gt;Bo
+&lt;input type="checkbox" name="pets" value="checkers"&gt;Checkers
+
+&lt;script&gt;
+
+var checkedVal = $('input[name="pets"]:checked').val();
+
+&lt;/script&gt;
+</code>
+
+<p>
+  If we work with forms enough, we might want a function that could be pointed at a form, and would return an object containing the values of all the elements inside. One version might look something like this:
+
+<code>
+var getForm = function(form) {
+  form = $(form); //make sure the form object is jQuery, just to be safe
+  var output = {};
+  
+  //find all the simple inputs, which we can read with val()
+  var easy = form.find('input[type=text],textarea,select');
+  for (var i = 0; i &lt; easy.length; i++) {
+    //eq() pulls out a single jQuery item, similar to []
+    var item = easy.eq(i);
+    var name = item.attr('name');
+    var value = item.val();
+    //set a property on the output item with the name and value of the input
+    output[name] = value;
+  }
+
+  //we also need to find the checkboxes and radio buttons, but
+  //they need an additional filter applied
+  var hard = form.find('input[type=checkbox], input[type=radio]');
+  //we only care about selected items, which match :checked
+  hard = hard.filter(':checked');
+  for (var i = 0; i &lt; hard.length; i++) {
+    var item = hard.eq(i);
+    var name = item.attr('name');
+    //since we've filtered down to checked items, now we can use val()
+    var value = item.val();
+    output[name] = value;
+  }
+
+  //return the completed form object
+  return output
+}
+</code>
+
+<h2>Regular Expressions</h2>
+
+<p>
+  In addition to the technical quirks dating back to the earliest HTML, forms offer us another challenge: human beings. A form input is an invitation to chaos. It's hard to say what people will type into it, but it's almost guaranteed that it won't be what you expect, from the overlooked (someone types their phone number with dots, and you expect dashes) to the incorrect (the user types their home city and state into a field that's only meant for the city) to the malicious (hackers who attempt to feed dangerous code into your form in the hopes of corrupting or accessing your server's database). How do we deal with this chaos?
+
+<p>
+  The answer, especially when it comes to good web security, is an entire book all on its own. But for simple input validation, we can use <mark>regular expressions</mark> (or "regexes" for short) to make sure that the format of the input matches what we expect, and let users know if they need to change it before they submit the form. These are not only helpful in JavaScript, but they're also common in almost all other programming languages, which means writing them is a versatile skill to have.
+
+<aside>
+
+  <h1>99 Problems, But A RegEx Is Numbers 1 Through 98</h1>
+
+  <p>
+    There is an old saying, normally attributed to Jamie Zawinski, that says: "Some people, when confronted with a problem, think 'I know, I'll use regular expressions.'' Now they have two problems." Obviously, this is tongue-in-cheek, and yet there's an element of truth to it. For all their power, regular expressions are incredibly tricky, even for experienced coders. They're also easy to abuse, and a ready source of bugs due to that abuse. As we learn more about them, try to keep the following rules of thumb in mind:
+
+    <ul>
+      <li> <b>Keep it simple.</b> Don't try to cram more into a regex than you absolutely need.
+      <li> <b>Do it in stages.</b> Instead of writing one huge regular expression, try writing multiple, simpler versions that can be chained together.
+      <li> <b>Approach with caution.</b> Many problems that <i>seem</i> solveable via regular expressions are actually better solved with other strategies.
+      <li> <b><a href="http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454">Don't parse HTML with a regex.</a></b>
+    </ul>
+
+  <p>
+    To be fair, these rules apply to almost everything in programming. The density and complexity of regular expression syntax just makes them more obvious.
+
+</aside>
+
+<p>
+  Regular expressions are a kind of language for wildcards in text. You may have used wildcard characters before, say on a command line, where you might type <var>dir *.txt</var> to find any file that ends in ".txt". These wildcards are pretty crude, however: they stand for any character, and any number of that character. If we're looking for files that start with one of three letters, and are less than five letters long, an asterisk just isn't going to suffice. We need something with a little more granularity in its search pattern.
+
+<p>
+  Let's start by capturing a specific phrase. The following code creates a regex that looks for the letters "java", and executes it on a sample string. Regular expressions in JavaScript are just strings, but instead of being quoted with apostrophes or double-quotes, we wrap them in slashes.
+
+<code>
+var java = /java/; //here's our regex
+var sample = "Let's learn some javascript";
+
+//String.search() returns where the pattern was matched, i.e. character #17
+var index = sample.search(java);
+
+//String.match() returns any matching substrings as an array
+var matches = sample.match(java);
+
+//The test() method on the regex just says whether the string was found.
+var found = java.test(sample); //true!
+</code>
+
+<p>
+  If we want to match any one character, we can use a dot, which will stand in for any character.
+
+<code>
+var bax = /ba./;
+
+bax.test('bat'); //true
+bax.test('bar'); //true
+bax.test('cat'); //false
+bax.test('baseball'); //true, for both "bas" and "bal"
+</code>
+
+  We can match repeated characters, including the dot wildcard, by using <mark>metacharacters</mark>. These include <var>*</var>, which matches the previous character 0 or more times, and <var>+</var>, which matches the previous character 1 or more times. We can also ask for a specific number of repeats by putting pairs of numbers inside curly braces, like so:
+
+<code>
+/bal+/; // Matches "balk" and "ballet", but not "bard"
+
+// asterisks can make a character optional
+/bar&lowast;/; // Matches "barrel" and "baby", since the "r" is required 0+ times
+
+//a single number between braces requires exactly that many repeats
+/bat{2}/; // Matches "battle" and "batten" but not "batch" or "battt"
+
+//comma-separated numbers allow a range of repeat values
+/ban{1, 2}/; // Matches "bane" and "banner"
+</code>
+
+<p>
+  In addition to repeating single characters, by putting parts of our regular expression in parentheses, we combine them as a <mark>group</mark> that's treated as a single character for repetition purposes.
+
+<code>
+/ba(na)+na/; // Matches banana, banananana, etc.
+</code>
+
+<p>
+  Just as you can be very specific about the number of repeated characters, you can also specify subsets of the alphabet that are more restrictive than the dot character's "everything matches" rule. The following table lays out a few helpful metacharacters for matching only certain letters.
+
+<table>
+  <tr>
+    <th> Sequence
+    <th> Notes
+  <tr>
+    <td> \d
+    <td> Matches any digit. Capitalizing it, as <var>\D</var>, matches anything that's <i>not</i> a digit.
+  <tr>
+    <td> \w
+    <td> Matches any "word" character, meaning all English letters, numbers, and underscores, but not spaces or punctuation. Capitalizing this pattern (<var>\W</var>) matches anything that's <i>not</i> a word character. It's not a coincidence that <var>\w</var> matches characters that are valid variable names in many languages, including JavaScript.
+  <tr>
+    <td> \s
+    <td> Matches any whitespace, including spaces and tabs.
+  <tr>
+    <td> [abc]
+    <td> Putting characters between braces means that it will match any of the characters inside. In this case, it will match "a", "b", or "c".
+  <tr>
+    <td> [a-m]
+    <td> You can also express character ranges. This set matches the first half of the lower-case alphabet. To capture the same as <var>\w</var>, for example, we would write <var>[a-zA-Z0-9_]</var>.
+  <tr>
+    <td> [^abc]
+    <td> Negated character set, which will match anything that's <i>not</i> one of the characters between the brackets.
+</table>
+
+<p>
+  If you want to use any of the metacharacters in your actual pattern (for example, if you wanted to search for "("), you can escape them using backslashes, just like you can escape quotes in strings. You don't have escape characters inside of the square brackets, however. These are only a few of the metacharacters available to you. 
+
+<p>
+  Writing a regular expression between slashes is a regex <mark>literal</mark>, but we can also generate regular expressions from strings by calling the <var>RegExp()</var> function. If you create them this way, you don't have to use the open and closing slashes, but you do have to double-escape the backslahes that precede many metacharacters, because otherwise they'll be treated as escaped string characters.
+
+<code>
+var fromString = RegExp('\\d+'); //match 1 or more numbers
+</code>
+
+<p>
+  If you're interested in learning more, you should <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Regular_Expressions">check out the Mozilla Developer Network documentation</a>. Now, let's put them to use.
+
+<h2>Pattern Matching</h2>
+
+<p>
+  The HTML5 <var>pattern</var> attribute lets authors specify a regular expression (without the outside slashes) that an input's value must match before the browser will let you submit a form. Of course, <var>pattern</var> is fairly new, and many older browsers do not support it. In this exercise, we'll write a <mark>polyfill</mark> that simulates the feature using JavaScript when support for <var>pattern</var> isn't available. Polyfills are a valuable part of the modern JavaScript landscape, since they let us "patch" older browsers to have the newest features, albeit sometimes in a slower or degraded form.
+
+<p>
+  First, we need to write our regular expression patterns to attach to our elements. Regular expressions can be difficult to write, but there are lots of tools that let us test them in an interactive fashion. The box below contains two inputs: an input area for typing your regular expression, and a text area containing some sample text. Any complete regular expressions will be run against the sample text, and matches will be highlighted. Try to write two patterns: one that matches all the phone numbers in the sample, and one that matches all the e-mail addresses.
+
+[@import interactives/regex.html]
+<script>
+require(['interactives/Regex']);
+</script>
+
+<p>
+  Writing a regular expression that can match all the variations is not easy, is it? That's why, for the purposes of form inputs, it is probably best to be forgiving. An alternate tactic is to concentrate less on matching all the possible patterns that someone could type, and more on ruling out inputs that we know are absolutely <i>not</i> allowed. For our phone and e-mail form inputs, we'll use these two regular expressions, which I've annotated below.
+
+<code>
+/*
+Telephone numbers: since these can be written in so many ways, we're just
+going to require two simple rules: no letters, and at least 7 characters.
+*/
+var phoneRegex = /^[^a-zA-Z]{7,}$/;
+//Let's break that down into parts:
+
+//By starting our regex with ^ and ending with $, we require it to match the
+//whole line: no partials
+^
+  [^ //a negated set: match anything that's <i>not</i> inside
+    a-zA-Z //a range covering all the letters, uppercase and lower
+  ]
+  { //require a certain number of the previous, not-letter characters
+    7, //we require at least seven, but we leave out the upper limit
+  }
+$
+</code>
+
+<aside>
+
+  <h1>Using the <var>pattern</var> attribute</h1>
+
+  <p>
+    The HTML5 <var>pattern</var> attribute works just like our JavaScript regular expressions, and tells the browser not to allow the form to be submitted unless the pattern inside is matched. The browser may also show some indication that the element has been incorrectly completed, although it's not always very good at describing the mistake, so you'll probably want to write some JavaScript code to supplement it. <var>pattern</var> does have a few differences in the way we write regular expressions, however:
+
+    <ul>
+
+      <li> It's automatically a whole-line match. You don't have to start the pattern with <var>^</var> and end with <var>$</var>.
+
+      <li> You don't need to wrap your regular expression in slashes.
+
+    </ul>
+
+</aside>
+
+<code>
+/*
+E-mail addresses: e-mail is fantastically copmlicated, and there is actually a
+monstrous regular expression in the standard for matching e-mails. However,
+the real test of a valid address is whether or not it can be sent. So we'll
+check for just a few requirements, then leave it up to our server to actually
+verify.
+*/
+var emailRegex = /^.+@.+\..+$/;
+//Again, we'll break this down:
+
+//Start and end with ^ and $ to require a whole-line match
+^
+  .+ //Match anything before the @, as long as there's at least one character
+  @ //Literally, match the @
+  .+ //Following the @, there's the domain, which could be almost anything.
+  \. //However, it must have at least one dot (escaped here, not a wildcard)
+  .+ //And the dot must be followed by at least one of anything
+$
+</code>
+
+<p>
+  Using these two regular expressions, we're going to write a function that provides form validation for older browsers that don't support the HTML5 pattern. Adding features this way is called a <mark>polyfill</mark> if it works the same way as the standard feature, and a <mark>shim</mark> if it provides a new API (you can think of jQuery as a shim for the low-level page functions). Normally, you would want to test for the existence of the feature, similar to the way <a href="http://modernizr.com/">Modernizr</a> does, before adding your functionality. In this case, since the UI for <var>pattern</var> tends to be poor, we'll just run our code no matter what.
+
+<p>
+  From a high level, here's our plan. We want to blend in with HTML features, so we'll use the same <var>pattern</var> attribute to store our regular expressions. When the submit button is clicked, we'll loop through the input elements with <var>pattern</var> attributes, creating regular expressions from the pattern and checking it against the input value. If an input fails, we'll cancel the click event on the submit button and put up a helpful error message for our user. If they all check out, the event goes through and the form submits without a problem.
+
+[@import interactives/timelapse.html src="../../js/interactives/data/formValidation.time" id="template-function"]
+
+<h2>Exercises and Practice Questions</h2>
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]
