@@ -90,11 +90,23 @@ rows.hide();
 rows.fadeIn();
 </code>
 
-<p>
-  You should see the table of selectors above vanish and then reappear with a fade effect. Our first function call, <var>$('#selectors tr')</var>, told jQuery to find any <var>&lt;tr&gt;</var> tags inside of the <var>#selectors</var> element (the table has an ID of "selectors"). Then we called the <var>hide()</var> and <var>fadeIn()</var> methods on the resulting object, causing it to do exactly those actions.
+<aside>
+
+  <h1>The DOM</h1>
+
+  <p>
+    If you've only written HTML and CSS, chances are you're used to thinking of the page as plain text, with tags that tell act kind of like the bold or italic buttons in a word processor: start a certain kind of formatting here, stop it elsewhere. But JavaScript sees the page differently--the same way the browser sees it. And the browser "sees" your HTML document by converting it into a tree of nested elements, called the <mark>Document Object Model</mark> or the <mark>DOM</mark> for short.
+
+  <p>
+    There are lots of metaphors we could use, but the easiest way to visualize the conversion from text to data structure is to open up your development tools and switch to the "HTML" or "Elements" tab (depending on your browser). You'll probably see only a few tags at first--probably the &lt;head&gt; and &lt;body&gt; tags--but if you click the indicator next to these elements (it probably looks like a + or a triangle) you can expand it to see the elements inside each parent element, all eventually rooted in the &lt;html&gt; element that surrounds everything on the page. Keep this arrangement in mind when we find ourselves talking about "sibling," "parent," "child," or "ancestor" elements.
+
+  <p>
+    Although we often use the terms "tag" and "element" to mean the same thing, looking at this view of the document makes a distinction clear. When it's in plain text, we write tags with attributes. The browser then converts that to a data structure made up of elements, fixing any misplaced or unknown tags along the way. Some people are sticklers for proper usage, insisting that we should only call &lt;div&gt; or &lt;p&gt; "tags" if they're in text format. But in this document, for reasons of readability if nothing else, we'll use them interchangeably.
+
+</aside>
 
 <p>
-  jQuery normally creates two functions for you to use when selecting elements. You can call it using the full name, <var>jQuery</var>, but it also aliases itself to the shorter <var>$</var> function, which is what most people use.
+  You should see the table of selectors above vanish and then reappear with a fade effect. Our first function call, <var>$('#selectors tr')</var>, told jQuery to find any <var>&lt;tr&gt;</var> tags inside of the <var>#selectors</var> element (the table has an ID of "selectors"). jQuery actually creates two functions that you can use for finding elements, <var>$</var> and <var>jQuery</var>, but most people use the shorter form, so we will too. Then we called the <var>hide()</var> and <var>fadeIn()</var> methods on the resulting object, causing it to do exactly those actions. If you watch in the HTML/Elements tab, you'll see the inline styles for those parts of the page change (usually this change is highlighted in yellow). 
 
 <p>
   For right now, let's just concentrate on searching for elements on the page using jQuery. Try using the following jQuery selections in your console, and then mouse over them in the resulting output line. You should see the elements highlighted on the page when you hover over each one in the array-like jQuery object that's returned.
@@ -119,21 +131,6 @@ if ($('table > td').length > 0) {
   //you can also just test the length by itself--non-zero numbers are truthy
 }
 </code>
-
-<aside>
-
-  <h1>The Document Tree</h1>
-
-  <p>
-    If you've only written HTML and CSS, chances are you're used to thinking of the page as plain text, with tags that tell act kind of like the bold or italic buttons in a word processor: start a certain kind of formatting here, stop it elsewhere. But JavaScript sees the page differently, the way the browser sees it. And the browser sees your HTML document by converting it into a tree of nested elements.
-
-  <p>
-    There are lots of metaphors we could use, but the easiest way to visualize the conversion from text to data structure is to open up your development tools and switch to the "HTML" or "Elements" tab (depending on your browser). You'll probably see only a few tags at first--probably the &lt;head&gt; and &lt;body&gt; tags--but if you click the indicator next to these elements (it probably looks like a + or a triangle) you can expand it to see the elements inside each parent element, all eventually rooted in the &lt;html&gt; element that surrounds everything on the page. Keep this arrangement in mind when we find ourselves talking about "sibling," "parent," "child," or "ancestor" elements.
-
-  <p>
-    Although we often use the terms "tag" and "element" to mean the same thing, looking at this view of the document makes a distinction clear. When it's in plain text, we write tags with attributes. The browser then converts that to a data structure made up of elements, fixing any misplaced or unknown tags along the way. Some people are sticklers for proper usage, insisting that we should only call &lt;div&gt; or &lt;p&gt; "tags" if they're in text format. But in this document, for reasons of readability if nothing else, we'll use them interchangeably.
-
-</aside>
 
 <p>
   Whenever we call the jQuery function (through <var>$</var> or <var>jQuery</var>) and pass in a selector, what we get back is a special object that contains a huge number of functions for changing the selected elements. It also contains functions for finding other elements, using the current selection as a starting place. For example, you might want to locate a menu, and then find different child elements in order to give them a certain appearance or behavior:

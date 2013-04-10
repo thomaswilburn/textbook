@@ -141,8 +141,8 @@ mark {
   font-weight: bold;
 }
 aside {
-  font-size: 14px;
-  font-size: 0.875rem;
+  font-size: 15px;
+  font-size: 0.9375rem;
   width: 25em;
   float: right;
   clear: right;
@@ -420,6 +420,28 @@ li.L9 {
   background: white;
   border: 1px dotted rgba(0, 0, 0, 0.1);
   font-weight: bold;
+}
+.interactive.regex-tester input {
+  width: 100%;
+  padding: 4px;
+}
+.interactive.regex-tester textarea {
+  width: 100%;
+  height: 200px;
+}
+.interactive.regex-tester .match {
+  background: #0FF;
+}
+.interactive.canvas canvas {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  background: white;
+  z-index: 1;
+  -moz-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 }
 .blank {
   border: none;

@@ -1,0 +1,521 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie"><![endif]-->
+<!--[if gt IE 9]><!--><html><!--<![endif]-->
+<head>
+  <title>Javascript for the Web Savvy &bull; Canvas</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+  require.config({
+    baseUrl: '../js',
+    paths: {
+      jquery: 'jquery-1.9.min'
+    }
+  });
+  </script>
+</head>
+<body>
+  <!--<div class="navigation">
+    <a href="./">&laquo; Table of Contents</a>
+  </div>-->
+  <h1>Canvas</h1>
+  <div class="content">
+
+<h2>Unleashing Your Inner Code Artist</h2>
+
+<p>
+  After all that form drudgery, we deserve to have some fun as well, and the HTML5 &lt;canvas&gt; element certainly counts. Unlike the other elements, which we style with CSS and fill with text, &lt;canvas&gt; lets us draw anything we want inside its borders. That opens up a whole world for us that wasn't previously available: games, artwork, animations, rich interactive elements, graphs, and more.
+
+<p>
+  Using &lt;canvas&gt; requires us to do a little bit of setup first. We'll need to create a canvas element, and assign it a height and width. You can style the element however you'd like, but the height and width will be used for the internal drawing space of the canvas, and stretch to fit its onscreen size. This can make your drawings blurry or out-of-proportion if the CSS size doesn't match the element size, so it's a good idea to start just sizing the element manually. Like a script tag, you must always close your &lt;canvas&gt; tag. Unlike a script tag, you can put fallback text between the opening and closing tags, and it will be shown in browsers that don't support canvas.
+
+<code>
+&lt;canvas id="picasso" height=640 width=480&gt;&lt;/canvas&gt;
+</code>
+
+<p>
+  Now that we have the element, we need to get a <mark>drawing context</mark> for it. The context is the object on which you actually issue drawing commands--the browser then takes those commands and handles painting them into the element. We want to get the 2D context. There is also a 3D context, which uses WebGL for creating graphics, but we'll stick to 2D for now. The function to get the context only works on the raw DOM element, and can't be called through jQuery, so we're going to use a regular DOM function to get it. <var>document.querySelector</var> works basically the same way as jQuery, but its selectors are limited only to valid CSS (no ":checked" or ":visible") and it will only grab one element.
+
+<code>
+var canvas = document.querySelector('#picasso');
+var context = canvas.getContext('2d');
+</code>
+
+<aside id="canvas-offset">
+
+  <h1>Canvas Coordinates</h1>
+
+  <p>
+    Inside the &lt;canvas&gt; tag, all drawing commands take place relative to the upper-left corner of the canvas. The X values start at 0 and get larger to the right, and the Y values start with 0 at the top and get larger toward the bottom. Canvas pixels also do not necessarily match screen pixels, if its height and width attributes are set differently from its height and width in CSS. This can all be a bit confusing.
+
+  <p>
+    Scaling the canvas involves some interesting (but confusing) math that we won't get into here. But if the size of the canvas hasn't been tampered with, it's relatively easy to convert a mouse event's X and Y into canvas-relative X and Y, just by using the jQuery <var>offset</var> function, as below:
+
+<code>
+var offset = $(canvas).offset();
+//offset provides a "top" and "left"
+//relative to the document
+$(canvas).on('mousemove', function(e) {
+  var x = e.pageX - offset.left;
+  var y = e.pageY - offset.top;
+  console.log(x, y);
+}
+</code>
+
+  <p>
+    You can see this in action in the following canvas, which draws lines to follow the mouse in canvas coordinates, but also shows the position in page coordinates.
+  
+  <div style="text-align: center">
+    <canvas id="coordinate-demo" style="border: 1px solid #888;" width=200 height=200></canvas>
+    <pre id="coordinate-position"></pre>
+  </div>
+
+  <script>
+require(['jquery'], function($) {
+
+  var canvas = document.querySelector('#coordinate-demo');
+  var context = canvas.getContext('2d');
+  var pre = $('#coordinate-position');
+
+  $(canvas).on('mousemove', function(e) {
+    //erase the previous drawing
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    var offset = $(canvas).offset();
+    var x = e.pageX - offset.left;
+    var y = e.pageY - offset.top;
+    //draw blue lines
+    context.strokeStyle = "#08F";
+    //draw vertical
+    context.beginPath();
+    context.moveTo(x, 0);
+    context.lineTo(x, canvas.height);
+    context.stroke();
+    //draw horizontal
+    context.beginPath();
+    context.moveTo(0, y);
+    context.lineTo(canvas.width, y);
+    context.stroke();
+
+    //list out coordinates
+    pre.html('Page X: ' + e.pageX + '\nPage Y: ' + e.pageY + '\nLocal X: ' + x + '\nLocal Y: ' + y);
+  });
+
+});
+  </script>
+
+</aside>
+
+  Now that we have the context, we can actually start drawing some pictures.
+
+<p>
+  Imagine that the canvas element is a robot arm, like in a factory, but instead of a claw or a welding attachment it has a pen at the end. The person running the robot programs it with a series of moves on a screen--some with the pen down on the paper, some with it lifted for repositioning--and then presses a big green button and watches it perform the actual drawing. That's basically how canvas works: we start a drawing sequence with the <var>beginPath()</var> instruction, tell it where we want the pen to draw (<var>lineTo()</var>) and where we want it to lift (<var>moveTo</var>), and then we finally ask the robot to either outline the path we've described (<var>stroke()</var>), or fill it with color (<var>fill()</var>). 
+
+<p>
+  Here's an example that draws an X on the canvas. This code is live: changes in the JavaScript will be reflected in the canvas drawing on the right, so feel free to play with it and add your own drawing instructions.
+
+<div class="interactive canvas" id="x">
+  <canvas width=200 height=200></canvas>
+  <code class="prettyprinted" contenteditable>
+//start a sequence of drawing commands
+context.beginPath();
+
+//move to the upper-left corner
+context.moveTo(20, 20);
+//draw down and over to the coordinates 100, 100
+context.lineTo(100, 100);
+//move to the upper-right part of the X
+context.moveTo(100, 20);
+//draw down to the lower-left
+context.lineTo(20, 100);
+
+//now that we have our plan, we ask the canvas to ink this path
+context.stroke();
+  </code>
+  <script>
+require(['interactives/MetaCanvas'], function(MC) { MC('x'); });
+  </script>
+</div>
+
+<p>
+  We can change the color of the line by altering the <var>strokeStyle</var> property of the drawing context (<var>fillStyle</var> affects filled shapes). Any valid CSS color is valid here: You can use color names ("green"), hex values ("#FC8CA3"), RGB and RGBA values ("rgba(255, 195, 200, .5)"), or HSL in browsers that support it. You can also change the width of the line using the <var>lineWidth</var> property. Here's the interesting thing about these properties: you can set them as many times as you want, but the only one that matters is the last one you set before calling <var>stroke()</var> or <var>fill()</var>. You can think of our artistic robot as using only a single marker per path: if you want to change colors, call <var>stroke()</var> to finish in the old color and <var>beginPath()</var> to start a new path before changing the stroke style.
+
+<div class="interactive canvas" id="strokeState">
+  <canvas width=200 height=200></canvas>
+  <code class="prettyprinted" contenteditable>
+context.beginPath();
+context.moveTo(20, 20);
+context.lineTo(20, 180);
+context.lineTo(180, 180);
+context.strokeStyle = "red";
+context.fillStyle = "green";
+context.lineWidth = 6;
+
+//un-comment the next three lines to create a new path
+//context.stroke();
+//context.fill();
+//context.beginPath();
+
+context.moveTo(180, 180);
+context.lineTo(180, 20);
+context.lineTo(20, 20);
+context.strokeStyle = "#08F";
+context.fillStyle = "rgba(0, 0, 0, .4)";
+context.lineWidth = 2;
+
+context.stroke();
+context.fill();
+  </code>
+  <script>
+require(['interactives/MetaCanvas'], function(MC) { MC('strokeState'); });
+  </script>
+</div>
+
+<h2>More Than Just Lines</h2>
+
+<p>
+  By creating line-based paths and stroking or filling them, we can draw a lot of shapes. But we don't have to draw everything one line segment at a time, luckily. The canvas API provides functions for drawing circles and rectangles as well. Rectangles in particular, are fairly easy: we can call the <var>rect()</var> function, passing in the x and y coordinates, followed by the width and height of the rectangular path we want to create.
+
+<code>
+
+context.beginPath();
+//draw a 30x40 rectangle at coordinates 10, 10
+context.rect(10, 10, 30, 40);
+context.fill();
+</code>
+
+<p>
+  Circles are a bit more difficult. Although it would be great to have a <var>circle()</var> function, the powers that be decided that it would be a "better" idea to only expose a method that creates <i>arcs</i>--sections of a circle, not a whole circle on its own.
+
+<code>
+context.arc(<i>centerX</i>, <i>centerY</i>, <i>radius</i>, <i>startPosition</i>, <i>endPosition</i>);
+</code>
+
+  Even worse, the required arguments for the start and end position of the arc (meaning, where on the circle we should start and stop drawing with our canvas "pen") are not expressed in degrees. Instead, they're in <mark>radians</mark>. A full circle is 2&pi; radians around, and a half-circle is &pi; radians. If it were a clock, 0 on the circle would be 3 o'clock, and &pi; would be at 9 o'clock, with midnight and 6 o'clock at .5&pi; and 1.5&pi;, respectively. This is obviously kind of a lot of math to draw a simple circle. Luckily, the dynamic nature of JavaScript means that we can add our own <var>circle()</var> function to the context, with some help from the built-in value <var>Math.PI</var>.
+
+<code>
+context.circle = function(x, y, radius) {
+  //draw a circle from 0 to 2&pi; radians.
+  context.arc(x, y, radius, 0, Math.PI * 2);
+};
+</code>
+
+  Now we can draw circles as easily as we can draw rectangles.
+
+<div class="interactive canvas" id="circle-rectangle">
+  <canvas width=200 height=200></canvas>
+  <code>
+context.circle = function(x, y, radius) {
+  context.arc(x, y, radius, 0, Math.PI * 2);
+};
+
+context.beginPath();
+context.fillStyle = "red";
+context.rect(20, 20, 50, 150);
+context.fill();
+
+context.beginPath();
+context.strokeStyle = "blue";
+context.circle(150, 80, 20);
+context.stroke();
+
+context.beginPath();
+context.rect(90, 70, 20, 50);
+context.circle(100, 70, 10);
+context.fillStyle = "green";
+context.strokeStyle = "black";
+context.fill();
+context.stroke();
+  </code>
+</div>
+<script> require(['interactives/MetaCanvas'], function(MC) { MC('circle-rectangle'); }); </script>
+
+<p>
+  Don't let the fact that it's annoying blind you to the uses of the <var>arc</var> function, however. It has plenty of uses, especially if (as below) we want to emulate certain classic arcade characters.
+
+<div class="interactive canvas" id="ms-pacman">
+  <canvas width=200 height=200></canvas>
+  <code>
+context.beginPath();
+context.fillStyle = "#FF0";
+//top and bottom of the mouth
+var start = .3 * Math.PI;
+var end = 1.8 * Math.PI;
+context.arc(100, 100, 90, start, end);
+context.lineTo(100, 100);
+context.fill();
+
+context.beginPath();
+context.fillStyle = "black";
+context.arc(100, 60, 10, 0, Math.PI * 2);
+context.fill();
+
+context.beginPath();
+context.fillStyle = "magenta";
+context.moveTo(60, 40);
+context.lineTo(50, 0);
+context.lineTo(20, 60);
+context.lineTo(10, 20);
+context.fill();
+  </code>
+</div>
+<script> require(['interactives/MetaCanvas'], function(MC) { MC('ms-pacman'); }); </script>
+
+<p>
+  Incidentally, using the canvas API is a great way to see how functions can be useful as units of code. The code above draws a single figure at a single location. But if we were actually making an arcade game recreation, we'd probably want to do that more than once, especially for our enemy sprites. If we wrap up our drawing instructions in a function, and change all of our drawing to happen <i>relative to</i> some center coordinates, it becomes much easier to re-use.
+
+<code>
+var drawMsPacman = function(x, y) {
+  context.beginPath();
+  context.fillStyle = "#FF0";
+  //top and bottom of the mouth
+  var start = .3 * Math.PI;
+  var end = 1.8 * Math.PI;
+  context.arc(x, y, 90, start, end);
+  context.lineTo(x, y);
+  context.fill();
+
+  context.beginPath();
+  context.fillStyle = "black";
+  context.arc(x, y - 40, 10, 0, Math.PI * 2);
+  context.fill();
+
+  context.beginPath();
+  context.fillStyle = "magenta";
+  context.moveTo(x - 40, y - 60);
+  context.lineTo(x - 50, y - 100);
+  context.lineTo(x - 80, y - 40);
+  context.lineTo(x - 90, y - 80);
+  context.fill();
+};
+
+drawMsPacman(100, 100);
+</code>
+
+  Further versions of this code could even accept arguments for new colors or rotation. Once we've packaged our drawing instructions up this way, we don't have to really worry about how they're implemented, or try to get them right every time they're used. We turn many lines of code into only one.
+
+<h2>Animation</h2>
+
+<p>
+  Once we have a &lt;canvas&gt; element where we can draw at will, it's natural to want to redraw, and thus to animate our artistic visions. Doing so means using functions again, as well as a new built-in function that we haven't seen before, called <var>setTimeout()</var>. We can ask the browser to call a function of our choice after a short delay using <var>setTimeout()</var>, by passing it the function and the number of milliseconds that we want to wait. This is not too different from the way that we pass a function to jQuery to be called for an event. Try it for yourself by running the following code on your browser console:
+
+<code>
+setTimeout( function() { console.log("Hello from the past!"); }, 1000);
+</code>
+
+<aside>
+
+  <h1>Bad Advice Alert: <var>setTimeout</var> Edition</h1>
+
+  <p>
+    There is a lot of really bad advice out there surrounding <var>setTimeout()</var>, partly because it was very badly designed. When it was first created, the first argument for <var>setTimeout</var> wasn't a function, but a text string containing JavaScript source. Running code this way turns out to be a source of a tremendous number of bugs and security problems. Don't ever pass a string to <var>setTimeout()</var>--always pass a function that contains the code you want to run. In addition to being safer, you'll get the advantage of syntax coloring in your editor, which you can't have for JavaScript that lives inside a string.
+
+</aside>
+
+<p>
+  In an animation, however, we want our code to repeat itself more than just one time. We wouldn't want to have to schedule hours worth of timeouts at the start, just in case someone wanted to watch our page for that long. Instead, we want each frame to trigger the next, so that when one finishes it sets the timeout for another frame. That's easy to do by giving our function a name, and having it create a timeout to call itself again. If this sounds a bit confusing, like lifting yourself up by the scruff of your own neck, it is a bit easier to understand with an example.
+
+<code>
+var echo = function() {
+  console.log('hello');
+  setTimeout(echo, 1000);
+};
+echo();
+</code>
+
+  Once we call <var>echo()</var> the first time, it'll schedule itself to be called every second after that.
+
+<p>
+  It's common on the Internet to see people recommending the use of <var>setInterval</var> for animations instead of <var>setTimeout</var>. The former is called the same way, with a function and a delay. But instead of scheduling a single repeat after n milliseconds, <var>setInterval</var> schedules your function to be called every n milliseconds going forward, forever.
+
+<p>
+  Why isn't this a good idea? Surely, this is exactly what we're trying to do--to call a function over and over again, as long as the page is loaded. If <var>setInterval</var> can do that for us, without the goofy self-<var>setTimeout</var> line, why not take advantage of it? The answer lies in the very short timing of many animations, which may be called as quickly as 4 milliseconds later (that's 250 times per second) in order to be as smooth as possible. If all goes well, <var>setInterval</var> works fine. But consider the following code:
+
+<code>
+var broken = function() {
+  console.logg("Oops, we misspelled a function name.");
+};
+setInterval(broken, 100);
+</code>
+
+<p>
+  Now, ten times a second, your console will be filled with error messages, since there is no "console.logg" function to call. If you're trying to debug a crash somewhere, this flood of syntax errors will make it practically impossible to figure out--and might cause other side effects, if the part of the function before the crash did anything important. <var>setInterval</var> is a kind of infinite loop, and that should be cause for caution.
+
+<code>
+var notBroken = function() {
+  console.logg("Misspelled functions can cause no ruckus.");
+  setTimeout(notBroken, 100);
+}
+notBroken();
+</code>
+
+<p>
+  In this sample, by comparison, the bad function name will cause the script to stop before it schedules the next timeout. We'll get one error, and then the program will halt, waiting for us to dig in and investigate the crash. It may seem perverse, but by failing harder, our program is easier to fix and maintain.
+
+<p>
+  We need one other crucial function before we can animate something properly. If we draw repeatedly to the canvas, say a moving circle, it will leave a trail behind as it travels across the screen. We need to erase each previous drawing before drawing a new circle, to create the illusion of movement. The <var>clearRect()</var> function on the canvas context is called the same way as <var>rect()</var>, but it will immediately erase everything within its bounds. You don't need to call <var>fill()</var> or <var>stroke()</var> to do so. We can erase everything on the screen by clearing a rectangle starting from 0, 0 and stretching the full size of the canvas:
+
+  <code>
+context.clearRect(0, 0, canvas.width, canvas.height);
+  </code>
+
+  <p>
+    There are, in fact, a number of other ways to clear the canvas. Changing its width or height, for example, will typically cause the canvas to erase itself. These methods, however, while interesting and sometimes faster than <var>clearRect()</var>, do not create clear code. They hide their purpose. In the rare cases where we need an extremely fast screen erasure (such as a video game with many onscreen objects), this might be worth investigating. But for now, let's use <var>clearRect()</var> for the sake of legibility, if nothing else.
+
+  <p>
+    In the following example, we're going to create the animation of a bouncing ball. We'll start by creating an object that represents the ball, then work up from there: drawing one frame, animating many frames, checking the ball's position after each update, and clearing the previous drawing.
+
+<div class="interactive timelapse" id="ricochet">
+  <div class="controls">
+    <a class="first">First</a>
+    <a class="previous">Previous</a>
+    <ul class="revision-list"></ul>
+    <a class="next">Next</a>
+    <a class="last">Last</a>
+  </div>
+  <aside class="comments-container">
+    <h1 class="comments-bar">COMMENTS</h1>
+    <div class="comments"></div>
+  </aside>
+  <code class="revision"></code>
+<script type="text/timelapse">var ball = {
+    x: 10,
+    y: 10,
+    dx: 1,
+    dy: 1
+}
+@1,@
+@1,1@context.beginPath();
+@1,1@context.fillStyle = "#FF0";
+@1,1@//draw a circle 10 pixels in radius at the ball's location
+@1,1@context.arc(ball.x, ball.y, 10, 0, Math.PI * 2);
+@1,1@context.fill();
+@2,@var drawBall = function() {
+@2,@    context.beginPath();
+@2,@    context.fillStyle = "#FF0";
+@2,@    //draw a circle 10 pixels in radius at the ball's location
+@2,@    context.arc(ball.x, ball.y, 10, 0, Math.PI * 2);
+@2,@    context.fill();
+@2,@};
+@2,@
+@2,2@drawBall();
+@8,@var moveBall = function() {
+@8,@    //Adjust the x and y by the dx and dy properties
+@8,@    ball.x = ball.x + ball.dx;
+@8,@    ball.y = ball.y + ball.dy;
+@8,@    if (ball.y >= canvas.height || ball.y <= 0) {
+@8,@        ball.dy = ball.dy * -1;
+@8,@    }
+@8,@    if (ball.x >= canvas.width || ball.x <= 0) {
+@8,@        ball.dx = ball.dx * -1;
+@8,@    }
+@8,@};
+@8,@
+@3,@var animate = function() {
+@3,@    context.clearRect(0, 0, canvas.width, canvas.height);
+@3,@    drawBall();
+@4,7@    //Adjust the x and y by the dx and dy properties
+@4,7@    ball.x = ball.x + ball.dx;
+@4,7@    ball.y = ball.y + ball.dy;
+@5,6@    if (ball.y >= canvas.height) {
+@7,7@    if (ball.y >= canvas.height || ball.y <= 0) {
+@5,7@        ball.dy = ball.dy * -1;
+@5,7@    }
+@6,6@    if (ball.y <= 0) {
+@6,6@        ball.dy = ball.dy * -1;
+@7,7@    if (ball.x >= canvas.width || ball.x <= 0) {
+@7,7@        ball.dx = ball.dx * -1;
+@6,7@    }
+@6,6@    if (ball.x >= canvas.width) {
+@6,6@        ball.dx = ball.dx * -1
+@6,6@    }
+@6,6@    if (ball.x <= 0) {
+@6,6@        ball.dx = ball.dx * -1;
+@6,6@    }
+@8,@    moveBall();
+@3,@    setTimeout(animate, 100);
+@3,@};
+@3,@
+@3,@animate();
+@@c:0;We'll start with something very simple: creating an object to represent our bouncing ball. In addition to the <var>x</var> and <var>y</var> properties, which describe its position, we also have <var>dx</var> and <var>dy</var>. These two properties stand for the "delta," or the change, in both the x and y coordinates for each frame. Or to put it another way, they are the ball's vertical and horizontal speed.@@
+@@c:1;Now we can actually draw the ball, based on this object. So far, nothing too complicated.@@
+@@c:2;Let's put the drawing instructions inside a function, which will make them easier to trigger repeatedly.@@
+@@c:3;Next, we'll create an animation function that draws the ball every 100 milliseconds, calling itself using the same method described above. It also needs to clear the screen, or else our ball would leave trails behind.@@
+@@c:4;Of course, our animation just draws the same thing, over and over, every frame, so it doesn't look very animated. To make this work meaningful, we need to change the ball's position on each frame, thus creating an actual animation.@@
+@@c:5;If you load this code in a browser now (plus the code for getting a canvas context, of course), you'll see the ball animate. But it doesn't bounce: it moves down and to the right until it moves offscreen, where it probably keeps going forever, out of sight. We need to add some collision detection, so that it can bounce off the walls.
+
+We'll start with the bottom. When the y coordinate of the ball reaches the bottom of the canvas, we're going to reverse its <var>dx</var> property by multiplying it by -1. Now, instead of moving down, it will head upward.@@
+@@c:6;Adding bounce behavior to the other three sides is correspondingly simple: we're just checking to see if the ball has gone outside the bounds of the canvas element.@@
+@@c:7;In fact, since hitting the top and bottom, or the left and right, results in the same behavior, we can combine their conditions using the OR operator, represented by <var>||</var>.@@
+@@c:8;Finally, to make this as clean as possible, we might move our physics code into a separate function. This refactoring lets us keep our animation loop more descriptive, and if we needed to add more object later, it would be easier to repurpose a standalone function.@@</script>
+</div>
+<script>
+require(['jquery', 'meta/TLPlayer'], function($, Player) {
+  var element = $('#ricochet');
+  var player = new Player();
+  var diff = element.find('script[type="text/timelapse"]');
+  var revUL = element.find('ul.revision-list');
+  player.load(diff.html()).done(function() {
+    player.timelapse.revisions.forEach(function(item, i) {
+      var li = $('<li>');
+      li.html(i + 1);
+      li.attr('data-revision', i);
+      revUL.append(li);
+    });
+    player.connect({
+      code: element.find('code.revision'),
+      comments: element.find('.comments')
+    })
+    player.switch(0);
+    element.find('li:first').addClass('active');
+    element.find('.controls').on('click', 'li', function() {
+      var $this = $(this);
+      element.find('.active').removeClass('active');
+      $this.addClass('active');
+      player.switch($this.attr('data-revision'));
+    });
+    /*element.find('.comments').slideUp();
+    element.find('.comments-bar').on('click', function() {
+      element.find('.comments').slideToggle();
+    });*/
+    ['first', 'previous', 'next', 'last'].forEach(function(jump) {
+      element.find('.' + jump).click(function() {
+        player[jump]();
+        element.find('.active').removeClass('active');
+        element.find('li[data-revision=' + player.current + ']').addClass('active');
+      });
+    });
+  });
+});
+</script>
+
+<h2>Practice Exercise</h2>
+
+<p>
+  If you're of a certain age, that bouncing ball should probably have strong associations for you: it puts you within striking distance of the classic Pong arcade game. To practice your canvas kung fu, try creating a very simple Pong clone. Bear in mind the following requirements:
+
+  <ul>
+    <li> It's easier to start off with a single-player variation on Pong--more like racquetball--where the player simply has to bounce the ball off the other side. Then you can add a computer-controlled paddle once you get that working.
+    <li> Remember to use <var>offset()</var> to convert mouse coordinates from a "mousemove" event into canvas coordinates, as described <a href="#canvas-offset">here</a>.
+    <li> Remember that you don't have to do everything in the &lt;canvas&gt;. Game UI elements, such as scores or player names, can be easily accomplished with jQuery and elements above and below the canvas.
+    <li> Try to attack the larger problem in small steps. For example, in this case, we might break the problem of "Pong" down into:
+      <ul>
+        <li> Create a Pong-style bouncing ball.
+        <li> Draw the paddle onscreen at one position.
+        <li> Connect the vertical paddle position to the mouse cursor.
+        <li> Check for collisions between the ball and paddle, and cause them to bounce.
+        <li> Disable bounces on the player's side of the screen, and instead give a point to the computer when that happens.
+      </ul>
+  </ul>
+
+<script>
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code, pre').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
+  PR.prettyPrint();
+});
+</script>
+  </div>
+</body>
+</html>
