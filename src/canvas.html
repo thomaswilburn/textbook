@@ -20,7 +20,7 @@ var canvas = document.querySelector('#picasso');
 var context = canvas.getContext('2d');
 </code>
 
-<aside>
+<aside id="canvas-offset">
 
   <h1>Canvas Coordinates</h1>
 
@@ -283,7 +283,7 @@ setTimeout( function() { console.log("Hello from the past!"); }, 1000);
 
 <aside>
 
-  <h1>Dangers of <var>setTimeout</var>, Part I</h1>
+  <h1>Bad Advice Alert: <var>setTimeout</var> Edition</h1>
 
   <p>
     There is a lot of really bad advice out there surrounding <var>setTimeout()</var>, partly because it was very badly designed. When it was first created, the first argument for <var>setTimeout</var> wasn't a function, but a text string containing JavaScript source. Running code this way turns out to be a source of a tremendous number of bugs and security problems. Don't ever pass a string to <var>setTimeout()</var>--always pass a function that contains the code you want to run. In addition to being safer, you'll get the advantage of syntax coloring in your editor, which you can't have for JavaScript that lives inside a string.
@@ -303,39 +303,66 @@ echo();
 
   Once we call <var>echo()</var> the first time, it'll schedule itself to be called every second after that.
 
-<aside>
+<p>
+  It's common on the Internet to see people recommending the use of <var>setInterval</var> for animations instead of <var>setTimeout</var>. The former is called the same way, with a function and a delay. But instead of scheduling a single repeat after n milliseconds, <var>setInterval</var> schedules your function to be called every n milliseconds going forward, forever.
 
-  <h1>Dangers of <var>setTimeout</var>, Part II</h1>
+<p>
+  Why isn't this a good idea? Surely, this is exactly what we're trying to do--to call a function over and over again, as long as the page is loaded. If <var>setInterval</var> can do that for us, without the goofy self-<var>setTimeout</var> line, why not take advantage of it? The answer lies in the very short timing of many animations, which may be called as quickly as 4 milliseconds later (that's 250 times per second) in order to be as smooth as possible. If all goes well, <var>setInterval</var> works fine. But consider the following code:
 
-  <p>
-    The other common misconception on the Internet for calling functions at repeated time intervals is to advocate using <var>setInterval</var> instead of <var>setTimeout</var>. The former is called the same way, with a function and a delay. But instead of scheduling a single repeat after n milliseconds, <var>setInterval</var> schedules your function to be called every n milliseconds going forward, forever.
-
-  <p>
-    Why isn't this a good idea? Surely, this is exactly what we're trying to do--to call a function over and over again, as long as the page is loaded. If <var>setInterval</var> can do that for us, without the goofy self-<var>setTimeout</var> line, why not take advantage of it? The answer lies in the very short timing of many animations, which may be called as quickly as 4 milliseconds later (that's 250 times per second) in order to be as smooth as possible. If all goes well, <var>setInterval</var> works fine. But consider the following code:
-
-  <code>
+<code>
 var broken = function() {
   console.logg("Oops, we misspelled a function name.");
 };
 setInterval(broken, 100);
-  </code>
+</code>
 
-  <p>
-    Now, ten times a second, your console will be filled with error messages, since there is no "console.logg" function to call. If you're trying to debug a crash somewhere, this flood of syntax errors will make it practically impossible to figure out--and might cause other side effects, if the part of the function before the crash did anything important. <var>setInterval</var> is a kind of infinite loop, and that should be cause for caution.
+<p>
+  Now, ten times a second, your console will be filled with error messages, since there is no "console.logg" function to call. If you're trying to debug a crash somewhere, this flood of syntax errors will make it practically impossible to figure out--and might cause other side effects, if the part of the function before the crash did anything important. <var>setInterval</var> is a kind of infinite loop, and that should be cause for caution.
 
-  <code>
+<code>
 var notBroken = function() {
   console.logg("Misspelled functions can cause no ruckus.");
   setTimeout(notBroken, 100);
 }
 notBroken();
+</code>
+
+<p>
+  In this sample, by comparison, the bad function name will cause the script to stop before it schedules the next timeout. We'll get one error, and then the program will halt, waiting for us to dig in and investigate the crash. It may seem perverse, but by failing harder, our program is easier to fix and maintain.
+
+<p>
+  We need one other crucial function before we can animate something properly. If we draw repeatedly to the canvas, say a moving circle, it will leave a trail behind as it travels across the screen. We need to erase each previous drawing before drawing a new circle, to create the illusion of movement. The <var>clearRect()</var> function on the canvas context is called the same way as <var>rect()</var>, but it will immediately erase everything within its bounds. You don't need to call <var>fill()</var> or <var>stroke()</var> to do so. We can erase everything on the screen by clearing a rectangle starting from 0, 0 and stretching the full size of the canvas:
+
+  <code>
+context.clearRect(0, 0, canvas.width, canvas.height);
   </code>
 
   <p>
-    In this sample, by comparison, the bad function name will cause the script to stop before it schedules the next timeout. We'll get one error, and then the program will halt, waiting for us to dig in and investigate the crash. It may seem perverse, but by failing harder, our program is easier to fix and maintain.
+    There are, in fact, a number of other ways to clear the canvas. Changing its width or height, for example, will typically cause the canvas to erase itself. These methods, however, while interesting and sometimes faster than <var>clearRect()</var>, do not create clear code. They hide their purpose. In the rare cases where we need an extremely fast screen erasure (such as a video game with many onscreen objects), this might be worth investigating. But for now, let's use <var>clearRect()</var> for the sake of legibility, if nothing else.
 
-</aside>
+  <p>
+    In the following example, we're going to create the animation of a bouncing ball. We'll start by creating an object that represents the ball, then work up from there: drawing one frame, animating many frames, checking the ball's position after each update, and clearing the previous drawing.
 
+[@import interactives/timelapse.html src="../../js/interactives/data/canvas.time" id="ricochet"]
+
+<h2>Practice Exercise</h2>
+
+<p>
+  If you're of a certain age, that bouncing ball should probably have strong associations for you: it puts you within striking distance of the classic Pong arcade game. To practice your canvas kung fu, try creating a very simple Pong clone. Bear in mind the following requirements:
+
+  <ul>
+    <li> It's easier to start off with a single-player variation on Pong--more like racquetball--where the player simply has to bounce the ball off the other side. Then you can add a computer-controlled paddle once you get that working.
+    <li> Remember to use <var>offset()</var> to convert mouse coordinates from a "mousemove" event into canvas coordinates, as described <a href="#canvas-offset">here</a>.
+    <li> Remember that you don't have to do everything in the &lt;canvas&gt;. Game UI elements, such as scores or player names, can be easily accomplished with jQuery and elements above and below the canvas.
+    <li> Try to attack the larger problem in small steps. For example, in this case, we might break the problem of "Pong" down into:
+      <ul>
+        <li> Create a Pong-style bouncing ball.
+        <li> Draw the paddle onscreen at one position.
+        <li> Connect the vertical paddle position to the mouse cursor.
+        <li> Check for collisions between the ball and paddle, and cause them to bounce.
+        <li> Disable bounces on the player's side of the screen, and instead give a point to the computer when that happens.
+      </ul>
+  </ul>
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
