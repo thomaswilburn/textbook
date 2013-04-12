@@ -31,7 +31,10 @@ module.exports = function(grunt) {
             css: {
                 files: ['./src/css/*.less'],
                 tasks: ['compileCSS']
-            }            
+            },
+            options: {
+              nospawn: true
+            }
         }
     });
 

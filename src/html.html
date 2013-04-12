@@ -1,0 +1,70 @@
+[@import snippets/head.html title="Writing HTML and CSS with JavaScript"]
+
+<h2>Them Bones</h2>
+
+<p>
+  The "web-savvy" part of this book means that it assumes you know at least a little bit about HTML and CSS. So why are you reading a chapter on writing HTML? The answer is not that I've lost the plot, but that the HTML you write for JavaScript is often a bit different from the HTML that you write for static pages. In this chapter we'll examine some of the ways that you can write markup that's friendlier toward interactivity, and how this can improve both kinds of code.
+
+<p>
+  When we write HTML that's meant to support JavaScript, part of what we're doing is leaving ourselves clues in a machine-readable format. This is not a new idea for the web--in fact, it's a very old idea, and one that the web development community continues to discuss to this day (see also: the new "semantic" tags in HTML5, such as &lt;article&gt; and &lt;aside&gt;). But just as a good semantic markup can be relatively human-readable, good interactive HTML can be clear and readable: it should help explain the behavior that will be created by JavaScript, without tightly coupling your code to your page structure.
+
+<p>
+  In some ways, we can think of your page as the "skeleton," and JavaScript as the "muscles." HTML that's laid and styled correctly will let your page move freely and flexibly, but still be structured, just as a skeleton may flex along joints but be strong across its bones. A good skeleton, both on the web and in an animal, has a functional beauty of its own.
+
+<h2>Classes Versus IDs</h2>
+
+<p>
+  By now, you've seen that jQuery allows you to select parts of the page in many ways, but the most common will probably be by class or by ID. Which one is better? Although it is a slightly controversial opinion, it's my belief that classes are a better way to approach styling both for looks and for JavaScript. In part, this is because IDs can only be used once in a document, which means you must be absolutely sure that you only want to do something in a single place before using an ID. I find this is rarely the case: I may start with a single instance of a scripted behavior, but I often end up duplicating it elsewhere.
+
+<p>
+  Classes also allow us to easily compose behavior, just as they let us compose styling. In an "object-oriented" CSS file, classes are used to add different attributes to an element, such as color schemes, brand styling, and font choice. Likewise, we might want a button that uses certain scripted animations, connects to a form handler, or triggers behavior in multiple places. If we use an ID, we will have to write script that combines all those behaviors for a single element. With classes, however, we can compose changes and behaviors onto elements the same way that we combine the styles of any classes applied to them.
+
+<p>
+  But just as importantly, using only classes for as much of our styling as possible makes it simpler to predict which rules will affect a given element, because it keeps the <mark>selector specificity</mark> as regular as possible. When the browser examines a CSS rule to decide which styles will be overridden, it ranks them by the parts of the selector according to <a href="http://www.w3.org/TR/selectors/#specificity">the following scheme</a>:
+
+  <table>
+    <tr>
+      <th>Selector
+      <th>Point Value
+    <tr>
+      <td>Element (<var>li</var>, <var>div</var>, <var>a</var>)
+      <td>1
+    <tr>
+      <td>Class (<var>.example</var>)
+      <td>10
+    <tr>
+      <td>ID (<var>#menu</var>)
+      <td>100
+  </table>
+
+<aside>
+
+  <p>
+    Technically speaking, these rankings aren't absolutely ordered in decimal intervals. The specification for CSS only says that they must be ranked by some numerical base, meaning that the browser could easily decide that a class is worth 16 points (in a hexadecimal system) or 8 (in octal) or any other number. In many ways, this uncertainty only reinforces the predictive value of class-only selectors.
+
+</aside>
+
+<p>
+  According to this ranking, it takes eleven tag selectors to override a single class, and eleven classes to override an ID. If both the following CSS rules applied to a single element, it will be red, even though the selector length and positioning <i>appears</i> to make it blue.
+
+<code>
+/* 1 ID, 1 element: 101 points */
+#main-article div { 
+  background: red;
+}
+
+/* 2 elements, 4 classes: 42 points */
+body .container .column .feature.section div {
+  background: blue;
+}
+</code>
+
+  For this reason, if nothing else, it is better to style and control the page using classes only. If your selectors all use the same type, it's easy to see which one wins, both visually and by simply counting the number of parts in the selector.
+
+<h2>Attributes</h2>
+
+<p>
+  
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]
