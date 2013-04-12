@@ -48,8 +48,8 @@
   According to this ranking, it takes eleven tag selectors to override a single class, and eleven classes to override an ID. If both the following CSS rules applied to a single element, it will be red, even though the selector length and positioning <i>appears</i> to make it blue.
 
 <code>
-/* 1 ID, 1 element: 101 points */
-#main-article div { 
+/* 1 ID, 2 elements: 102 points */
+body #main-article div { 
   background: red;
 }
 
@@ -64,7 +64,69 @@ body .container .column .feature.section div {
 <h2>Attributes</h2>
 
 <p>
-  
+  Once an element is found, what do we do with it? We may often want to create a basic behavior via JavaScript, but tweak it slightly depending on the element involved. For example, different gallery thumbnails perform the same basic task--to show a lightboxed image in response to a click--but they must obviously display different pictures depending on which one is clicked. One way to distinguish between these is by giving elements different attributes, or using existing attributes to control JavaScript behavior.
+
+<p>
+  The HTML5 specification defines a method for creating attributes that are meant to be used with JavaScript, known as <var>data attributes</var>. These can be named anything you want, as long as they have a <var>data-</var> prefix. The following element boasts several data attributes for triggering a floating YouTube video in response to a click.
+
+<code>
+&lt;img src="video.jpg"
+  data-video-id="dQw4w9WgXcQ"
+  data-video-title="Adorable kittens"
+  data-video-start="0:13"
+&gt;
+</code>
+
+<p>
+  Once we add these attributes to an element, jQuery can get them in one of two ways: the <var>attr()</var> function, which gets or sets HTML attributes, and the <var>data()</var> function, which can store arbitrary values on an element and is seeded with the values of the data attributes. The following code gets and sets attributes on an element.
+
+<code>
+var element = $('img');
+
+//one argument gets the existing value
+element.attr('data-video-id'); //"dQw4w9WgXcQ"
+
+//two arguments sets it
+element.attr('data-video-start', '0:00');
+
+//data() lets us dispense with the prefix
+element.data('video-title'); //"Adorable kittens"
+
+//Unlike attr(), data() stores values without
+//altering the actual element
+element.data('video-length', '2:34');
+element.attr('data-video-length'); //no value
+element.data('video-length'); //'2:34'
+</code>
+
+<p>
+  Data attributes have their own uses, and in HTML5 they hook into new JavaScript APIs. According to the W3C standards group, new attributes should be created this way. But the not-so-dirty secret of web browsers is that they have always allowed custom attributes, <var>data-</var> prefix or not. You can create any attribute you want, add it to an element, and get to it from JavaScript in every browser in existence. Even though they are reliable, useful, and well-supported, custom attributes will cause your page to fail W3C validation. This would be one of the many reasons that validation is completely useless in the real world.
+
+<code>
+&lt;a href="link.html" quote="Hello, World"&gt;
+The W3C doesn't like it, but this tag's quote attribute
+is completely valid and usable in web browsers.
+&lt;/a&gt;
+</code>
+
+<h2>Structure</h2>
+
+<p>
+  Often in JavaScript, we'll be manipulating the styles of various elements to change their appearance, such as adding a class to show that a button is selected or to create a progress indicator. It can be difficult sometimes to test these features, since you may not be sure whether a bug is in your style or your JavaScript. In these cases, you have two options for checking your code.
+
+<p>
+  The first is to remember that classes are far more testable than styling. When testing a page that will be styled via JavaScript, it's not only easier to use classes from the jQuery side, but it's also easier to simply add those classes to your page while designing, so that you can tweak its appearance without having to run any script at all (especially handy when it would normally take many clicks to get the page set up that way, such as when creating dialog boxes or outputs from a long workflow). Once everything looks the way it's supposed to, you can remove the classes from the source and concentrate on getting the JavaScript to add them back at the correct times.
+
+<p>
+  The other crucial tool for creating good page structures is to learn your browser's development tools inside and out. The Webkit developer tools and Firebug add-on for Firefox are particularly deep, allowing you to change and test almost everything about the page, including editing the raw HTML and seeing it change in front of you. Luckily, although there are differences and most people prefer one or the other, most of the functionality between the various developer toolkits is interchangeable, so you won't be left helpless when not in your favorite browser. To really dig into the dev tools, try watching the <a href="http://discover-devtools.codeschoole.com">Discover Devtools</a> interactive guide for Chrome, or check the <a href="http://getfirebug.com/wiki/index.php/Firebug_Links">Firebug wiki</a> for links to books and tutorials.
+
+<h2>Polyfills</h2>
+
+<p>
+  In this book, we are mostly concerned with writing JavaScript on top of and around HTML. But one of the biggest strengths of JavaScript's integration into web browsers is that it can be used to <mark>polyfill</mark> new HTML features into old browsers. Projects like <a href="http://modernizr.com">Modernizr</a> can "upgrade" the browser using JavaScript, adding support for new CSS features and HTML tags. Although it's not always possible, for many features, you're no longer at the mercy of old browsers when it comes to adopting the latest web tech.
+
+<p>
+  One of the best resources for HTML5 polyfills is <a href="http://html5please.com">HTML5 Please</a>, a web site that catalogs new browser features and tracks when they're usable for a wide audience (its predecessor, <a href="http://caniuse.com">Can I Use</a>, is more comprehensive but not quite as user-friendly). For example, the <a href="http://html5please.com/#video">HTML5 &lt;video&gt; element</a> can be polyfilled in browsers that don't support it through a combination of JavaScript and Flash. It's not a great solution, but it means you can write one page using standards instead of one standards-based page and one legacy page.
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
