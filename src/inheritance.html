@@ -1,0 +1,131 @@
+[@import snippets/head.html title="Constructors and Inheritance"]
+
+<h2>Functions As Factories</h2>
+
+<p>
+  Let's say, now that we've been introduced to &lt;canvas&gt;, that we'd like to make our own version of the classic arcade game <i>Asteroids</i>. We know how to create parts of the game: we can write an animation loop, we can move objects around the screen, and we can write functions to draw them. It would be possible to muddle our way through a version of <i>Asteroids</i> using only these techniques, but it would involve managing a lot of complexity for all the different objects and interactions onscreen. Is there a way to make this problem simpler and easier to grasp?
+
+<p>
+  Consider the way <i>Asteroids</i> works: the player must clear the field of floating space rocks by shooting them, while avoiding collisions. Each asteroid that's struck by a missile, however, splits into multiple smaller asteroids, and each of those splits into even smaller asteroids when shot (which is, after all, where the challenge comes from). In order to make this game work, we're going to need to be able to create new asteroids on demand, very easily. We need a <mark>constructor</mark> function that can generate them for us.
+
+<p>
+  We talk about constructors as though they are a separate kind of function, because in many programming language they are a part of a class definition structure. JavaScript doesn't have classes, so technically every function is a constructor function. All we have to do is add the <var>new</var> keyword in front of it, and we'll get a new object back.
+
+<code>
+//regular function invocation
+var result = normalFunction();
+
+//creating objects with a constructor
+var newObject = new Thing();
+</code>
+
+  By convention, functions that are meant to be used as constructors should start with a capital letter for easy visual identification, since using them without the <var>new</var> keyword causes unwelcome side effects.
+
+<p>
+  When a function is called with the <var>new</var> keyword in front, a new object will be created and set as the <var>this</var> value for the function. We can use <var>this</var> inside the constructor to customize that object. For example, we might start creating our asteroids using the following constructor.
+
+<code>
+var Asteroid = function(size, x, y) {
+  this.x = x;
+  this.y = y;
+  this.size = size;
+  this.dx = Math.random() * 6 - 3;
+  this.dy = Math.random() * 6 - 3;
+};
+</code>
+
+  In this constructor, we use the arguments to initialize the <var>x</var>, <var>y</var>, and <var>size</var> properties. But we also generated dynamic <var>dx</var> and <var>dy</var> properties, so that the asteroid will have a random drift. We can also add defaults to the properties set by the arguments by using the <var>OR</var> operator--if the arguments weren't provided, they'll be undefined, and JavaScript will use the next value instead.
+
+<code>
+var Asteroid = function(size, x, y) {
+  this.x = x || 0;
+  this.y = y || 0;
+  this.size = size || 'large';
+  this.dx = Math.random() * 6 - 3;
+  this.dy = Math.random() * 6 - 3;
+};
+</code>
+
+  Now it's easy to create lots of asteroids, both at start-up and when each asteroid is shot and breaks apart, just by calling our constructor.
+
+<code>
+var rocks = [];
+//let's make 100 asteroids!
+for (var i = 0; i &lt; 100; i++) {
+  var asteroid = new Asteroid();
+  //add each to our rocks array
+  rocks.push(asteroid);
+}
+</code>
+
+<h2>Prototypes</h2>
+
+<p>
+  Constructors like this are fine for properties that change between <mark>instances</mark> of an object, but what about properties that are the same on every new object? Instead of creating those manually in the constructor, we can use the <mark>prototype</mark> of the constructor function. The prototype is the object that's used to create <var>this</var> when a function is called as a constructor. For example:
+
+<code>
+var Thing = function() {
+  this.x = 1;
+}
+Thing.prototype = {
+  isThing: true
+}
+
+var t = new Thing();
+console.log(t.x); // 1
+console.log(t.isThing); // true
+
+//Prototype properties are inherited by existing child objects in a "live" way
+console.log(t.inherited); // undefined
+Thing.prototype.inherited = true;
+console.log(t.inherited); // true
+</code>
+
+<p>
+  The prototype is shared between all objects created from the same constructor function. If you change the prototype, all those objects will pick up those changes. Changing the individual objects, however, will not update the prototype. Assigning a new value to a property that's inherited from the prototype will "shadow" that property: the local object property is used instead of the prototype property. To really understand how this works, we should understand the <mark>prototype chain</mark>.
+  
+<code>
+var Parent = function() {
+  this.type = "parent";
+}
+Parent.prototype = {
+  inherited: true
+}
+
+var Child = function() {
+  this.type = "child";
+}
+Child.prototype = new Parent();
+//we can add to the prototype, but not Parent, like this
+Child.prototype.notParent = true;
+
+var kid = new Child();
+</code>
+
+<p>
+  In the code above, we create two constructors. One, the Parent, is the base object. The other, the Child, is based on Parent: its prototype is a Parent object (but not <var>Parent</var>, which is a function, or <var>Parent.prototype</var>, which would make them "siblings"). Then we've created an actual Child, named <var>kid</var>.
+
+<p>
+  We never set the value of the <var>inherited</var> property on <var>Child</var> or on <var>kid</var> itself. If we ask for <var>kid.inherited</var>, it's technically <var>undefined</var> on the actual <var>kid</var> object, but before returning a value JavaScript will walk up the prototype chain, looking for it there. <var>kid</var>'s prototype is the same as any Child, meaning that it's a Parent. Since Parent objects <i>do</i> have an <var>inherited</var> property, JavaScript returns its value there. If Parent had a prototype from another object, the chain would work up to that. Only if JavaScript reaches the end of the prototype chain and still hasn't found a matching property does it return <var>undefined</var>.
+
+<code>
+console.log(kid.notParent); // true
+console.log(kid.neverDefined); // undefined
+console.log(kid.inherited); // true
+</code>
+
+<p>
+  From the perspective of the prototype chain, "shadow" properties make more sense. When you set a property on a child object that has the same name as a property on the prototype, JavaScript stops looking at the object itself, and never bothers looking up the chain. To remove the property, and allow JavaScript to check the prototype, we can use the <var>delete</var> keyword.
+
+<code>
+//shadow the chain
+kid.inherited = false;
+console.log(kid.inherited); // false, because Child and Parent aren't checked
+
+//remove the shadowing property
+delete kid.inherited;
+console.log(kid.inherited); // true, via the prototype chain
+</code>
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]
