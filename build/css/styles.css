@@ -443,6 +443,13 @@ li.L9 {
   -ms-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 }
+.interactive.prototype-canvas {
+  font-weight: bold;
+}
+.interactive.prototype-canvas canvas {
+  border: 1px dotted black;
+  vertical-align: middle;
+}
 .blank {
   border: none;
   border-bottom: 1px dashed #888;
