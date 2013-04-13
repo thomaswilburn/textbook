@@ -103,7 +103,7 @@ var kid = new Child();
 </code>
 
 <p>
-  In the code above, we create two constructors. One, the Parent, is the base object. The other, the Child, is based on Parent: its prototype is a Parent object (but not <var>Parent</var>, which is a function, or <var>Parent.prototype</var>, which would make them "siblings"). Then we've created an actual Child, named <var>kid</var>.
+  In the code above, we create two constructors. One, the Parent, is the base object. The other, the Child, is based on Parent: its prototype is a "new" Parent, and we say that Child <mark>inherits from</mark> Parent. Because <var>Child</var>'s prototype is an instance of <var>Parent</var>, and not <var>Parent.prototype</var>, we can <mark>extend</mark> it with new properties that make it distinct from its ancestor (such as <var>notParent</var> above). Finally, we've created an actual Child, named <var>kid</var>.
 
 <p>
   We never set the value of the <var>inherited</var> property on <var>Child</var> or on <var>kid</var> itself. If we ask for <var>kid.inherited</var>, it's technically <var>undefined</var> on the actual <var>kid</var> object, but before returning a value JavaScript will walk up the prototype chain, looking for it there. <var>kid</var>'s prototype is the same as any Child, meaning that it's a Parent. Since Parent objects <i>do</i> have an <var>inherited</var> property, JavaScript returns its value there. If Parent had a prototype from another object, the chain would work up to that. Only if JavaScript reaches the end of the prototype chain and still hasn't found a matching property does it return <var>undefined</var>.
@@ -126,6 +126,114 @@ console.log(kid.inherited); // false, because Child and Parent aren't checked
 delete kid.inherited;
 console.log(kid.inherited); // true, via the prototype chain
 </code>
+
+<h2>Asteroids, Continued</h2>
+
+<p>
+  Keeping all this information about inheritance in mind, let's return to our Asteroids game. In the game's simplistic playing field, there are many kinds of objects: asteroids of three sizes, the player ship, and missiles. All of these objects are different in important ways, but they share many characteristics. They are all affected by inertia as they move, they are all onscreen at their <var>x</var> and <var>y</var> coordinates, and they must be tracked by the game engine for collisions and drawing. Perhaps we can simplify our game by making all these objects inherit from a single prototype that handles the way they're alike, but allows them to be different.
+
+<p>
+  The following code defines a <var>Sprite</var> constructor that will serve as the ancestor for all of our onscreen objects. It contains properties for screen position and speed, defines an <var>update()</var> method that moves them based on momentum, and provides an empty <var>draw()</var> method that does nothing.
+
+<code>
+//since this is just used for its prototype,
+//the constructor doesn't try to change it.
+var Sprite = function() {};
+Sprite.prototype = {
+  x: 0,
+  y: 0,
+  dx: 0, //horizontal speed
+  dy: 0, //vertical speed
+  update: function() {
+    //update with current "drift" momentum
+    this.x = this.x + this.dx;
+    tihs.y = this.y + this.dy;
+  },
+  draw: function() {}
+}
+</code>
+
+<p>
+  Sprite is pretty simple, because it only serves as a way to share functionality between our real classes, such as our Asteroids.
+
+<code>
+var Asteroid = function(size, x, y) {
+  this.size = size || "large";
+  this.x = x || 0;
+  this.y = y || 0;
+  this.dx = Math.random() * 6 - 3;
+  this.dy = Math.random() * 6 - 3;
+}
+Asteroid.prototype = new Sprite();
+
+//Now we'll add new properties where Asteroids are not like Sprites
+//starting with its appearance.
+Asteroid.prototype.draw = function() {
+  canvasContext.beginPath();
+  canvasContext.arc(this.x, this.y, 20, 0, Math.PI * 2);
+  canvasContext.stroke();
+}
+
+//Here's a player ship as well
+var Ship = function(x, y) {
+  this.x = x || 0;
+  this.y = y || 0;
+  //the ship starts stationary, no need to set dx and dy
+}
+Ship.prototype = new Sprite();
+
+//Ships also look different from asteroids, so we'll replace draw()
+Ship.prototype.draw = function() {
+  canvasContext.beginPath();
+  canvasContext.moveTo(this.x, this.y - 10);
+  canvasContext.lineTo(this.x + 5, this.y + 10);
+  canvasContext.lineTo(this.x - 5, this.y + 10);
+  canvasContext.lineTo(this.x, this.y - 10);
+  canvasContext.stroke();
+}
+</code>
+
+  Now for the real gains: because our ships and our asteroids share a common set of functions and properties, we can treat them identically when it comes to animating our game.
+
+<code>
+//set up all objects
+var sprites = [];
+var player = new Ship();
+sprites.push(player);
+//create 100 asteroids in the same array
+for (var i = 0; i &lt; 100; i++) {
+  var asteroid = new Asteroid();
+  sprites.push(asteroid);
+}
+
+//drawing loop
+var animate = function() {
+  //clear the screen
+  canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+  for (var i = 0; i &lt; sprites.length; i++) {
+    //get each sprite
+    var s = sprites[i];
+    //update its position using Sprite's update() function
+    s.update();
+    //draw using the object type's unique draw() method
+    s.draw();
+  }
+  //set timer for next frame
+  setTimeout(animate, 10);
+}
+
+//start animation loop
+animate();
+</code>
+
+<p>
+  This code has a long way to go before it's a real game--we haven't added any inputs, our asteroids all start at the same position, and we're not yet testing for collisions. But by using inheritance and constructor functions, we can share code between objects when possible. Now, if we want to change our physics for all objects, we can update anything that inherits from Sprite by changing code in just one place, instead of in each object's unique prototype. We can start to see the power of object-oriented programming in this way: code is easy to reuse and update, while still working in logical units that are easy to think about and debug.
+
+<h2>Practice Questions</h2>
+
+<ol>
+  <li> 
+</ol>
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
