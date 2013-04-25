@@ -1,0 +1,62 @@
+[@import snippets/head.html title=AJAX]
+
+<h2>Live, From Your Server</h2>
+
+<p>
+  The rise of AJAX is probably the biggest success story of the web. An acronym for "Asynchronous JavaScript and XML" (even though it was never restricted to the XML data format), AJAX is the process by which JavaScript can request more data from the server without refreshing the page. It's what makes modern web-based e-mail useful, loads the "infinite stream" of many social networks, and powers the autocomplete behavior on search engines. Thanks to AJAX, we can write web applications with fast, responsive user interfaces, while still leaving the heavy data-lifting to the server.
+
+<p>
+  One of jQuery's biggest advantages in its early days was that it smoothed over the cross-browser differences in performing AJAX requests, which continue to be a pitfall with this particular browser feature. It also provides a shorter, simpler API for making these requests, since the built-in browser methods use long, frustrating names like <var>XMLHttpRequest</var> and a set of hard-to-remember numerical status codes.
+
+<aside>
+
+  <h1>Logging AJAX</h1>
+
+  <p>
+    In Firefox (both Firebug and the built-in developer tools), AJAX requests show up on the console, which is extremely helpful for debugging. For whatever reason, Chrome does not show requests in the console by default. At least for this chapter, you'll want to enable their display. To do so, open your Chrome dev tools and click the gear in the lower-right corner of the panel, then check the box marked "Log XMLHttpRequests." You'll be glad that you did.
+
+</aside>
+
+<p>
+  Making our first AJAX request is simple. Open up your browser console on this page, and type the following code:
+
+<code>
+$.ajax({url: "index.html"});
+</code>
+
+  You should see two lines on the console in response. The first is the return value from <var>$.ajax</var>. The second is a log of the request itself, which will usually include the request method (usually "GET" or "POST"), URL, and time taken for the server to respond.
+
+<p>
+  What you don't see is the response itself--in this case, the contents of <var>index.html</var>. Remember the first A in AJAX: asynchronous. When you make a request to the server via JavaScript, the browser fires off that request but then continues running your code. Remember, your browser runs JavaScript in lockstep with its user interface, and these requests could take up to several seconds to complete. If we paused JavaScript while the request went to the server and returned, we'd have to freeze the rest of the browser as well, which would be a terrible experience for users. So how do we keep running code, but handle the server's response when it finally comes in?
+
+<p>
+  The answer lies in that request object that <var>$.ajax</var> returned. The request is a special kind of object called a <mark>promise</mark> (also known as a <mark>deferred</mark> or <mark>future</mark>, depending on the JavaScript library). A promise represents a one-time process, and allows you to attach functions that are called when that process either succeeds or fails. We can use the promise's <var>done()</var> method to attach a function, and jQuery will call it when the request finishes:
+
+<code>
+var request = $.ajax({
+  url: "index.html"
+});
+
+request.done(function(data) {
+  console.log("This will run second.");
+  //here's the response!
+  console.log(data);
+});
+
+request.fail(function() {
+  console.log("Called if the request was unsuccessful.")
+});
+
+console.log("This will run first.")
+</code>
+
+<p>
+  This pattern should look a little familiar: it's not that different from working with browser events and jQuery's <var>on()</var> method, including the fact that our callback functions will run out of order with the rest of our code. Promises actually provide a lot of interesting ways to keep asynchronicity from being too headache-inducing, but what we're mostly concerned with is <var>done()</var> and <var>fail()</var>.
+
+<h2>Request Customization</h2>
+
+<p>
+  
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]
