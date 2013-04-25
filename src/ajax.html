@@ -18,7 +18,7 @@
 </aside>
 
 <p>
-  Making our first AJAX request is simple. Open up your browser console on this page, and type the following code:
+  Making our first AJAX request is simple. Open up your browser console on this page, and type the following code, which calls <var>$.ajax</var> with a configuration object as its only argument, specifying the URL:
 
 <code>
 $.ajax({url: "index.html"});
@@ -27,7 +27,7 @@ $.ajax({url: "index.html"});
   You should see two lines on the console in response. The first is the return value from <var>$.ajax</var>. The second is a log of the request itself, which will usually include the request method (usually "GET" or "POST"), URL, and time taken for the server to respond.
 
 <p>
-  What you don't see is the response itself--in this case, the contents of <var>index.html</var>. Remember the first A in AJAX: asynchronous. When you make a request to the server via JavaScript, the browser fires off that request but then continues running your code. Remember, your browser runs JavaScript in lockstep with its user interface, and these requests could take up to several seconds to complete. If we paused JavaScript while the request went to the server and returned, we'd have to freeze the rest of the browser as well, which would be a terrible experience for users. So how do we keep running code, but handle the server's response when it finally comes in?
+  What you don't see on the console is the response to this request--in this case, the contents of <var>index.html</var>. Remember the first A in AJAX: asynchronous. When you make a request to the server via JavaScript, the browser fires off that request but then continues running your code. Remember, your browser runs JavaScript in lockstep with its user interface, and these requests could take up to several seconds to complete. If we paused JavaScript while the request went to the server and returned, we'd have to freeze the rest of the browser as well, which would be a terrible experience for users. So how do we keep running code, but handle the server's response when it finally comes in?
 
 <p>
   The answer lies in that request object that <var>$.ajax</var> returned. The request is a special kind of object called a <mark>promise</mark> (also known as a <mark>deferred</mark> or <mark>future</mark>, depending on the JavaScript library). A promise represents a one-time process, and allows you to attach functions that are called when that process either succeeds or fails. We can use the promise's <var>done()</var> method to attach a function, and jQuery will call it when the request finishes:
@@ -56,7 +56,64 @@ console.log("This will run first.")
 <h2>Request Customization</h2>
 
 <p>
-  
+  To make AJAX useful, we need to be able to customize our request more than just asking for a specific URL. We may want to add parameters to it, to ask for specific information, or send the contents of a form to its handler on the server without requiring a page refresh. To do so, we'll fill in the configuration object we pass as <var>$.ajax</var>'s argument with a few new properties. The complete list of settings is available at <a href="http://api.jquery.com/jQuery.ajax/">the jQuery documentation page</a>, but here are some of the more common settings.
+
+<table>
+  <tr>
+    <td><var>data</var>
+    <td>An object or string containing parameters to be sent back to the server. jQuery will translate these into the URL parameters or request body, depending on the HTTP method used.
+  <tr>
+    <td><var>cache</var>
+    <td>By default, the browser caches most requests. Set this to <var>false</var> to make sure you get a fresh copy each time.
+  <tr>
+    <td><var>dataType</var>
+    <td>jQuery will try to figure out the type of data the server sends automatically, whether that's XML, JSON, or HTML. If it doesn't correctly guess, you can force it to use a specific type by setting this property.
+  <tr>
+    <td><var>type</var>
+    <td>The HTTP method to use for the request. This is "GET" for most requests and "POST" when sending data to a form handler or web service. You can also use the other HTTP verbs, such as "PUT" or "DELETE" in most modern browsers, but these are more rare.
+</table>
+
+<p>
+  Let's say that we wanted to submit a form to a server without requiring a page refresh. jQuery provides a helper function, named <var>serialize()</var>, to collect the form values for transmission, but we'll need to set a few extra parameters. The following code causes clicks on the form's submit button to send via AJAX instead.
+
+<code>
+//when you click the submit button...
+$('form button, form input[type=submit]').on('click', function(e) {
+  //cancel the normal form behavior
+  e.preventDefault();
+
+  //gather up the form's values
+  var form = $(this).closest('form');
+  var formData = form.serialize();
+
+  //send the request
+  var request = $.ajax({
+    url: "formHandler.php",
+    data: formData,
+    type: "POST" //forms are always posted
+  });
+
+  //temporarily replace the form, to prevent double-submit
+  form.html("Please wait...");
+
+  //when the server replies...
+  request.done(function(response) {
+    //replace the form contents with the response
+    form.html(response);
+  });
+
+  //if something went wrong
+  request.fail(function() {
+    form.html("Sorry, something's gone wrong. Please try again later.")
+  });
+
+});
+</code>
+
+<p>
+  The beauty of this particular approach is that we don't need to change anything on the server to make it work. As far as it is concerned, it got a form submission just like any other, and responded to it as normal. But our users did not have to wait for a full page refresh, or wonder if the information was going through. Their experience was instantly responsive, with a 
+
+
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
