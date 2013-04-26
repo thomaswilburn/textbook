@@ -50,6 +50,24 @@ request.fail(function() {
 console.log("This will run first.")
 </code>
 
+<aside>
+
+  <h1>Cross Origin Hackery</h1>
+
+  <p>
+    AJAX is a powerful tool for building interactive applications on the web. It's also a huge security hole waiting to happen: if a malicious hacker manages to inject any JavaScript onto your page, it has access to your browser cookies, local storage information, and possibly any sites for which you're currently signed in. As an attempt to minimize the damage an attacker can do, browsers implement something called <mark>Same Origin Policy</mark> for AJAX requests.
+
+  <p>
+    Essentially, scripts can only communicate with the current site (determined by domain name) via AJAX, and can't send information to other sites. In many browsers, AJAX is also locked down when opening files from the local hard drive, meaning that you will need to run a web server either locally or remotely to make requests.
+
+  <p>
+    As a security measure, this lasted roughly a minute before someone thought of a loophole around it. JavaScript that wants to talk to an outside server could always use an image tag's <var>src</var> attribute to send a request to a remote server. It can add a &lt;script&gt; tag with a source from anywhere (a sometimes-useful hole known as JSONP). It can change your window's location, or set cookies in order to fool the server or force you to log in or out.
+
+  <p>
+    In modern browsers, prompted by the fact that AJAX security was leaky as swiss cheese, browser makers have added <mark>Cross-Origin Requests</mark> (CORS) to the XMLHttpRequest object that powers AJAX. Using this addition, you can make a request to different domains as long as the server on the other end sets a special header in the reply.
+
+</aside>
+
 <p>
   This pattern should look a little familiar: it's not that different from working with browser events and jQuery's <var>on()</var> method, including the fact that our callback functions will run out of order with the rest of our code. Promises actually provide a lot of interesting ways to keep asynchronicity from being too headache-inducing, but what we're mostly concerned with is <var>done()</var> and <var>fail()</var>.
 
@@ -116,9 +134,56 @@ $('form button, form input[type=submit]').on('click', function(e) {
 <h2>JSON: Not Just for Friday the 13th</h2>
 
 <p>
-  
+  We've mentioned JSON once or twice now. It stands for <mark>JavaScript Object Notation</mark>, and it's a format for exchanging information on the web that will look pretty familiar to you. Here's a sample:
 
+<code>
+{
+  "author": {
+    "last": "Herbert",
+    "first": "Frank"
+  },
+  "books": ["Dune", "Children of Dune"],
+  "authorID": 927492,
+  "local": false
+}
+</code>
 
+  That's right: JSON is just JavaScript object literals, with some additional rules applied for strictness. Those rules are:
+
+  <ul>
+    <li> All property names must be quoted using double-quotes.
+    <li> Only primitive values and collections are allowed: no functions, and no JavaScript expressions
+    <li> All strings must be quoted in double-quotes.
+  </ul>
+
+<p>
+  JSON has become extremely popular even outside of JavaScript as a format for storing and transferring data. Compared to other formats, like XML, it's compact and has relatively little "noise" around its values. When we communicate over AJAX, it's common to use JSON as a way of expressing the parameters of our request and its results. If a server replies as JSON, jQuery will automatically translate the response into a JavaScript object before passing it to your request's callback function. You can also perform this translation manually using the <var>JSON</var> object in your browser:
+
+<code>
+var data = {
+  "hello": "World"
+}
+
+//This converts from data to JSON text.
+//Please forgive the incredibly stupid "stringify" name
+var jsonString = JSON.stringify(data);
+
+//We can change it back with JSON.parse()
+var decoded = JSON.parse(jsonString);
+</code>
+
+<h2>Example Code</h2>
+
+<p>
+  Let's build a basic AJAX-powered autocomplete. For the purposes of the code below, assume that the service at <var>http://youcompleteme.com</var> will return a JSON array of suggestions when sent a request with the current input contents.
+
+//TODO ADD AUTOCOMPLETE CODE
+
+<h2>Practice Questions</h2>
+
+  <ol>
+    <li> 
+  </ol>
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
