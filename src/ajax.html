@@ -1,0 +1,189 @@
+[@import snippets/head.html title=AJAX]
+
+<h2>Live, From Your Server</h2>
+
+<p>
+  The rise of AJAX is probably the biggest success story of the web. An acronym for "Asynchronous JavaScript and XML" (even though it was never restricted to the XML data format), AJAX is the process by which JavaScript can request more data from the server without refreshing the page. It's what makes modern web-based e-mail useful, loads the "infinite stream" of many social networks, and powers the autocomplete behavior on search engines. Thanks to AJAX, we can write web applications with fast, responsive user interfaces, while still leaving the heavy data-lifting to the server.
+
+<p>
+  One of jQuery's biggest advantages in its early days was that it smoothed over the cross-browser differences in performing AJAX requests, which continue to be a pitfall with this particular browser feature. It also provides a shorter, simpler API for making these requests, since the built-in browser methods use long, frustrating names like <var>XMLHttpRequest</var> and a set of hard-to-remember numerical status codes.
+
+<aside>
+
+  <h1>Logging AJAX</h1>
+
+  <p>
+    In Firefox (both Firebug and the built-in developer tools), AJAX requests show up on the console, which is extremely helpful for debugging. For whatever reason, Chrome does not show requests in the console by default. At least for this chapter, you'll want to enable their display. To do so, open your Chrome dev tools and click the gear in the lower-right corner of the panel, then check the box marked "Log XMLHttpRequests." You'll be glad that you did.
+
+</aside>
+
+<p>
+  Making our first AJAX request is simple. Open up your browser console on this page, and type the following code, which calls <var>$.ajax</var> with a configuration object as its only argument, specifying the URL:
+
+<code>
+$.ajax({url: "index.html"});
+</code>
+
+  You should see two lines on the console in response. The first is the return value from <var>$.ajax</var>. The second is a log of the request itself, which will usually include the request method (usually "GET" or "POST"), URL, and time taken for the server to respond.
+
+<p>
+  What you don't see on the console is the response to this request--in this case, the contents of <var>index.html</var>. Remember the first A in AJAX: asynchronous. When you make a request to the server via JavaScript, the browser fires off that request but then continues running your code. Remember, your browser runs JavaScript in lockstep with its user interface, and these requests could take up to several seconds to complete. If we paused JavaScript while the request went to the server and returned, we'd have to freeze the rest of the browser as well, which would be a terrible experience for users. So how do we keep running code, but handle the server's response when it finally comes in?
+
+<p>
+  The answer lies in that request object that <var>$.ajax</var> returned. The request is a special kind of object called a <mark>promise</mark> (also known as a <mark>deferred</mark> or <mark>future</mark>, depending on the JavaScript library). A promise represents a one-time process, and allows you to attach functions that are called when that process either succeeds or fails. We can use the promise's <var>done()</var> method to attach a function, and jQuery will call it when the request finishes:
+
+<code>
+var request = $.ajax({
+  url: "index.html"
+});
+
+request.done(function(data) {
+  console.log("This will run second.");
+  //here's the response!
+  console.log(data);
+});
+
+request.fail(function() {
+  console.log("Called if the request was unsuccessful.")
+});
+
+console.log("This will run first.")
+</code>
+
+<aside>
+
+  <h1>Cross Origin Hackery</h1>
+
+  <p>
+    AJAX is a powerful tool for building interactive applications on the web. It's also a huge security hole waiting to happen: if a malicious hacker manages to inject any JavaScript onto your page, it has access to your browser cookies, local storage information, and possibly any sites for which you're currently signed in. As an attempt to minimize the damage an attacker can do, browsers implement something called <mark>Same Origin Policy</mark> for AJAX requests.
+
+  <p>
+    Essentially, scripts can only communicate with the current site (determined by domain name) via AJAX, and can't send information to other sites. In many browsers, AJAX is also locked down when opening files from the local hard drive, meaning that you will need to run a web server either locally or remotely to make requests.
+
+  <p>
+    As a security measure, this lasted roughly a minute before someone thought of a loophole around it. JavaScript that wants to talk to an outside server could always use an image tag's <var>src</var> attribute to send a request to a remote server. It can add a &lt;script&gt; tag with a source from anywhere (a sometimes-useful hole known as JSONP). It can change your window's location, or set cookies in order to fool the server or force you to log in or out.
+
+  <p>
+    In modern browsers, prompted by the fact that AJAX security was leaky as swiss cheese, browser makers have added <mark>Cross-Origin Requests</mark> (CORS) to the XMLHttpRequest object that powers AJAX. Using this addition, you can make a request to different domains as long as the server on the other end sets a special header in the reply.
+
+</aside>
+
+<p>
+  This pattern should look a little familiar: it's not that different from working with browser events and jQuery's <var>on()</var> method, including the fact that our callback functions will run out of order with the rest of our code. Promises actually provide a lot of interesting ways to keep asynchronicity from being too headache-inducing, but what we're mostly concerned with is <var>done()</var> and <var>fail()</var>.
+
+<h2>Request Customization</h2>
+
+<p>
+  To make AJAX useful, we need to be able to customize our request more than just asking for a specific URL. We may want to add parameters to it, to ask for specific information, or send the contents of a form to its handler on the server without requiring a page refresh. To do so, we'll fill in the configuration object we pass as <var>$.ajax</var>'s argument with a few new properties. The complete list of settings is available at <a href="http://api.jquery.com/jQuery.ajax/">the jQuery documentation page</a>, but here are some of the more common settings.
+
+<table>
+  <tr>
+    <td><var>data</var>
+    <td>An object or string containing parameters to be sent back to the server. jQuery will translate these into the URL parameters or request body, depending on the HTTP method used.
+  <tr>
+    <td><var>cache</var>
+    <td>By default, the browser caches most requests. Set this to <var>false</var> to make sure you get a fresh copy each time.
+  <tr>
+    <td><var>dataType</var>
+    <td>jQuery will try to figure out the type of data the server sends automatically, whether that's XML, JSON, or HTML. If it doesn't correctly guess, you can force it to use a specific type by setting this property.
+  <tr>
+    <td><var>type</var>
+    <td>The HTTP method to use for the request. This is "GET" for most requests and "POST" when sending data to a form handler or web service. You can also use the other HTTP verbs, such as "PUT" or "DELETE" in most modern browsers, but these are more rare.
+</table>
+
+<p>
+  Let's say that we wanted to submit a form to a server without requiring a page refresh. jQuery provides a helper function, named <var>serialize()</var>, to collect the form values for transmission, but we'll need to set a few extra parameters. The following code causes clicks on the form's submit button to send via AJAX instead.
+
+<code>
+//when you click the submit button...
+$('form button, form input[type=submit]').on('click', function(e) {
+  //cancel the normal form behavior
+  e.preventDefault();
+
+  //gather up the form's values
+  var form = $(this).closest('form');
+  var formData = form.serialize();
+
+  //send the request
+  var request = $.ajax({
+    url: "formHandler.php",
+    data: formData,
+    type: "POST" //forms are always posted
+  });
+
+  //temporarily replace the form, to prevent double-submit
+  form.html("Please wait...");
+
+  //when the server replies...
+  request.done(function(response) {
+    //replace the form contents with the response
+    form.html(response);
+  });
+
+  //if something went wrong
+  request.fail(function() {
+    form.html("Sorry, something's gone wrong. Please try again later.")
+  });
+
+});
+</code>
+
+<p>
+  The beauty of this particular approach is that we don't need to change anything on the server to make it work. As far as it is concerned, it got a form submission just like any other, and responded to it as normal. But our users did not have to wait for a full page refresh, or wonder if the information was going through. Their experience was instantly responsive, with helpful loading and error messages every step of the way. 
+
+<h2>JSON: Not Just for Friday the 13th</h2>
+
+<p>
+  We've mentioned JSON once or twice now. It stands for <mark>JavaScript Object Notation</mark>, and it's a format for exchanging information on the web that will look pretty familiar to you. Here's a sample:
+
+<code>
+{
+  "author": {
+    "last": "Herbert",
+    "first": "Frank"
+  },
+  "books": ["Dune", "Children of Dune"],
+  "authorID": 927492,
+  "local": false
+}
+</code>
+
+  That's right: JSON is just JavaScript object literals, with some additional rules applied for strictness. Those rules are:
+
+  <ul>
+    <li> All property names must be quoted using double-quotes.
+    <li> Only primitive values and collections are allowed: no functions, and no JavaScript expressions
+    <li> All strings must be quoted in double-quotes.
+  </ul>
+
+<p>
+  JSON has become extremely popular even outside of JavaScript as a format for storing and transferring data. Compared to other formats, like XML, it's compact and has relatively little "noise" around its values. When we communicate over AJAX, it's common to use JSON as a way of expressing the parameters of our request and its results. If a server replies as JSON, jQuery will automatically translate the response into a JavaScript object before passing it to your request's callback function. You can also perform this translation manually using the <var>JSON</var> object in your browser:
+
+<code>
+var data = {
+  "hello": "World"
+}
+
+//This converts from data to JSON text.
+//Please forgive the incredibly stupid "stringify" name
+var jsonString = JSON.stringify(data);
+
+//We can change it back with JSON.parse()
+var decoded = JSON.parse(jsonString);
+</code>
+
+<h2>Example Code</h2>
+
+<p>
+  Let's build a basic AJAX-powered autocomplete. For the purposes of the code below, assume that the service at <var>http://youcompleteme.com</var> will return a JSON array of suggestions when sent a request with the current input contents.
+
+//TODO ADD AUTOCOMPLETE CODE
+
+<h2>Practice Questions</h2>
+
+  <ol>
+    <li> 
+  </ol>
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]

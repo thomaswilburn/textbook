@@ -1,0 +1,17 @@
+{
+	"name": "savvy-js",
+	"preferGlobal": false,
+	"version": "0.1.0",
+	"author": "Thomas Wilburn <news@thomaswilburn.net>",
+	"description": "JavaScript for the Web Savvy",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/thomaswilburn/textbook.git"
+	},
+	"dependencies": {
+		"grunt": ">=0.4",
+		"grunt-contrib-watch": "*",
+		"less": "*"
+	},
+	"license": "MIT"
+}

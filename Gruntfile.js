@@ -121,14 +121,14 @@ module.exports = function(grunt) {
 
                 var importCode = match[0];//.replace(/\[@import|\]/g, '');
                 //chunker finds the attributes within the shortcode
-                var chunker = /\s([\w\/.]+)(?:=(['"]{0,1}).*?\2)?/g
+                var chunker = /\s([\w\/.]+)(?:=\w+|=(['"]{0,1}).*?\2)?/g
                 var attributes = importCode.match(chunker);
                 if (attributes == null) continue;
                 var importPath = attributes.shift().trim();
                 var params = {};
                 for (var i = 0; i < attributes.length; i++) {
                     var split = attributes[i].trim().split('=');
-                    if (typeof split[1] == 'string' && split[1][0].search(/['"]/) != -1) {
+                    if (typeof split[1] == 'string' && split[1][0] && split[1][0].search(/['"]/) != -1) {
                         split[1] = split[1].substr(1, split[1].length - 2);
                     }
                     params[split[0]] = split[1] || "";
