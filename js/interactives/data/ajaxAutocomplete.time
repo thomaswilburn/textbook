@@ -1,0 +1,48 @@
+@,0@$.ajax({
+@1,1@var request = $.ajax({
+@,1@    url: "http://youcompleteme.com/autocomplete",
+@,1@    dataType: "json",
+@,1@    data: {
+@,1@        q: "dog"
+@,1@    }
+@4,@var requestPending = false;
+@4,@
+@2,@$('#search').on('keyup', function() {
+@4,@    
+@4,@    if (requestPending) {
+@4,@        return;
+@4,@    }
+@2,@
+@2,@    var request = $.ajax({
+@2,@        url: "http://youcompleteme.com/autocomplete",
+@2,@        dataType: "json",
+@2,@        data: {
+@2,2@            q: "dog"
+@3,@            q: $(this).val();
+@2,@        }
+@2,@    });
+@4,@    
+@4,@    requestPending = true;
+@4,@    
+@2,@    request.done(function(data) {
+@4,@        requestPending = false;
+@2,@        $('#suggestion').html("Did you mean " + data.suggestions[0] + "?"); 
+@2,@    });
+@2,@
+});
+@1,1@request.done(function(data) {
+@1,1@    $('#suggestion').html("Did you mean " + data.suggestions[0] + "?"); 
+@1,1@});
+@@c:0;We'll start by making a sample request to the server, just to make sure that the service works. In this case, we're going to type "dog," for which autocomplete suggestions might range from "dog food" to "doggerel."@@
+@@c:1;The $.ajax function returns a promise object representing the outgoing request. We'll add a function to the <var>done()</var> handler of the request, which will prompt with the first item in the array that the server sends back. For reference, the server response probably looks something like this:
+
+{
+  suggestions: [
+    "dog food",
+    "dog training",
+    "doggy day care"
+  ]
+}@@
+@@c:2;Once we know the request works properly, we'll hook it up to the input search box. Of course, we're still just sending "dog" each time, no matter what the person has sent, but now we're doing so in response to keyup events.@@
+@@c:3;It's a simple change to make the request send actual query data now, just by retrieving the form value. Remember that inside the keyup listener, <var>this</var> is the #search input box.@@
+@@c:4;Finally, we don't want to flood the server on every request. Instead, we can create a variable that's used to track whether a request is out, and not send a new autocomplete request until the current one finishes.@@
