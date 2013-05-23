@@ -197,6 +197,12 @@ code + samp {
   margin-top: -1em;
   border-bottom: 1px dashed #888;
 }
+samp.pre {
+  white-space: pre;
+}
+samp.pre:before {
+  content: none;
+}
 /* Pretty printing styles. Used with prettify.js. */
 pre .str,
 code .str {
