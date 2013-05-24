@@ -60,7 +60,7 @@ document.cookie;
 </table>
 
 <p>
-  Getting the current cookies is also frustrating: you have to find your specific cookie within the long string value, then find the value that follows after the equals sign. This entire process is so frustrating, that even Mozilla provides a <a href="https://developer.mozilla.org/en-US/docs/Web/API/document.cookie">simpler get/set API sample</a> on the documentation page for <var>document.cookie</var>. We can, however, write a simpler wrapper around cookies in only a few lines of code.
+  Getting the current cookies is also frustrating: you have to find your specific cookie within the long string value, then find the value that follows after the equals sign. This entire process is so cumbersome that even Mozilla provides a <a href="https://developer.mozilla.org/en-US/docs/Web/API/document.cookie">simpler get/set API sample</a> on the documentation page for <var>document.cookie</var>. We can, however, write a simpler wrapper around cookies in only a few lines of code.
 
 <code>
 var getCookie = function(name) {
@@ -69,7 +69,7 @@ var getCookie = function(name) {
   var pairs = document.cookie.split(/;\s*/)
   for (var i = 0; i &lt; pairs.length; i++) {
     //split each pair into its key and value via the =
-    var split = pairs.split("=");
+    var split = pairs[i].split("=");
     //search for a key matching our name argument
     if (split[0] == name) {
       return split[1]
@@ -93,7 +93,35 @@ var setCookie = function(name, value) {
 <h2>Local Storage</h2>
 
 <p>
-  
+  In contrast with the cookie system, the <var>localStorage</var> and <var>sessionStorage</var> APIs were designed to be much easier to use. Both objects are attached to the <var>window</var> global, which means that we can refer to them directly, and they provide a set of easy methods for interacting with their contents. 
+
+<code>
+localStorage.setItem("one", "stored"); //store a value as "one"
+localStorage.getItem("one"); //returns "stored"
+localStorage.removeItem("one"); //deletes this item from storage
+
+localStorage.setItem("two", 2);
+//all items are stored as strings
+localStorage.getItem("two"); //returns "2"
+
+localStorage.length; //returns 1, since only "two" is still there
+localStorage.clear(); //removes all items
+
+//You can also treat localStorage as a regular object.
+localStorage["three"] = "hello, world";
+
+//sessionStorage works the same way, but will be cleared when the browser is closed
+sessionStorage.setItem("forgetMe", "true");
+</code>
+
+  Like cookies, <var>localStorage</var> is isolated on a per-site basis and will only store strings, but it can hold a much larger amount of data. If you want to store large objects, you can use the JSON parser built into the browser--<var>JSON.stringify()</var> to convert objects to text, and <var>JSON.parse()</var> to convert them back.
+
+<h2>Example Code</h2>
+
+<p>
+  Support for the local storage APIs is actually very good: it's in all modern browsers, including IE 8 and higher. That said, it's a good exercise to write a storage API that can seamlessly switch between cookies and <var>localStorage</var> in older browsers. We call this kind of fallback a <mark>polyfill</mark>: unlike a shim, it gives us a new API that degrades gracefully depending on the browser's capabilities. In many cases, given the general clumsiness of the built-in browser functions, it can actually be more pleasant than the real thing.
+
+[@import interactives/timelapse.html src="../../js/interactives/data/storage.time" id="storage"]
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]

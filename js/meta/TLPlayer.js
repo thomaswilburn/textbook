@@ -38,7 +38,7 @@ define(['jquery', 'meta/TimeLapse', 'google-code/prettify'], function($, TimeLap
         return;
       }
       var spans = [];
-      this.current = number;
+      this.current = number * 1;
       var data = this.timelapse.data.lines;
       for (var i = 0; i < data.length; i++) {
         var line = data[i];
