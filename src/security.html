@@ -18,10 +18,10 @@
     <li> Cross-site scripting (XSS)
     <li> Sensitive data exposure
     <li> Session hijacking
-    <li> Hostile users
+    <li> Cross-site request forgery
   </ol>
 
-  But above all, always remember that JavaScript is not--and will never be--a secure programming language. Don't trust it with your user's data, your own secrets, or any processes that you consider private, and you'll be fine.
+  You'll soon see that many of these mistakes overlap: an attacker may use a cross-site script to hijack another person's session, for example. It's important to keep your web applications protected from any of these flaws. But above all, always remember that JavaScript is not--and will never be--a secure programming language. Don't trust it with your user's data, your own secrets, or any processes that you consider private, and you'll be fine.
 
 <h2>Cross-site Scripting</h2>
 
@@ -48,7 +48,20 @@
   Web applications often track a user from page to page using a "session cookie," which identifies them on each request. These cookies are generally encrypted, so that no information is exposed to the browser in an unsafe form. But what about other information? One attack is to alter the session cookie, through JavaScript or otherwise, in order to either log them out or make them appear to the server as the attacker.
 
 <p>
-  Why would anyone want to log you in as themselves? The session cookie contains information that's tied to the user, but the browser's other storage mechanisms, like cookies and local storage, have no concept of "login information." If an attacker can change a login into something they control, they can get access to that personal information as if it were their own. 
+  Why would anyone want to log you in as themselves? The session cookie contains information that's tied to the user, but the browser's other storage mechanisms, like cookies and local storage, have no concept of "login information." If an attacker can change a login into something they control, they can get access to that personal information as if it were their own. On the other hand, if they can steal the cookie value, they can also masquerade as that user to remote servers as though they were logged in as their victim.
+
+<h2>Cross-site Request Forgery</h2>
+
+<p>
+  If an attacker can get control of the page, it's possible for them to make requests as that user. This is similar to session hijacking, but the purpose is different: instead of trying to access the user's information, the attacker causes the user to issue commands on their behalf. They might have the user's browser load a URL that downloads financial information, for example, or resets their password. Although JavaScript can't be used to do this directly, due to AJAX security policies, it's a simple matter to, say, create an &lt;img&gt; tag with the <var>src</var> attribute set to the desired address. 
+
+<p>
+  Request forgery attacks are prevented on the server side, by requiring a token of some kind to be sent along with the request, or by requiring all dangerous actions to take place over POST requests (as opposed to the GET requests that browsers issue when retrieving images and assets). From the JavaScript side, however, we should treat these as similar to XSS attacks: all inputs and outputs should be sanitized, to keep malicious tags from being inserted into the page.
+
+<h2>Safety First</h2>
+
+<p>
+  Security is rarely a top priority for developers, much less JavaScript developers. But as browsers expose more and more functionality to scripts, it's becoming increasingly important to be aware of practices that expose vulnerabilities for your visitors. For more information, you may want to read through the most recent OWASP <a href="https://owasp.org/index.php/Top_10_2013-Table_of_Contents">Top Ten Project</a>, which lists the most common vulnerabilities for the year, as well as ways to minimize or eliminate them from your web apps.
 
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
