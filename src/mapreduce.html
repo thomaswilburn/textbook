@@ -1,0 +1,120 @@
+[@import snippets/head.html title="Functional Programming"]
+
+<h2>Higher-order Functions</h2>
+
+<p>
+  Let's say that you were allergic to <var>for</var> loops--you don't like the syntax, maybe, or you dislike having to track a separate variable just for loop position. Could we write a function that does looping for us? First, let's write a function that just adds one to every item in an array that we pass in as the first argument.
+
+<code>
+var loop = function(array) {
+  for (var i = 0; i &lt; array.length; i++) {
+    array[i] = array[i] + 1;
+  }
+}
+</code>
+
+  That works for one particular loop, but we don't want to have to write a new function for every loop--that defeats the purpose. Instead, we want a general purpose function, where we can "fill in" the operation on each item.
+
+<p>
+  To solve this problem, remember that functions in JavaScript are also values, just like objects, numbers, strings, and booleans. They can be passed as arguments to a function--in fact, we've done so many times, every time we've added an event listener to an object. Here's an updated version of our loop function, but this time it will accept a function as input and call that function on each item in the array.
+
+<code>
+var loop = function(array, func) {
+  for (var i = 0; i &lt; array.length; i++) {
+    array[i] = func(array[i], i);
+  }
+}
+</code>
+
+<p>
+  Inside the loop, we're calling <var>func</var> with two arguments: the item value, and its position in the array. To use our new <var>loop</var> function, we just have to call it and pass in a function that will accept those two values, while returning the new value. Here's our add function again, rewritten into our generic <var>loop</var> form.
+
+<code>
+loop(function(item, i) {
+  return item + 1;
+});
+</code>
+
+  Tada! We've written a loop, but there's not a <var>for</var> in sight. Instead, it is isolated away inside of <var>loop</var>. Effectively, the function we pass in becomes the inner section of the loop.
+
+<p>
+  In this case, <var>loop</var> is what we call a <mark>higher-order function</mark>--it's a function that either operates on or returns other functions. The style of using functions this way is called (appropriately enough) <mark>functional programming</mark>, and it's extremely useful for several reasons. It helps to isolate variables, creates reusable units of operation, and (for some people) is less "noisy" and more readable than the original loop form.
+
+<h2>The Usual Suspects</h2>
+
+<p>
+  The function we've made above is more commonly known as an "each" or "forEach" operation. In most browsers (including IE9 and up), arrays have a <var>forEach</var> built in, like so:
+
+<code>
+list.forEach(function(item) {
+  return item + 1;
+});
+</code>
+
+  In addition to <var>forEach</var>, there are a number of other common functional operations that come built-in for working with arrays. The following list includes a short description of each, as well as a small example of use.
+
+  <ul>
+
+    <li> <b>Map</b>: <var>map</var> is similar to <var>forEach</var>, but it creates a new array instead of altering the existing values. You can think of it as "mapping" values in one array to the values in the next. 
+
+<code>
+var input = [1, 2, 3];
+var output = input.map(function(item) {
+  return item * item;
+});
+//output is [1, 4, 9], input is unchanged
+</code>
+
+    <li> <b>Reduce</b>: It's often useful to be able to turn an array into a single value--say, to find the sum of its items, or to locate one particular item. <var>reduce</var> is a functional way to perform that selection, although it's a little confusing. In addition to the reduction function, you'll need to pass in a starting value. The function you pass in will get the following arguments: the result of the previous operation (or the starting value), the current value, the index of the current value, and the array itself. The following code adds up all the numbers in an array.
+
+<code>
+var input = [1, 2, 3, 4];
+var sum = input.reduce(function(previous, current) {
+  return previous + current;
+}, 0);
+//sum is 10
+</code>
+
+    <li> <b>Filter</b>: This function does exactly what it sounds like. If the function you pass in returns something truthy, the value will be placed in the result array. Otherwise it will be discarded. This code, for example, returns an array that's filtered down to just names with fewer than four letters.
+
+<code>
+var names = ["Alice", "Bob", "Carl", "Dave", "Eve"];
+var short = names.filter(function(name) {
+  return name.length &lt; 4;
+});
+//short is ["Bob", "Eve"]
+</code>
+
+    <li> <b>Every</b> and <b>some</b>: These two functions serve as counterparts to each other, as a kind of true/false <var>reduce</var>. <var>every</var> returns true if every item in the array passes the conditional function you provide. <var>some</var> will return true if at least one does.
+
+<code>
+var input = [1, 5, 9, 10]
+var allLessThan9 = input.every(function(item) {
+  return item &lt; 9;
+});
+var someLessThan9 = input.some(function(item) {
+  return item &lt; 9;
+});
+//allLessThan9 is false
+//someLessThan9 is true
+</code>
+
+    <li> <b>Sort</b>: Unlike the other functions, which create new arrays with their results, <var>sort</var> operates in-place on the array. The comparison function that's passed in should take two values, and it return a number. If the number is less than zero, then the second argument should come first in the sorted array. If it's positive, the first argument comes first. If it's zero, they're the same value.
+
+<code>
+var names = ["Dave", "Bob", "Alice", "Eve", "Carl"];
+names.sort(function(a, b) {
+  if (a &lt; b) {
+    return 1;
+  }
+  if (a &gt; b) {
+    return -1;
+  }
+  return 0;
+});
+</code>
+
+  </ul>
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]
