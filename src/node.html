@@ -1,0 +1,70 @@
+[@import snippets/head.html title="Node.js"]
+
+<h2>JavaScript Everywhere</h2>
+
+<p>
+  In 2009, a programmer named Ryan Dahl took Google's V8 JavaScript engine, which had been built for the Chrome browser, and plunked it on top of a fully-asynchronous all-purpose library, including functions for opening files, serving web pages, and talking to other servers. The team called their platform Node.js, and it allowed developers to write JavaScript for the kinds of scripts where previously they would have turned to Python, PHP, or Ruby.
+
+<p>
+  Node was not the first time that JavaScript has been used for scripting regular desktop tasks outside of a web browser. Windows has supported scripts written in JavaScript for its Windows Scripting Host for many years now. But Node had several advantages that earlier attempts did not:
+
+  <ul>
+
+    <li> Node is cross-platform. You can run its scripts on Windows, Linux, or Mac, and they will behave identically on each.
+
+    <li> It's fast. V8 is one of the fastest scripting engines in existence, and is constantly improving. Node scripts often run much faster than their equivalents in Ruby or Python.
+
+    <li> It has a relatively good API. If someone has written a fair amount of JavaScript, using Node for server-side tasks is relatively painless, and allows developers to do less mental context-switching than they would do when working with multiple languages.
+
+    <li> It cooincided with the rise of many web developers for whom JavaScript was a first language, and a language that they liked.
+
+  </ul>
+
+<p>
+  The last item--that web developers were already comfortable and happy with JavaScript--cannot be overemphasized. As a result of that familiarity, Node has become a popular workflow tool for writing productivity enhancements. Technologies like LESS (for improving CSS), RequireJS (for organizing JavaScript), and Grunt (which creates automated build tools) are all written using Node.js. It's a must-have scripting platform for modern web programmers.
+
+<h2>Getting Started with Node.js</h2>
+
+<p>
+  Learning how to write for Node is a book all of its own, so this will only be a cursory glance at the basics. To get started, you should first download and install the Node engine from its <a href="http://nodejs.org/">home page</a> (on Ubuntu Linux, Node is now pre-installed with the OS as of version 12.04). Node will also install Node Package Manager (NPM), which you can use to easily install utility programs written in Node.
+
+<p>
+  As an example, let's install the LESS CSS preprocessor. LESS adds features like variables, imports, and nesting to CSS, making it easier to write maintainable and flexible CSS. Once you have Node installed, open up a command line and navigate to an empty directory, then type the following command:
+
+<code>
+npm install less
+</code>
+
+  You should see NPM download a few files, which it will place in the <var>node_modules</var> subdirectory. Normally, NPM installs modules <mark>locally</mark> so that each project gets its own copy of anything it uses. The package manager is set up this way so that if one project expects to see a module with version 1.0, and another expects version 2.0, they don't break each other. If you'd like to install a module globally so that you can use it anywhere, add a <var>-g</var> to the end of your install command, like so:
+
+<code>
+npm install less -g
+</code>
+
+<p>
+  Now we can try LESS to make sure it worked. Open up a new file named "test.less" in same directory where you ran NPM, and write the following:
+
+<code>
+@blue: #0033FF;
+
+body {
+  background: @blue;
+}
+</code>
+
+  Then, at the command line, type <var>less test.less > test.css</var>. LESS should create a new "test.css" file where variables have been replaced with their values, like this:
+
+<code>
+body {
+  background: #0033FF;
+}
+</code>
+
+  LESS is a tremendously powerful tool that can do a lot more than this, of course. For more information, be sure to visit its web site, <a href="http://lesscss.org">lesscss.org</a>.
+
+<h2>Writing Your Own Node Scripts</h2>
+
+
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]
