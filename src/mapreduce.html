@@ -116,5 +116,141 @@ names.sort(function(a, b) {
 
   </ul>
 
+<h2>Browser Compatibility</h2>
+
+<p>
+  Rarely, of course, do most people use all these functions. The most common functional operations by far are each, map, and filter. Of course, if you're in an older browser like IE8 or below, you don't have even those available. Luckily, jQuery provides its own versions of them, albeit slower and with a few quirks.
+
+<p>
+  <var>$.each()</var> can be called on both objects and arrays, unlike the built-in function which is only defined for arrays. It also swaps the order of arguments, with the index coming first and the item value second (these are different from the built-ins, because jQuery actually added its <var>each</var> before the browsers did). Because <var>each</var> is defined on the jQuery object, and not on arrays, you need to pass in the array you want to loop over as the first argument.
+
+<code>
+$.each(["A", "B", "C"], function(i, item) {
+  console.log(i, item); //logs out the index of each item, followed by its value
+});
+</code>
+
+<p>
+  jQuery's <var>map</var> function doubles as its version of <var>filter</var>. If you return <var>null</var> from the input function, that item will be removed from the resulting array--this is a handy property that would actually be nice in the regular <var>map</var> function. Like <var>$.each</var>, <var>$.map</var> also works on both arrays and objects (although it only returns arrays), and must take its target as the first argument, followed by the actual function that will do the mapping/filtering.
+
+<code>
+var pets = {
+  dog: "Wallace",
+  cat: "Neko",
+  hamster: "Nadia"
+}
+var startWithN = $.map(pets, function(prop, name) {
+  var letter = /^N/; //find names that start with N
+  if (letter.test(name)) {
+    return name;
+  } else {
+    return null; //filter out non-N names
+  }
+});
+//startWithN = ["Neko", "Nadia"];
+</code>
+
+<p>
+  Between these two functions, you have most of the necessary tools for working with lists using functions. If you find that you want more functional power, but you need to be compatible with older browsers, you may want to check out <a href="http://underscorejs.org/">Underscore.js</a>, a library that includes not just <var>each</var>, <var>map</var>, <var>reduce</var>, and <var>filter</var>, but a dizzying arry of other functions for working with arrays.
+
+<h2>Call (and Apply) Me Maybe</h2>
+
+<p>
+  Once you get used to the idea that functions are just values to be passed around and called by other functions, it opens up an enormous range of potential applications. In fact, most of the powerful ideas in JavaScript come from the flexibility of these <mark>first-class</mark> functions. For example, let's say that you wanted to be able to delay the execution of a function. You could call <var>setTimeout</var> every time, but that gets cumbersome. Instead, let's write a function that wraps our original function in a delay of our choosing.
+
+<code>
+var wait = function(f, delay) {
+  return function() {
+    setTimeout(f, delay);
+  };
+};
+
+//now, we can create a delayed version easily:
+var logHello = function() {
+  console.log("Hello");
+};
+
+var delayedHello = wait(logHello, 1000);
+
+//call the returned function
+delayedHello();
+//after a second, you'll see it say "Hello"
+</code>
+
+<p>
+  A more common scenario is that you'd want to throttle function calls, say inside a scroll listener that's called many times per second. You only want to run your function once every half-second, no matter how many times it's called. That's an easy functional order:
+
+<code>
+var throttle = function(f, delay) {
+  var snooze = false;
+  return function() {
+    if (snooze) {
+      //we're sleeping, do nothing
+      return;
+    }
+    //otherwise, run our function and set snooze temporarily
+    f();
+    snooze = true;
+    setTimout(function() {
+      //after a delay, wake back up
+      snooze = false;
+    }, delay);
+  }
+}
+</code>
+
+<p>
+  In both of these cases, however, we've called our function directly. Functions called this way, you may remember, have a <var>this</var> value of either the <var>window</var> object, or <var>undefined</var>. The same thing happens when we use <var>setTimeout</var>--because the function value is passed in, but it's not called in the context of its parent object, our desired value of <var>this</var> won't be preserved. However, we can force JavaScript to use a given <var>this</var> value by running functions with <var>call()</var> and <var>apply()</var> instead of direct invocation.
+
+<code>
+var logThis = function() {
+  console.log(this);
+}
+
+logThis(); //either window or undefined
+
+//by using call(), we can set the this value
+logThis.call(document); //logs out the document object
+
+logThis.call(logThis); //logs out itself
+</code>
+
+<p>
+  Both <var>call</var> and <var>apply</var> are methods that are attached to every JavaScript function. As their first argument, they take the context object that you'd like to be the value of <var>this</var> for the function. Their difference comes from what they expect next: <var>call</var> will pass its next arguments in as arguments to the function, while <var>apply</var> only accepts an array as its second argument, and will expand those into the called function's argument list.
+
+<code>
+var logArgs = function(a, b, c) {
+  console.log(this);
+  console.log(a, b, c);
+};
+
+logArgs.call(document, 1, 2, 3); //logs out the document, followed by 1, 2, 3
+
+logArgs.apply(jQuery, [4, 5, 6]); //logs out jQuery, followed by 4, 5, 6
+</code>
+
+<p>
+  Although <var>call</var> is more straightforward (and a little faster), <var>apply</var> actually enables a couple of useful tricks. For one thing, inside each function, its arguments are available as an array-like object named (of course) <var>arguments</var>. By passing this directly into apply, you can bind a function to a new permanent context, but still allow it to take arguments like normal:
+
+<code>
+var bind = function(f, context) {
+  return function() {
+    f.apply(context, arguments);
+  }
+};
+
+var bound = bind(function(a, b, c) {
+  console.log(this);
+  console.log(a, b, c);
+}, document);
+
+bound(1, 2, 3);
+//logs document for the value of this, not window
+//but also still logs out 1, 2, 3 as normal
+</code>
+
+<p>
+  Bound functions can be very useful for event listeners or object methods. If called directly or through a timeout, those methods would no longer know about their parent objects unless they're bound to its context. This is so handy, the same browsers that support functional operations like <var>map</var> also support <var>bind</var> as a third method on all functions alongside <var>call</var> and <var>apply</var>.
+
 [@import snippets/scripts.html]
 [@import snippets/foot.html]
