@@ -1,0 +1,127 @@
+[@import snippets/head.html title="Cookies and Local Storage"]
+
+<h2>Toll House</h2>
+
+<p>
+  The origins of the term "cookie" on the web are an interesting story. Early Netscape engineers needed a way for the server to identify a browser between requests. Normally, there's no information shared between one page load and another, unless it's awkwardly tagged onto the URL. This makes the web a <mark>stateless</mark> system: each page load is a fresh request all on its own. Unfortunately, there are many applications where we need to track users for legitimate reasons, such as keeping you logged into a service.
+
+<p>
+  To solve this problem, Netscape implemented a "magic cookie," which was then shortened to cookie. These are small pieces of information that the server could ask the browser to hold onto and send back to the server with every future request. So, for example, a retail site might ask the browser to store a cookie containing your encrypted user ID. From that point on, every page request will include the cookie, so that the server can decrypt your username and show you the correct shopping cart. The browser doesn't have the decryption key (it just passes back whatever value it was given), so your credentials are safe from prying eyes, which is ostensibly the "magic" part. It's not exactly Penn and Teller, but it's a useful sleight of hand.
+
+<p>
+  It's not just servers that can set cookies, however. JavaScript was given that ability early on, and for a long time it was the only option available if a programmer wanted to store information on a user's computer--say, for configuration settings, or to show pop-ups only to first-time visitors. JavaScript cookies are just like server cookies in that they're also sent to the server, which is an extremely useful capability. In the last few years, alternatives for local storage have been created for web browsers, but they don't get copied with requests and they're still not supported by all legacy browsers, so cookies still have their place in the ecosystem.
+
+<p>
+  Cookies have gotten a bad rap over the years, mostly due to the privacy implications of user-tracking cookies. Some of this is deserved, and some of it is evening-news hysteria. The truth is more complicated, since cookies actually operate under a fairly strict security policy. A cookie will only be sent back to the site that created it--other sites can't even tell it's there. Cookies can also only store a small amount of data. Finally, "HTTP-only" cookies are not available to JavaScript: they can only be set and read by a server, so malicious scripts can't read them.
+
+<h2>Your Cookie Recipe</h2>
+
+<p>
+  Because they are one of the oldest features in the browser (Netscape 2.0!), cookies don't really have an API so much as they have quirks and inconveniences. JavaScript can access the current document's cookies by using the <var>cookie</var> property on the <var>document</var> global object. You set and get cookies through this property, but they don't behave in consistent ways. To see what I mean, open up your dev tools on a site that is likely to have set cookies--say, <a href="http://www.google.com">google.com</a>--and type the following lines into the console:
+
+<code>
+document.cookie;
+document.cookie = "testCookie=1";
+document.cookie;
+</code>
+
+<p>
+  What you should see when you get the value of <var>document.cookie</var> is a long string of gibberish that Google uses to keep track of who you are between searches. The weird thing is that when you set <var>document.cookie</var> to a new value, that gibberish doesn't go away. Instead, your text gets jammed onto the end of it. That's because the string value of this property isn't really a string at all--it's a representation of the behind-the-scenes cookie storage for your browser.
+
+<p>
+  You can view this storage in several places, but the easiest is through a good developer toolkit. The Chrome dev tools display all cookies for a site on the Resources tab, and the Firebug extension for Firefox now includes a dedicated cookies tab. Sadly, the built-in Firefox dev tools do not yet include a good way to view cookies, but they are all listed behind a link in the "privacy" section of the Firefox options.
+
+<p>
+  Viewing the cookie we just set, you may notice that it's marked as a "session" cookie. This means it will only be stored as long as the browser is open. When the user closes their browser, all session cookies are erased. If we want to store this for a longer period of time, we need to add some extra parameters to our cookie string, as shown in the table below. Parameters must be separated from each other with semicolons.
+
+<table>
+  <tr>
+    <th>Parameter
+    <th>Notes
+  <tr>
+    <td>path
+    <td>This sets the path in which the cookie is applied. If you don't specify a path, it'll use the current folder, which is probably not what you want. Most people set the path equal to the root of the site, as in the example, so that their cookies are available anywhere.
+      <code>"val=1;path=/";</code>
+  <tr>
+    <td>domain
+    <td>Like the path, but for your domains. You can use this to set a cookie from a subdomain, such as <var>www.example.com</var>, across all subdomains for <var>example.com</var> by putting a dot in front of the value. If you leave this out, it'll use your current domain, which is usually fine.
+      <code>"val=1;domain=.example.com";</code>
+  <tr>
+    <td>expires
+    <td>The Expires parameter is the really important one, because it sets permanent (non-session cookies) that will last until their expiration date. The date must be expressed as a Greenwich Mean Time date string, so in the example we use the <var>Date()</var> constructor and its <var>toGMTString</var> method to create one for us, expiring on January 1, 2025.
+
+      <code>
+"val=1;expires=" + (new Date(2025, 0, 1).toGMTString());
+      </code>
+  <tr>
+    <td>secure
+    <td>Secure cookies are only sent to the server over an HTTPS connection. This is safer on public networks, and should be used for user-sensitive information whenever possible.
+      <code>"val=1;secure";</code>
+</table>
+
+<p>
+  Getting the current cookies is also frustrating: you have to find your specific cookie within the long string value, then find the value that follows after the equals sign. This entire process is so cumbersome that even Mozilla provides a <a href="https://developer.mozilla.org/en-US/docs/Web/API/document.cookie">simpler get/set API sample</a> on the documentation page for <var>document.cookie</var>. We can, however, write a simpler wrapper around cookies in only a few lines of code.
+
+<code>
+var getCookie = function(name) {
+  //divide the cookie string up by semicolons,
+  //which separate key/value pairs
+  var pairs = document.cookie.split(/;\s*/)
+  for (var i = 0; i &lt; pairs.length; i++) {
+    //split each pair into its key and value via the =
+    var split = pairs[i].split("=");
+    //search for a key matching our name argument
+    if (split[0] == name) {
+      return split[1]
+    }
+  }
+  //if nothing matched, return null
+  return null;
+}
+
+var setCookie = function(name, value) {
+  //let's just set long-lived cookies
+  var expires = new Date(2025, 0, 1).toGMTString();
+  var path = "/";
+  var set = name + "=" + value;
+  //join all these with semicolons between them
+  var cookieString = [set, path, expires].join(';');
+  document.cookie = cookieString;
+}
+</code>
+
+<h2>Local Storage</h2>
+
+<p>
+  In contrast with the cookie system, the <var>localStorage</var> and <var>sessionStorage</var> APIs were designed to be much easier to use. Both objects are attached to the <var>window</var> global, which means that we can refer to them directly, and they provide a set of easy methods for interacting with their contents. 
+
+<code>
+localStorage.setItem("one", "stored"); //store a value as "one"
+localStorage.getItem("one"); //returns "stored"
+localStorage.removeItem("one"); //deletes this item from storage
+
+localStorage.setItem("two", 2);
+//all items are stored as strings
+localStorage.getItem("two"); //returns "2"
+
+localStorage.length; //returns 1, since only "two" is still there
+localStorage.clear(); //removes all items
+
+//You can also treat localStorage as a regular object.
+localStorage["three"] = "hello, world";
+
+//sessionStorage works the same way, but will be cleared when the browser is closed
+sessionStorage.setItem("forgetMe", "true");
+</code>
+
+  Like cookies, <var>localStorage</var> is isolated on a per-site basis and will only store strings, but it can hold a much larger amount of data. If you want to store large objects, you can use the JSON parser built into the browser--<var>JSON.stringify()</var> to convert objects to text, and <var>JSON.parse()</var> to convert them back.
+
+<h2>Example Code</h2>
+
+<p>
+  Support for the local storage APIs is actually very good: it's in all modern browsers, including IE 8 and higher. That said, it's a good exercise to write a storage API that can seamlessly switch between cookies and <var>localStorage</var> in older browsers. We call this kind of fallback a <mark>polyfill</mark>: unlike a shim, it gives us a new API that degrades gracefully depending on the browser's capabilities. In many cases, given the general clumsiness of the built-in browser functions, it can actually be more pleasant than the real thing.
+
+[@import interactives/timelapse.html src="../../js/interactives/data/storage.time" id="storage"]
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]

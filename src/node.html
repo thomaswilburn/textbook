@@ -1,0 +1,110 @@
+[@import snippets/head.html title="Node.js"]
+
+<h2>JavaScript Everywhere</h2>
+
+<p>
+  In 2009, a programmer named Ryan Dahl took Google's V8 JavaScript engine, which had been built for the Chrome browser, and plunked it on top of a fully-asynchronous all-purpose library, including functions for opening files, serving web pages, and talking to other servers. The team called their platform Node.js, and it allowed developers to write JavaScript for the kinds of scripts where previously they would have turned to Python, PHP, or Ruby.
+
+<p>
+  Node was not the first time that JavaScript has been used for scripting regular desktop tasks outside of a web browser. Windows has supported scripts written in JavaScript for its Windows Scripting Host for many years now. But Node had several advantages that earlier attempts did not:
+
+  <ul>
+
+    <li> Node is cross-platform. You can run its scripts on Windows, Linux, or Mac, and they will behave identically on each.
+
+    <li> It's fast. V8 is one of the fastest scripting engines in existence, and is constantly improving. Node scripts often run much faster than their equivalents in Ruby or Python.
+
+    <li> It has a relatively good API. If someone has written a fair amount of JavaScript, using Node for server-side tasks is relatively painless, and allows developers to do less mental context-switching than they would do when working with multiple languages.
+
+    <li> It cooincided with the rise of many web developers for whom JavaScript was a first language, and a language that they liked.
+
+  </ul>
+
+<p>
+  The last item--that web developers were already comfortable and happy with JavaScript--cannot be overemphasized. As a result of that familiarity, Node has become a popular workflow tool for writing productivity enhancements. Technologies like <a href="http://lesscss.org">LESS</a> (for improving CSS), <a href="http://requirejs.org">RequireJS</a> (for organizing JavaScript), and <a href="http://gruntjs.com">Grunt</a> (which creates automated build tools) are all written using Node.js. It's a must-have scripting platform for modern web programmers, and sooner or later you'll probably want to have it installed.
+
+<h2>Getting Started with Node.js</h2>
+
+<p>
+  Learning how to write for Node is a book all of its own, so this will only be a cursory glance at the basics. To get started, you should first download and install the Node engine from its <a href="http://nodejs.org/">home page</a> (on Ubuntu Linux, Node is now pre-installed with the OS as of version 12.04). Node will also install Node Package Manager (NPM), which you can use to easily install utility programs written in Node.
+
+<p>
+  As an example, let's install the LESS CSS preprocessor. LESS adds features like variables, imports, and nesting to CSS, making it easier to write maintainable and flexible CSS. Once you have Node installed, open up a command line and navigate to an empty directory, then type the following command:
+
+<code>
+npm install less
+</code>
+
+  You should see NPM download a few files, which it will place in the <var>node_modules</var> subdirectory. Normally, NPM installs modules <mark>locally</mark> so that each project gets its own copy of anything it uses. The package manager is set up this way so that if one project expects to see a module with version 1.0, and another expects version 2.0, they don't break each other. If you'd like to install a module globally so that you can use it anywhere, add a <var>-g</var> to the end of your install command, like so:
+
+<code>
+npm install less -g
+</code>
+
+<p>
+  Now we can try LESS to make sure it worked. Open up a new file named "test.less" in same directory where you ran NPM, and write the following:
+
+<code>
+@blue: #0033FF;
+
+body {
+  background: @blue;
+}
+</code>
+
+  Then, at the command line, type <var>less test.less > test.css</var>. LESS should create a new "test.css" file where variables have been replaced with their values, like this:
+
+<code>
+body {
+  background: #0033FF;
+}
+</code>
+
+  LESS is a tremendously powerful tool that can do a lot more than this, of course. For more information, be sure to visit its web site, <a href="http://lesscss.org">lesscss.org</a>.
+
+<h2>Writing Your Own Node Scripts</h2>
+
+<p>
+  Using tools to make your development process easier is always a good thing, but sooner or later you may want to put together your own scripts, either to automate tasks or to speed up your workflow. For example, while working on this book, I wrote a few scripts on top of Node to take my source files, combine them with templates, and output them as the "built" textbook files. Writing Node scripts is not difficult, but it does have a few differences from other scripting languages that you should be aware of.
+
+<p>
+  Let's write a simple Node script to explore those differences. Save the following code in a text file named "myFirstNode.js" in a directory, then open a command line in that directory and type <var>node myFirstNode.js</var>.
+
+<code>
+console.log("Hello, World!");
+</code>
+
+  In Node, <var>console.log</var> writes to the standard command line output. Running this script should result in "Hello, World!" on the next line. You can write any JavaScript you want in your file, and use the console as output just as we did when we started this book. Unlike the browser version of JavaScript, Node is much more stripped-down--there's no DOM, and some of the other global variables (like <var>localStorage</var>) do not exist. However, there's a rich collection of modules that you can load into your script. Let's try one of them now.
+
+<code>
+var fs = require('fs'); //load the file system module
+
+fs.readDir(".", function(err, files) {
+  if (err) {
+    console.log("Couldn't read the directory!");
+    return;
+  }
+  for (var i = 0; i &lt; files.length; i++) {
+    var fileStats = fs.statSync(files[i]);
+    console.log(files[i], fileStats.size);
+  }
+});
+</code>
+
+<p>
+  This script reads the contents of a directory and lists each file, as well as its size. First, though, it loads the file system module by calling <var>require("fs")</var>. Node organizes its library of utility functions into modules, so that you can load only the specific functionality that you need. A list of all the built-in modules is available at the <a href="http://nodejs.org/api/">Node API documentation</a>. Any NPM modules that you install are also available through the <var>require</var> function. 
+
+<p>
+  Next, the script calls <var>fs.readDir</var>, which takes two arguments. The first is the directory that we want to read, which in this case is the current directory. The last argument of this function, like the last argument of most Node functions, is a callback function that will be called with the result. Callbacks are an important part of Node's design. In other scripting languages, where reading a file would be a single line of code, the script is basically paused while the file is read from the hard drive. This is easier for the programmer, but it's not very efficient because the computer is effectively idle while it waits for the disk to finish.
+
+<p>
+  In Node, by contrast, all input and output is <mark>non-blocking</mark>: the script does not pause. Instead, we pass those functions a callback to be run when the operation completes, and the scripting language continues on to run other operations while it waits. This is a little bit harder on developers, but much more efficient for writing network servers (an area where Node excels).
+
+<p>
+  Because Node is used as a general-purpose scripting language in addition to a server language, its developers have added traditional synchronous input and output functions to the library. After all, when something is only running on your own computer, efficiency is less important than programming ease-of-use. We use one of these functions in the script above as well: <var>fs.statSync</var> gets information about a file synchronously, and simply returns the result instead of requiring a callback function. Almost all the blocking functions are marked with "Sync" at the end of the name, so that you can easily tell which ones return directly, and which ones are written in the callback style.
+
+<p>
+  These are the most basic principles of writing Node scripts. If you'd like to know more, the <a href="http://nodejs.org/api/">Node documentation</a> is a good place to start. You can also look through the source for any modules that you've downloaded by simply opening up the <var>node_modules</var> directory and browsing around, which is a good place to start. You may also want to take a look at <a href="http://www.nodebeginner.org/">The Node Beginner Book</a>, an e-text that will walk you through creating a complete web server in Node.js.
+
+[@import snippets/scripts.html]
+[@import snippets/foot.html]
