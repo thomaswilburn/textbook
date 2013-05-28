@@ -1,0 +1,175 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie"><![endif]-->
+<!--[if gt IE 9]><!--><html><!--<![endif]-->
+<head>
+  <title>Javascript for the Web Savvy &bull; Source Control with Git</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+  require.config({
+    baseUrl: '../js',
+    paths: {
+      jquery: 'jquery-1.9.min'
+    }
+  });
+  </script>
+</head>
+<body>
+  <!--<div class="navigation">
+    <a href="./">&laquo; Table of Contents</a>
+  </div>-->
+  <h1>Source Control with Git</h1>
+  <div class="content">
+
+<h2>Why Source Control?</h2>
+
+<p>
+  When working with computer code, you may have run into a tricky situation: while making changes to try to solve a difficult problem, your code gets so far from its original state that it's nearly impossible to get it running again. It would be great if you could roll back your code to the last working version, and start again from there, wouldn't it?
+
+<p>
+  Or: you may be working with other people, and need to keep everyone's code in sync with everyone else's. Copying files around manually, or opening them off a shared folder, can cause problems when two people make changes in the same file, or if one person starts a very extensive project that breaks the program for everyone else. You really need a system where people can work independently, but still merge their changes together into a canonical location.
+
+<p>
+  Or: you want to open-source your code, so that other people can use it and possibly send you improvements. You want to keep track of who has contributed, so that everyone can get credit for their work, and you'd also prefer to be as safe as possible when accepting patches. Now you have all the problems of group collaboration, plus problems of hosting and security. 
+
+<p>
+  The solution to all three of these problems, and many more, is a source control system. At its simplest level, source control is just a way of keeping a copy of all the changes that are made to your code over time. However, most of them also offer powerful utilities for merging, managing, and sharing source code. For this chapter, we'll be talking about Git, but the basic concepts apply to other systems, such as Subversion and Mercurial.
+
+<h2>What does Git do?</h2>
+
+<p>
+  Git works by taking snapshots of your files and their contents at a given moment in time and storing those in a <mark>repository</mark>--a kind of database. Each of these snapshots is called a <mark>commit</mark>. Between one commit and the next, Git tracks the changes that you make--new files, changes to existing files, and file deletions. Using Git, we can track our work similar to the "track changes" feature in word processors. If we make a mistake, we can use Git to revert back to an earlier, working state. It's like a universal undo function for all your source code.
+
+<p>
+  Because Git tracks the changes between files over time, it can also pull changes from another repository and apply them to your files. Imagine that two people are working together on a JavaScript game. Alice is working on the physics programming, and Bob is doing AI code. When Alice commits a series of updates to the physics code, Bob can pull those changes from her repository, and instantly have all his files updated to match without losing the work he's been doing elsewhere. Even if they're working in the same file, Git will try to <mark>merge</mark> the changes together--automatically, if possible, or offering Bob a file with markers that he can use to resolve the conflict. Since Alice and Bob are still working on their own local copies, they don't have to worry about saving over each other's work by accident.
+
+<p>
+  As you can imagine, source control is crucial to working on software teams, and yet it's strangely under-taught by many academic programs. In this chapter, I hope to remedy that. Even working individually, and on non-traditional projects, source control systems can be incredibly helpful to you. In fact, this book was written using Git extensively to track its history and share the current version of the code between the two or three computers that I typically use for writing. You can visit its repository and see my commit history at <a href="https://github.com/thomaswilburn/textbook">https://github.com/thomaswilburn/textbook</a>.
+
+<h2>The World's Smallest Git Tutorial</h2>
+
+<aside>
+
+  <h1>git log</h1>
+
+  <p>
+    Git is a relatively recent innovation in source control systems. It was invented in 2005 by Linus Torvalds, the creator of Linux, and a number of other programmers working on the Linux kernel. Git is designed to handle very large projects with lots of contributors in a simple, elegant way.
+
+  <p>
+    One of the distinguishing features of Git is that it's a <i>distributed</i> version control system. In this context, "distributed" means that every person who is connected to a repository downloads not only the source files contained inside, but also the complete history of that repo. Unlike systems like Subversion, Git has no central server or "source of truth"--everyone is an equal peer, which means no-one can hold a project hostage.
+
+  <p>
+    In this, Git follows a long tradition of open-source software, including the belief that source code should be freely and widely available. The act of taking a project's code forward with a new team is called <mark>forking</mark>, and far from a hostile act, it's the fundamental way that open source gets better. Git's strength, as a distributed system, is that it makes forking easier than centralized source repositories.
+
+</aside>
+
+<p>
+  First, you'll need to download Git and install it on your computer. You can get an installer for all major operating systems <a href="http://git-scm.com/downloads">here</a>. Once you've done that, open up a command line (on Windows, the installer creates a shortcut in your Start Menu named "Git Bash" that opens a UNIX-like command line for you, but the regular Command Prompt or PowerShell programs will work as well). 
+
+<p>
+  If you haven't used a command line very much, this may be both exciting and scary. After all, it's not a particularly user-friendly interface. On the plus side, it feels a bit like being a hacker in a big-budget Hollywood film. But don't worry! For the purposes of this tutorial, what you mainly need to be able to do is explore and change directories, which are very similar commands across all three operating systems. To list all the files and folders in your current directory, use the <var>ls</var> or <var>dir</var> commands. To change directories, type <var>cd</var>, followed by the name of the directory you want to open, and press enter. To go up a directory, use <var>cd ..</var> (".." is always the directory above the current location).
+
+<p>
+  In this example, I open up the textbook folder on my desktop using Windows Powershell. It will look a little different on other operating systems, but the basics are the same.
+
+<code class="prettyprinted">
+<span class="com">//ls works on everything except the Windows Command Prompt
+//For Command Prompt, use "dir" instead.</span>
+C:\Users\Thomas Wilburn\Desktop&gt;<span class="typ">ls</span>
+
+
+    Directory: C:\Users\Thomas Wilburn\Desktop
+
+
+Mode                LastWriteTime     Length Name
+----                -------------     ------ ----
+d----         5/18/2013   9:38 AM            crypto2
+d----         1/27/2013   3:12 PM            SafeInCloud_Portable
+d----         3/26/2013   9:47 PM            SCCC
+d----         5/19/2013   1:29 PM            textbook
+d----         4/30/2013   8:34 PM            webgl
+-a---        11/28/2012  11:26 PM         59 chrome_remote.bat
+-a---          5/3/2013   1:35 PM        308 GitHub.appref-ms
+-a---         1/15/2013   1:12 PM       2208 Google Chrome.lnk
+-a---         7/13/2011   4:22 AM     483328 putty.exe
+
+C:\Users\Thomas Wilburn\Desktop&gt;<span class="typ">cd textbook</span>
+<span class="com">//The prompt updates when I change directories</span>
+C:\Users\Thomas Wilburn\Desktop\textbook&gt;
+</code>
+
+<p>
+  To get started, let's create a blank repository. First, make an empty folder, then navigate to it on the command line and type the following command.
+
+<code>
+git init
+</code>
+
+  You should see a response like "Initialized empty Git repository in Your/Directory/Path/.git/" after this command. If you can see hidden files in your file manager, you'll also see a ".git" folder created: this is where Git keeps its database of file changes.
+
+<p>
+  Now, create a file in the directory named "first.txt" and type several lines of text into it using your favorite editor (I always find a haiku to be a relaxing source of sample text). We're going to tell Git to track this file and save a snapshot of it. Back at the command line, type the following commands:
+
+<code>
+git add first.txt
+git commit -m "Hello, world!"
+</code>
+<samp class="pre">
+[master (root-commit) 306d187] Hello, world!
+ 1 file changed, 1 insertion(+)
+ create mode 100644 first.txt
+</samp>
+
+  The <var>git add</var> command tells git that we want it to add this file to our next snapshot. Git will stay aware of changes to all files in its directory, but it won't actually take snapshots unless you add them. You can always type <var>git add *</var> to add them all, if you've changed or created lots of files. The next command, <var>git commit</var>, actually saves the snapshot to Git's history. By appending <var>-m "Hello, world!"</var>, we also added a <mark>commit message</mark>, which we can use to keep track of what changes were made in this snapshot (it's probably a good idea to use more descriptive messages than "Hello, world" in your real repositories).
+
+<p>
+  To see the history of your repository, type:
+
+<code>
+git log
+</code>
+
+  You should see a list of all the commits you've made so far (just one, if you've been following along). You can make whatever changes you want to first.txt, or to other files, and commit those as well, and all their history will be saved. 
+
+<p>
+  Now, let's see how Git can help you recover from mistakes. First, erase the contents of first.txt and save it. Now, let's get the last snapshot back out of our repository. On your command line, run a <var>git log</var>, then look for the commit ID hash (highlighted below):
+
+<code class="prettyprinted">
+commit <span class="typ">306d187c36431db9e8adfa628bf221db243c44e3</span>
+Author: Thomas Wilburn <news@thomaswilburn.net>
+Date:   Thu May 23 01:16:56 2013 -0700
+
+    Hello, world!
+</code>
+
+  Every commit gets a long, hexadecimal ID number generated by the system. Luckily, you don't have to type the whole thing--if you give Git enough digits, it'll figure out the rest. For the commit above, to restore the first.txt file, we can use the following command:
+
+<code class="prettyprinted">
+git checkout 306d187 first.txt
+</code>
+
+  And voila! Our file contents are back to their snapshotted state. In fact, this can be even easier: if we know that we want to revert to the last commit (say, to roll back all the changes we've made since then), we can just check out the <mark>HEAD</mark> commit (as in "head of the line," since Git models your commits as a timeline flowing away into the past). Just type <var>git checkout head *</var> to revert all files to their previous versions.
+
+<h2>Beyond the Basics</h2>
+
+<p>
+  These few operations--<var>init</var>, <var>add</var>, <var>commit</var>, <var>log</var>, and <var>checkout</var>--are the minimum necessary to start using Git, but they don't even touch on its powerful features for collaboration and workflow. If you'd like to learn more, it's probably a good idea to start with a graphical client, which will abstract away the command line so that you can be immediately productive. There are a couple of good, free Git clients available: <a href="http://github.com">GitHub</a> offers an easy-to-use program that also connects with its hosted repository service, and <a href="http://www.sourcetreeapp.com/">SourceTree</a> provides a more powerful set of commands, including a timeline visualization of commits.
+
+<p>
+  Once you do feel like getting more well-acquainted with Git's command line options, be sure to check out the free <i>Pro Git</i> textbook available at the <a href="http://git-scm.com/book">Git home page</a>. It covers everything you'd want to know, and more. The page also links to videos and detailed reference materials.
+
+<p>
+  Finally, it would be a good idea to be familiar with other source control systems. The most common options in the open-source world are Subversion and Mercurial. Although they differ from Git in many ways, the basic workflow--committing and checking out--is much the same. 
+
+<script>
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code, pre').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
+  PR.prettyPrint();
+});
+</script>
+  </div>
+</body>
+</html>

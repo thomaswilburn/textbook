@@ -1,0 +1,98 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie"><![endif]-->
+<!--[if gt IE 9]><!--><html><!--<![endif]-->
+<head>
+  <title>Javascript for the Web Savvy &bull; JavaScript Security</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <script src="../js/require.js"></script>
+  <script>
+  require.config({
+    baseUrl: '../js',
+    paths: {
+      jquery: 'jquery-1.9.min'
+    }
+  });
+  </script>
+</head>
+<body>
+  <!--<div class="navigation">
+    <a href="./">&laquo; Table of Contents</a>
+  </div>-->
+  <h1>JavaScript Security</h1>
+  <div class="content">
+
+<h2>Abandon All Hope</h2>
+
+<p>
+  The most important thing to understand about JavaScript security is this: it doesn't exist.
+
+<p>
+  There is no such thing as secure JavaScript--at least in the browser. The only kind of secret JavaScript in the browser is JavaScript that no-one ever runs. It is an inherently unsafe programming environment, and anyone who tells you otherwise is lying.
+
+<p>
+  Of course, you could say this about much of the Internet as well. It's not that security on the web is impossible, but it's very hard, and people get it wrong on a regular basis. In many ways, the miracle of the Internet is that it manages to be safe enough for the multitude of sensitive applications--everything from banking to social networking--that run there. But JavaScript does not help matters, at least as it's currently implemented. The slippery way that the language treats objects, even built-in objects, makes it hard to secure. 
+
+<p>
+  In this chapter, we'll look at some common security mistakes that people make, and try to place those in a general security framework so that you won't make the same mistake. Those mistakes are:
+
+  <ol>
+    <li> Cross-site scripting (XSS)
+    <li> Sensitive data exposure
+    <li> Session hijacking
+    <li> Cross-site request forgery
+  </ol>
+
+  You'll soon see that many of these mistakes overlap: an attacker may use a cross-site script to hijack another person's session, for example. It's important to keep your web applications protected from any of these flaws. But above all, always remember that JavaScript is not--and will never be--a secure programming language. Don't trust it with your user's data, your own secrets, or any processes that you consider private, and you'll be fine.
+
+<h2>Cross-site Scripting</h2>
+
+<p>
+  All it takes to compromise a site and steal users' passwords, login sessions, and more, is a single line of JavaScript. If an attacker can get that line onto the page, it's all downhill from there. Why? Because with that line, they can create a script element that includes more hostile code, and from that point the full power of the DOM--event listeners, cookies, local storage, and more--is all theirs. Injecting JavaScript onto someone else's site this way is known as cross-site scripting, or XSS.
+
+<p>
+  According to <a href="https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29">the Open Web Application Security Project</a> (OWASP), XSS attacks are commonly created when a user manages to insert their own hostile content into the site, either by inserting it into the site's content or by taking over remotely-included content. For example, imagine a comment system that isn't careful to sanitize its input form. A hostile user might type a script tag into the comment, which would then be included on the page for subsequent visitors. JavaScript doesn't have to just run in actual script tags, either: it can be included in HTML attributes, altered by abruptly closing or opening new kinds of tags, or loaded as base 64-encoded content.
+
+<p>
+  Cross-site scripting can only be prevented by making sure that all inputs and outputs for your application are sanitized and treated as untrustworthy. A user should never be able to enter text into your page and get that text displayed directly to another person. Whenever possible, you should also avoid using unsafe JavaScript functions that turn text into executable script, such as <var>eval</var>, the Function constructor, or JSONP requests. This should be fairly easy: we've gotten through this book so far without using any of them, after all.
+
+<h2>Sensitive Data Exposure</h2>
+
+<p>
+  One of the main ways that many of us learn web programming is by studying the source code written by other people. It's one of the defining features, and strengths, of the web platform. But it also means that there's nothing hidden on the web: your source is completely available to other people, even if it's "obfuscated:" tools exist that can turn muddled code into perfectly readable source.
+
+<p>
+  This probably seems obvious, but it is amazing how many people forget this--leaving their sensitive encryption keys, passwords, and credentials right in their JavaScript source. Even if it's not in the source code, anything that's transmitted to a JavaScript application, such as over AJAX or other channels, can be examined in a debugger by an unscrupulous user. Basically, you must assume that if your JavaScript knows about it, so do visitors to your page.
+
+<h2>Session Hijacking</h2>
+
+<p>
+  Web applications often track a user from page to page using a "session cookie," which identifies them on each request. These cookies are generally encrypted, so that no information is exposed to the browser in an unsafe form. But what about other information? One attack is to alter the session cookie, through JavaScript or otherwise, in order to either log them out or make them appear to the server as the attacker.
+
+<p>
+  Why would anyone want to log you in as themselves? The session cookie contains information that's tied to the user, but the browser's other storage mechanisms, like cookies and local storage, have no concept of "login information." If an attacker can change a login into something they control, they can get access to that personal information as if it were their own. On the other hand, if they can steal the cookie value, they can also masquerade as that user to remote servers as though they were logged in as their victim.
+
+<h2>Cross-site Request Forgery</h2>
+
+<p>
+  If an attacker can get control of the page, it's possible for them to make requests as that user. This is similar to session hijacking, but the purpose is different: instead of trying to access the user's information, the attacker causes the user to issue commands on their behalf. They might have the user's browser load a URL that downloads financial information, for example, or resets their password. Although JavaScript can't be used to do this directly, due to AJAX security policies, it's a simple matter to, say, create an &lt;img&gt; tag with the <var>src</var> attribute set to the desired address. 
+
+<p>
+  Request forgery attacks are prevented on the server side, by requiring a token of some kind to be sent along with the request, or by requiring all dangerous actions to take place over POST requests (as opposed to the GET requests that browsers issue when retrieving images and assets). From the JavaScript side, however, we should treat these as similar to XSS attacks: all inputs and outputs should be sanitized, to keep malicious tags from being inserted into the page.
+
+<h2>Safety First</h2>
+
+<p>
+  Security is rarely a top priority for developers, much less JavaScript developers. But as browsers expose more and more functionality to scripts, it's becoming increasingly important to be aware of practices that expose vulnerabilities for your visitors. For more information, you may want to read through the most recent OWASP <a href="https://owasp.org/index.php/Top_10_2013-Table_of_Contents">Top Ten Project</a>, which lists the most common vulnerabilities for the year, as well as ways to minimize or eliminate them from your web apps.
+
+<script>
+require(['jquery', 'google-code/prettify'], function($) {
+  $('code, pre').each(function() { $(this).html($.trim(this.innerHTML)) }).addClass('prettyprint');
+  PR.prettyPrint();
+});
+</script>
+  </div>
+</body>
+</html>
