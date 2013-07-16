@@ -4,19 +4,24 @@ Textbook Tasks Remaining
 - Write sample code for functions chapter
   * Something that illustrates using functions to refactor
   * Spellchecker/sanitizer/image update?
+- Practice questions and exercises:
+  * AJAX
+  * Inheritance
+  * Forms
+  * Objects
+  * Conditionals
+- Redo/rethink interactives:
+  * light bulbs
+  * loops
+  * inheritance
 - Add sidebar icons--helpful tip, resources, history, etc.
-- See if we can hook into the Chrome Dev Tools to execute code there, steal the "opened dev tools" 
-thing from the tutorial elsewhere
-- Rethink the light bulb interactive--probably not accessible enough.
+- Add dev tools detection
+  * window.outerHeight - window.innerHeight > 150
+  * doesn't work if the window is undocked
+  * is there really a place where this is useful?
+  * better scenario: create more interactive sections where the page is mutable based on console ops
 - Switch to a nice set of web fonts
-- Write practice exercises for the conditionals chapter
-- Rewrite the loop example--needs to be more fun, less awkward. Think about leveraging esprima
 - Add a license for this thing
-- Write practice questions for objects chapter
-- Write practice questions for forms chapter
 - Add live animation example
-- Come up with a better inheritance example
 - Show asteroids live
-- Add more practice questions for inheritance chapter
-- Add practice questions to AJAX
 - NodeJS - write a simple server?
