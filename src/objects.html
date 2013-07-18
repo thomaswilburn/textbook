@@ -154,7 +154,7 @@ for (var key in group) {
   Instead, when we write a <var>for...in</var> loop, JavaScript will loop through the object for us and assign each key (<i>not</i> each value) to the variable we provide. You can name that variable anything you want, as long as it's followed by <var>in o</var>, where "o" is the name of the object you want to loop through. I always find it useful to create a new variable with a predictable name, as above (where I've named it "key" for self-evident reasons). 
 
 <p>
-  Remember, however, that this is not the value. It's the key--the string name of the property that we can use to find the actual value with the square brackets syntax, just as our array loops used <var>array[i]</var> to find the actual value of each item in <var>array</var>. Unfortunately, you can't use the dot syntax inside a loop. Only in the square brackets will the value of your key variable--and not its name--be used to look up a value from your object.
+  Remember, however, that this is not the value. It's the key--the string name of the property that we can use to find the actual value with the square brackets syntax, just as our array loops used <var>array[i]</var> to find the actual value of each item in <var>array</var>. Unfortunately, you can't use the dot syntax inside a loop, because we don't know the actual name of the variable during each repetition. Only in the square brackets will the value of your key variable--and not its name--be used to look up a value from your object.
 
 <code>
 var movie = {
@@ -233,7 +233,9 @@ console.log("The biggest earthquake took place in " + highest.location);
 <h2>Exercises and Practice Questions</h2>
 
 <ol>
-  <li>
+  <li> Pick three random objects from the room around you. Describe those as JavaScript objects. Try to pick at least one container-like object, which holds other things, and think about how to simulate its contents.
+  <li> Write a JavaScript snippet that counts the number of times that each letter occurs in a given piece of text, using an object to store the counts for each letter. To make this easier, it helps to remember that you can treat a string as an array in most browsers.
+  <li> In the earthquake example above, we found the highest magnitude of earthquake. Write another loop that will find the average magnitude of all the quake objects.
 </ol>
 
 [@import snippets/scripts.html]
