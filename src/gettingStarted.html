@@ -39,7 +39,7 @@
   You should see two more lines added to the console: first a line containing the command you just typed, and then the result (hopefully "4"). Congratulations! You've just become a JavaScript programmer!
 
 <p>
-  The code "2 + 2" is what we call an <mark>expression</mark>. An expression is any JavaScript code that can be reduced down into a value, like we did here. The simplest expression possible is just a number value on its own, without any kind of operation. Expressions can be built out of smaller expressions, like so:
+  The code "2 + 2" is what we call an <mark>expression</mark>. An expression is any JavaScript code that can be reduced down into a value (4, in this case). The simplest expression possible is just a number value on its own, without any kind of operation. Expressions can be built out of smaller expressions, like so:
 
 <code>
 1 + 2 * 3;
@@ -64,6 +64,16 @@
 <code>
 var result = 1 + 2 * 3;
 </code>
+
+<p>  
+  In this statement, we do four things:
+
+  <ol>
+    <li> We use the <var>var</var> keyword to tell JavaScript that we are declaring a variable.
+    <li> Next we write the name of the variable (in this case, "result"). Variable names can be any combination of letters and numbers with no spaces between them, but they must start with a letter. Uppercase and lowercase letters mean different things, so <var>dog</var> and <var>Dog</var> are two different variables.
+    <li> We write an equals sign to assign the value. In JavaScript, = does not mean "equals." Instead, it means to take the value on the right, and assign it to the variable on the left.
+    <li> Finally, we write the expression that will have its value assigned to the variable.
+  </ol>
 
 <aside>
 
@@ -117,23 +127,10 @@ var result = 1 + 2 * 3;
       yield
     </var>
 
-
-
-
-
   <p>
     You can use these words if you add something else to the variable name: <var>newItem</var> is allowed, for example, even though <var>new</var> is not.
 
 </aside>
-
-  In this statement, we do four things:
-
-  <ol>
-    <li> We use the <var>var</var> keyword to tell JavaScript that we are declaring a variable.
-    <li> Next we write the name of the variable (in this case, "result"). Variable names can be any combination of letters and numbers with no spaces between them, but they must start with a letter. Uppercase and lowercase letters mean different things, so <var>dog</var> and <var>Dog</var> are two different variables.
-    <li> We write an equals sign to assign the value. In JavaScript, = does not mean "equals." Instead, it means to take the value on the right, and assign it to the variable on the left.
-    <li> Finally, we write the expression that will have its value assigned to the variable.
-  </ol>
 
 <p>
   Our variable <var>result</var> now contains the value 7. If we want to use that value, we can just write the variable name into a new expression, like so:
