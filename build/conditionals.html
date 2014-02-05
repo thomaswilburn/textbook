@@ -10,7 +10,7 @@
   <script src="../js/require.js"></script>
   <script>
   require.config({
-    baseUrl: '../js',
+    baseUrl: 'js',
     paths: {
       jquery: 'jquery-1.9.min'
     }
@@ -369,7 +369,7 @@ var confirmation = confirm("Press OK to set confirmation to 'true.'");
 @4,@        console.log("It's delicious.");
 @5,@        
 @5,@        var hours = "The porridge makes you sleepy. Nap for how many hours?";
-@5,@        var sleep = prompt(question);
+@5,@        var sleep = prompt(hours);
 @5,@        sleep = Number(sleep);
 @5,@        
 @6,@        if (sleep < 2) {
@@ -433,10 +433,6 @@ require(['jquery', 'meta/TLPlayer'], function($, Player) {
   });
 });
 </script>
-
-<h2>Practice</h2>
-
-
 
 <script>
 require(['jquery', 'google-code/prettify'], function($) {

@@ -1,0 +1,37 @@
+var enter = confirm("You are outside a forest cabin. Press OK to enter.");
+@1,@
+@1,@if (enter) {
+@1,@    //go into the cabin
+@3,@    var bowl = prompt("You see three bowls of porridge. Eat bowl 1, 2, or 3?")
+@3,@    if (bowl == 1) {
+@3,@        console.log("It's too hot! THE END");
+@4,@    } else if (bowl == 2) {
+@4,@        console.log("It's too cold! THE END");
+@4,@    } else {
+@4,@        console.log("It's delicious.");
+@5,@        
+@5,@        var hours = "The porridge makes you sleepy. Nap for how many hours?";
+@5,@        var sleep = prompt(hours);
+@5,@        sleep = Number(sleep);
+@5,@        
+@6,@        if (sleep < 2) {
+@6,@            console.log("You wake just in time, and scamper away!");
+@6,@        } else {
+@6,@            console.log("You sleep to late, and are eaten by hungry bears.");
+@6,@        }
+@6,@        console.log("THE END.");
+@6,@        
+@3,@    }
+@1,@} else {
+@1,@    //didn't go in
+@2,@    console.log("And that's the world's shortest fable. THE END.")
+@1,@}
+@@c:0;We'll start by asking our opening true/false question.@@
+@@c:1;Since confirm() returns either true or false, we can just use its value directly for a conditional statement.@@
+@@c:2;We leave comments for ourselves as a way of keeping track of our position in the script logic. Here, we've filled in the branch for people who don't go into the cabin which, according to the horror movie wisdom of generations, is probably a wise move.@@
+@@c:3;Using prompt(), we can create another set of decisions inside the first conditional statement. Of course, with three bowls, our if/else statement will have to be more complicated.@@
+@@c:4;We can follow an else with another if statement to handle multiple contingencies. In this case, people can select from one of three bowls. 
+
+Of course, when we chain the statements together like this, the last one becomes our default, no matter what the user types in. If we wanted to be more strict, we could, but this'll be fine for now.@@
+@@c:5;For the last condition, we'll want to compare numbers. Unfortunately, prompt() only returns a string. We'll use Number() to convert it before we make any comparisons.@@
+@@c:6;For our last condition, take note of how we can handle commonality between the two branches. Since both of them are the end of the story, we can put our "THE END" outside the condition. To be honest, we could move it all the way out, after all the choices, and it would work even better.@@

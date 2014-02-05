@@ -10,7 +10,7 @@
   <script src="../js/require.js"></script>
   <script>
   require.config({
-    baseUrl: '../js',
+    baseUrl: 'js',
     paths: {
       jquery: 'jquery-1.9.min'
     }
@@ -478,6 +478,12 @@ require(['jquery', 'meta/TLPlayer'], function($, Player) {
 </script>
 
 <h2>Exercises and Practice Questions</h2>
+
+<ol>
+  <li> Try to write a regular expression that will check addresses. It may be easier if you break the address into several form inputs.
+  <li> Along with the <var>required</var> and <var>pattern</var> attributes, HTML5 introduced a number of new input tag types. What are these new types, and which ones are available in the browsers you target?
+  <li> Forms can be validated using JavaScript, but they can also be created in response to user actions. Using jQuery, create a form where a drop-down menu for "city" changes in when the user picks a state.
+</ol>
 
 <script>
 require(['jquery', 'google-code/prettify'], function($) {

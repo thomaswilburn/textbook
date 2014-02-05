@@ -1,0 +1,70 @@
+var ball = {
+    x: 10,
+    y: 10,
+    dx: 1,
+    dy: 1
+}
+@1,@
+@1,1@context.beginPath();
+@1,1@context.fillStyle = "#FF0";
+@1,1@//draw a circle 10 pixels in radius at the ball's location
+@1,1@context.arc(ball.x, ball.y, 10, 0, Math.PI * 2);
+@1,1@context.fill();
+@2,@var drawBall = function() {
+@2,@    context.beginPath();
+@2,@    context.fillStyle = "#FF0";
+@2,@    //draw a circle 10 pixels in radius at the ball's location
+@2,@    context.arc(ball.x, ball.y, 10, 0, Math.PI * 2);
+@2,@    context.fill();
+@2,@};
+@2,@
+@2,2@drawBall();
+@8,@var moveBall = function() {
+@8,@    //Adjust the x and y by the dx and dy properties
+@8,@    ball.x = ball.x + ball.dx;
+@8,@    ball.y = ball.y + ball.dy;
+@8,@    if (ball.y >= canvas.height || ball.y <= 0) {
+@8,@        ball.dy = ball.dy * -1;
+@8,@    }
+@8,@    if (ball.x >= canvas.width || ball.x <= 0) {
+@8,@        ball.dx = ball.dx * -1;
+@8,@    }
+@8,@};
+@8,@
+@3,@var animate = function() {
+@3,@    context.clearRect(0, 0, canvas.width, canvas.height);
+@3,@    drawBall();
+@4,7@    //Adjust the x and y by the dx and dy properties
+@4,7@    ball.x = ball.x + ball.dx;
+@4,7@    ball.y = ball.y + ball.dy;
+@5,6@    if (ball.y >= canvas.height) {
+@7,7@    if (ball.y >= canvas.height || ball.y <= 0) {
+@5,7@        ball.dy = ball.dy * -1;
+@5,7@    }
+@6,6@    if (ball.y <= 0) {
+@6,6@        ball.dy = ball.dy * -1;
+@7,7@    if (ball.x >= canvas.width || ball.x <= 0) {
+@7,7@        ball.dx = ball.dx * -1;
+@6,7@    }
+@6,6@    if (ball.x >= canvas.width) {
+@6,6@        ball.dx = ball.dx * -1
+@6,6@    }
+@6,6@    if (ball.x <= 0) {
+@6,6@        ball.dx = ball.dx * -1;
+@6,6@    }
+@8,@    moveBall();
+@3,@    setTimeout(animate, 100);
+@3,@};
+@3,@
+@3,@animate();
+@@c:0;We'll start with something very simple: creating an object to represent our bouncing ball. In addition to the <var>x</var> and <var>y</var> properties, which describe its position, we also have <var>dx</var> and <var>dy</var>. These two properties stand for the "delta," or the change, in both the x and y coordinates for each frame. Or to put it another way, they are the ball's vertical and horizontal speed.@@
+@@c:1;Now we can actually draw the ball, based on this object. So far, nothing too complicated.@@
+@@c:2;Let's put the drawing instructions inside a function, which will make them easier to trigger repeatedly.@@
+@@c:3;Next, we'll create an animation function that draws the ball every 100 milliseconds, calling itself using the same method described above. It also needs to clear the screen, or else our ball would leave trails behind.@@
+@@c:4;Of course, our animation just draws the same thing, over and over, every frame, so it doesn't look very animated. To make this work meaningful, we need to change the ball's position on each frame, thus creating an actual animation.@@
+@@c:5;If you load this code in a browser now (plus the code for getting a canvas context, of course), you'll see the ball animate. But it doesn't bounce: it moves down and to the right until it moves offscreen, where it probably keeps going forever, out of sight. We need to add some collision detection, so that it can bounce off the walls.
+
+We'll start with the bottom. When the y coordinate of the ball reaches the bottom of the canvas, we're going to reverse its <var>dx</var> property by multiplying it by -1. Now, instead of moving down, it will head upward.@@
+@@c:6;Adding bounce behavior to the other three sides is correspondingly simple: we're just checking to see if the ball has gone outside the bounds of the canvas element.@@
+@@c:7;In fact, since hitting the top and bottom, or the left and right, results in the same behavior, we can combine their conditions using the OR operator, represented by <var>||</var>.@@
+@@c:8;Finally, to make this as clean as possible, we might move our physics code into a separate function. This refactoring lets us keep our animation loop more descriptive, and if we needed to add more object later, it would be easier to repurpose a standalone function.@@

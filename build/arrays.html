@@ -10,7 +10,7 @@
   <script src="../js/require.js"></script>
   <script>
   require.config({
-    baseUrl: '../js',
+    baseUrl: 'js',
     paths: {
       jquery: 'jquery-1.9.min'
     }
@@ -85,6 +85,7 @@ console.log(alphabet[1]); //logs "b"
 <code>
 var todo = ['take out trash', 'walk dog', 'do laundry'];
 todo[3] = 'buy groceries'; //sets the fourth item (remember, we start at 0)
+
 todo = "learn about arrays"; 
 console.log(todo); //"learn about arrays"
 //Oh no! Instead of adding a fifth item, 
@@ -92,7 +93,7 @@ console.log(todo); //"learn about arrays"
 </code>
 
 <p>
-  You can store any kind of value in an array, including another array if you want (it ends up looking kind of like a spreadsheet). Most of the time, though, we try to make arrays contain the same type of value. We might have a list of numbers, or a list of names, but we wouldn't want to mix the two up, because it will make it hard to treat those values the same--and if we can't treat them the same, why put them in the same list together?
+  You can store any kind of value in an array, including another array if you want (think of it as a list of columns or rows, like a spreadsheet). Most of the time, though, we try to make arrays contain the same type of value. We might have a list of numbers, or a list of names, but we wouldn't want to mix the two up, because it will make it hard to treat those values the same--and if we can't treat them the same, why put them in the same list together?
 
 <p>
   In addition to the numbered values inside an array, they also have a special property that tells you how many items the array currently contains. This property is the <var>length</var> property. Since arrays start at index #0, the length will always be one more than the highest item index in the array--i.e., an array with a <var>length</var> of 4 will have its last item at <var>[3]</var>.

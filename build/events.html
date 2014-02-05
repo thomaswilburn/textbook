@@ -10,7 +10,7 @@
   <script src="../js/require.js"></script>
   <script>
   require.config({
-    baseUrl: '../js',
+    baseUrl: 'js',
     paths: {
       jquery: 'jquery-1.9.min'
     }
@@ -70,7 +70,7 @@ buttons.on('click', function() {
   In this code sample, we find all the &lt;button&gt; elements on the page as usual. Then, we use the jQuery <var>on()</var> function to ask the browser to notify us when "click" events happen on those buttons. <var>on()</var> takes two arguments: first, a string specifying the type of event (see the sidebar for more examples), and then a function to be called when the event occurs. Now, when you click any button on a page with this JavaScript, the console will log out a note.
 
 <p>
-  For this listener, we've written our listener as a <mark>function listeral</mark> without a name directly into the function arguments. But we can also write our listener function as a named variable, then pass that variable in to be registered.
+  For this listener, we've written our listener as a <mark>function literal</mark> without a name directly into the function arguments. But we can also write our listener function as a named variable, then pass that variable in to be registered.
 
 <code>
 var buttons = $('button');

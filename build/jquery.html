@@ -10,7 +10,7 @@
   <script src="../js/require.js"></script>
   <script>
   require.config({
-    baseUrl: '../js',
+    baseUrl: 'js',
     paths: {
       jquery: 'jquery-1.9.min'
     }
@@ -191,7 +191,7 @@ $('#substitute').html('This space intentionally left blank.');
 </code>
 
 <p>
-  Note that when we change the page using jQuery, for most change, jQuery will apply our alteration to all of the objects you selected--whether that's just one element (as above) or a long list. For example, <var>$('p').html('replaced')</var> will change the contents of every &lt;p&gt; tag on the page. You don't have to write a loop to affect each selected element, because jQuery will do it for you. Just make sure your selectors are accurate, since it will also happily affect elements that you didn't intend to target.
+  Note that when we change the page using jQuery, for most changes, jQuery will apply our alteration to all of the objects you selected--whether that's just one element (as above) or a long list. For example, <var>$('p').html('replaced')</var> will change the contents of every &lt;p&gt; tag on the page. You don't have to write a loop to affect each selected element, because jQuery will do it for you. Just make sure your selectors are accurate, since it will also happily affect elements that you didn't intend to target.
 
 <p>
   The <var>html()</var> function is, like many of jQuery's functions, both what we call a <mark>getter</mark> and a <mark>setter</mark>. By this, I mean that it can either get the inner HTML of an element, or it can set it. If you call <var>html()</var> without providing any input, as below, you'll get back the contents of the element.

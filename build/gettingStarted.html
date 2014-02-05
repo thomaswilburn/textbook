@@ -10,7 +10,7 @@
   <script src="../js/require.js"></script>
   <script>
   require.config({
-    baseUrl: '../js',
+    baseUrl: 'js',
     paths: {
       jquery: 'jquery-1.9.min'
     }
@@ -63,7 +63,7 @@
   You should see two more lines added to the console: first a line containing the command you just typed, and then the result (hopefully "4"). Congratulations! You've just become a JavaScript programmer!
 
 <p>
-  The code "2 + 2" is what we call an <mark>expression</mark>. An expression is any JavaScript code that can be reduced down into a value, like we did here. The simplest expression possible is just a number value on its own, without any kind of operation. Expressions can be built out of smaller expressions, like so:
+  The code "2 + 2" is what we call an <mark>expression</mark>. An expression is any JavaScript code that can be reduced down into a value (4, in this case). The simplest expression possible is just a number value on its own, without any kind of operation. Expressions can be built out of smaller expressions, like so:
 
 <code>
 1 + 2 * 3;
@@ -77,7 +77,7 @@
 </code>
 
 <p>
-  At the end of our statements, we add a semicolon to let JavaScript know that we're done with that line. If you leave it off, the code will still work. But it's often helpful to explicitly let the browser know that you're done with that particular thought.
+  At the end of our statements, we add a semicolon to let JavaScript know that we're done with that line. If you leave it off, the code will still work. But it's helpful to explicitly let the browser know that you're done with that particular thought, the same way that we end our sentences with punctuation even if the meaning is clear without any.
 
 <p>
   Often, when we are working with expressions, we may want to store the result so that we can use it later. For example, when balancing your checkbook, you might keep track of several subtotals within your budget (entertainment, food, rent) in order to see where your money is going. You wouldn't want to have to add up each subtotal every time you compared rent money to gas money.
@@ -88,6 +88,16 @@
 <code>
 var result = 1 + 2 * 3;
 </code>
+
+<p>  
+  In this statement, we do four things:
+
+  <ol>
+    <li> We use the <var>var</var> keyword to tell JavaScript that we are declaring a variable.
+    <li> Next we write the name of the variable (in this case, "result"). Variable names can be any combination of letters and numbers with no spaces between them, but they must start with a letter. Uppercase and lowercase letters mean different things, so <var>dog</var> and <var>Dog</var> are two different variables.
+    <li> We write an equals sign to assign the value. In JavaScript, = does not mean "equals." Instead, it means to take the value on the right, and assign it to the variable on the left.
+    <li> Finally, we write the expression that will have its value assigned to the variable.
+  </ol>
 
 <aside>
 
@@ -141,23 +151,10 @@ var result = 1 + 2 * 3;
       yield
     </var>
 
-
-
-
-
   <p>
-    You can use these words if you add something else to the variable name: <var>newItem</var> is allowed, even though <var>new</var> is not, for example.
+    You can use these words if you add something else to the variable name: <var>newItem</var> is allowed, for example, even though <var>new</var> is not.
 
 </aside>
-
-  In this statement, we do four things:
-
-  <ol>
-    <li> We use the <var>var</var> keyword to tell JavaScript that we are declaring a variable.
-    <li> Next we write the name of the variable (in this case, "result"). Variable names can be any combination of letters and numbers with no spaces between them, but they must start with a letter. Uppercase and lowercase letters mean different things, so <var>dog</var> and <var>Dog</var> are two different variables.
-    <li> We write an equals sign to assign the value. In JavaScript, = does not mean "equals." Instead, it means to take the value on the right, and assign it to the variable on the left.
-    <li> Finally, we write the expression that will have its value assigned to the variable.
-  </ol>
 
 <p>
   Our variable <var>result</var> now contains the value 7. If we want to use that value, we can just write the variable name into a new expression, like so:
@@ -273,7 +270,7 @@ var remaining = "You have $" + accountBalance + " remaining in your account.";
 </code>
 <samp>"You have $123.45 remaining in your account."</samp>
 
-  In this case, the number will be converted to a string for us, and combined with the other strings into a single sentence. That's good! But sometimes this automatic conversion isn't what we want. If we add two values together, thinking that they're both numbers, but one is a string, they'll get combined end-to-end instead of added together. In this case, we wanted the value 3, but we're not going to get it.
+  In this case, the number will be converted to a string for us, and combined with the other strings into a single sentence. That's good! But sometimes this automatic conversion <i>isn't</i> what we want. If we add two values together, thinking that they're both numbers, but one is a string, they'll get combined end-to-end instead of added together. In this case, we wanted the value 3, but we're not going to get it.
 
 <code>
 var numeric = 1;
@@ -300,7 +297,7 @@ typeof true
 <samp>"boolean"</samp>
 
 <p>
-  <var>typeof</var> returns a string containing the type of the variable being inspected. Once we know that a variable isn't what we want it to be, we can convert it between types with some simple operations. To convert a number to a string, you can use the <var>String()</var> function. A <mark>function</mark> is a special kind of JavaScript command. For now, just know that functions are usually followed by parentheses, and you place your input value inside of them. The function then evaluates to a value just like any other expression--in this case, it converts the number value into a text string.
+  <var>typeof</var> returns a string containing the type of the variable being inspected. Once we know that a variable isn't what we want it to be, we can convert it between types with some simple operations. To convert a number to a string, you can use the <var>String()</var> function. A <mark>function</mark> is a special kind of JavaScript command. For now, you only need to know that functions are usually followed by parentheses, and the value we want to be changed or used by the function goes between them. The function then evaluates to a value just like any other expression--in this case, it converts the number value into a text string.
 
 <code>
 var num = 2;
