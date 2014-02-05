@@ -1,0 +1,36 @@
+Textbook Tasks Remaining
+========================
+- Switch tools to Ractive
+- Write sample code for functions chapter
+  * Something that illustrates using functions to refactor
+  * Spellchecker/sanitizer/image update?
+- Practice questions and exercises:
+  * AJAX
+  * Inheritance
+  * Forms
+  * Objects
+  * Conditionals
+- Redo/rethink interactives:
+  * light bulbs
+    - Should demonstrate if/if else/if else if
+    - Maybe use a flow chart instead of light bulbs?
+    - Do people really have problems with if/else? 
+  * loops
+    - Let's use Excel instead of houses
+    - Can we use Esprima to generate the slo-mo?
+    - Show the live values using Angular
+  * inheritance
+    - show the "shadow" properties that are inherited on an object
+    - side-by-side code is probably better than the dot interactive
+- Add sidebar icons--helpful tip, resources, history, etc.
+- Add dev tools detection
+  * window.outerHeight - window.innerHeight > 150
+  * doesn't work if the window is undocked
+  * is there really a place where this is useful?
+  * better scenario: create more interactive sections where the page is mutable based on console ops
+  * Let's use Angular to make the page more reactive
+- Switch to a nice set of web fonts
+- Add a license for this thing
+- Add live animation example
+- Show asteroids live
+- NodeJS - write a simple server?

@@ -182,7 +182,18 @@ var decoded = JSON.parse(jsonString);
 <h2>Practice Questions</h2>
 
   <ol>
-    <li> 
+    <li> In the following code, the value of <var>remote</var> logged out to the console will be undefined, and not the value sent by the server. Why? How would we fix that?
+
+<code>
+var remote;
+var request = $.ajax({ url: "/server/url.php" });
+request.done(function(data) {
+  remote = data;
+});
+console.log(remote);
+</code>
+    <li> One use for AJAX requests on many web pages is to create an "infinite scroll" page, such as that used by many social networks. At a high level, describe how you would implement such a page (hint: you may want to look at the window's <var>scroll</var> event).
+    <li> If you have used a language other than JavaScript on the server, find out how to turn a data structure into JSON in your language of choice. Write a simple page that returns a weather prediction as JSON, then use AJAX and JavaScript to insert that prediction into the page.
   </ol>
 
 [@import snippets/scripts.html]
