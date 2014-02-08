@@ -1,6 +1,9 @@
 Textbook Tasks Remaining
 ========================
 - Switch tools to Ractive
+- Add images:
+  * console for browser, sniff the current browser and offer others
+  * Use Marmoset to generate some code sample images?
 - Figure out smarter JS build step
 - Write sample code for functions chapter
   * Something that illustrates using functions to refactor
