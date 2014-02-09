@@ -9,10 +9,12 @@ body {
   font-family: calibri, tahoma, verdana, sans-serif;
   background: @background;
   //Context = 16px font size
-  min-width: 20em;
   width: 44em;
   padding: 1em 0;
-  margin: 0 1em;
+  margin: auto;
+  //go left to center with asides
+  -webkit-transform: translateX(-12.5em);
+  transform: translateX(-12.5em);
   .drop-shadow(.5em, 0px, 1em, .1);
   min-height: 50em;
   position: relative;
@@ -27,7 +29,13 @@ body {
     margin: 0 0 1em;
   }
 
-  @media screen and (max-width: 46em) {
+  @media screen and (max-width: @collapseColumns) {
+    margin: auto;
+    -webkit-transform: none;
+    transform: none;
+  }
+  
+  @media screen and (max-width: @tablet) {
     width: auto;
   }
 }

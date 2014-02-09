@@ -131,7 +131,13 @@ for (var i = 0; i &lt; 100; i = i + 1) {
 }
 </code>
 
-  This is a pretty complicated piece of code, compared to what we've done before. Let's break it down into its individual parts. In the setup part of the loop, we created a variable <var>i</var> to keep track of how many times the loop had repeated, starting with 0. Our condition says to repeat as long as <var>i</var> is less than 100, meaning that it will repeat 100 times (remember, it starts at 0). Finally, our change section of the loop adds 1 to <var>i</var> each time we reach the end of the loop--important, because otherwise it would never be greater than 99, which means our condition would never be false, and the code would run forever (or, realistically, until the browser shuts it down for being disruptive--usually about 15 seconds).
+  This is a pretty complicated piece of code, compared to what we've done before. Let's break it down into its individual parts. 
+  
+  <ol>
+    <li> In the setup part of the loop, we created a variable <var>i</var> to keep track of how many times the loop had repeated, starting with 0. 
+    <li> Our condition says to repeat as long as <var>i</var> is less than 100, meaning that it will repeat 100 times (remember, it starts at 0). 
+    <li> Finally, our change section of the loop adds 1 to <var>i</var> each time we reach the end of the loop--important, because otherwise it would never be greater than 99, which means our condition would never be false, and the code would run forever (or, realistically, until the browser shuts it down for being disruptive--usually about 15 seconds).
+  </ol>
 
 <p>
   The possibility of a never-ending, infinite loop makes looping arguably the riskiest construct in JavaScript. On the other hand, it may be the most powerful construct, just in terms of being able to reduce the amount of code you write. For example, consider taking a list of prices and discounting them all by $2. Without loops, we're forced to basically treat each item in the loop as an individual variable, with all the problems that entails.
