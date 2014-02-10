@@ -108,7 +108,7 @@ console.log(book.title + ", by " + book.author);
 
   <ul>
     <li><var>window</var> - contains all <mark>global</mark> variables, including ones you declare for yourself. All variables that you define from the console are actually properties on the window object, as though you're "inside" it.
-    <li><var>Math</var> - contains a bunch of useful functions like <var>round()</var> and <var>sqrt</var> for doing calculations, along with some handy values like Math.PI.
+    <li><var>Math</var> - contains a bunch of useful functions like <var>round()</var> and <var>sqrt()</var> for doing calculations, along with some handy values like <var>Math.PI</var>.
     <li><var>document</var> - the current page as loaded into the browser. We'll do more stuff with the document in a bit.
   </ul>
 
@@ -194,6 +194,7 @@ for (var prop in movie) {
   console.log(movie.prop); 
 
   //RIGHT - this logs the value of each property inside movie
+  //equivalent of movie["value of prop"]
   console.log(movie[prop]); //"Alien", "Ridley Scott", "Sigourney Weaver"
 }
 </code>

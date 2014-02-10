@@ -35,6 +35,18 @@
 <p>
   But before we worry about those kinds of architectural concerns, let's talk about the anatomy of a function definition. At first glance, it won't look too different from other control structures, such as loops or conditional statements.
 
+<code>
+var greeting = function(name) {
+  var combined = "Hello, " + name;
+  console.log(combined);
+}
+
+greeting("Thomas"); // logs "Hello, Thomas"
+</code>
+
+<p>
+  The first part of this code should look familiar, since it's just declaring a variable and setting it equal to a value. Functions are first-class values in JavaScript, which means that just like strings and numbers, we can store them and pass them around in variables. The next part is the <mark>function literal</mark>: also like numbers and strings, functions have a "literal" form, meaning their value as written out (and not accessed through a variable). It begins with the <var>function</var> keyword to let JavaScript know what we're creating, followed by parentheses containing zero or more inputs, and a block of code that will be run when the function is called.
+
 <aside>
 
   <h1>Synonyms</h1>
@@ -59,18 +71,6 @@ var f = function f() {
     Given that this requires you to give the function a name twice, however, it may be easiest to hold off on this composite definition until debugging actually becomes difficult.
 
 </aside>
-
-<code>
-var greeting = function(name) {
-  var combined = "Hello, " + name;
-  console.log(combined);
-}
-
-greeting("Thomas"); // logs "Hello, Thomas"
-</code>
-
-<p>
-  The first part of this code should look familiar, since it's just declaring a variable and setting it equal to a value. Functions are first-class values in JavaScript, which means that just like strings and numbers, we can store them and pass them around in variables. The next part is the <mark>function literal</mark>: also like numbers and strings, functions have a "literal" form, meaning their value as written out (and not accessed through a variable). It begins with the <var>function</var> keyword to let JavaScript know what we're creating, followed by parentheses containing zero or more inputs, and a block of code that will be run when the function is called.
 
 <p>
   Let's talk about those inputs for a second. Where the condition goes in an <var>if</var> statement, functions have a list of inputs to the function, which we call its <mark>arguments</mark>. When you call a function, you provide those inputs by putting them between the parentheses of the function expression. Arguments act like variable definitions. In this case, we are declaring that inside the function, we'll have an input variable called <var>name</var>. If we provide a value (above, we provide the string "Thomas"), the argument starts the function with that value. If we don't, the argument is <var>undefined</var>, just like any variable that's declared but not assigned a value. You can have as many arguments as you like, just by separating them with commas:
@@ -328,10 +328,12 @@ paragraphs.css('color', 'green').html('hello').addClass('chained');
 <p>
   Just because you <i>can</i> chain jQuery methods this way doesn't mean that you <i>should</i>. When abused, it can be confusing and hard to update. But if you need to change one or two simple things about an element, chaining function calls on the object can be a <mark>fluent</mark> interface for doing so without needing an entirely new line for each change.
 
+<!--
 <h2>Example Code</h2>
 
 <p>
   In this example, we'll show how functions can be used to clean up, or <mark>refactor</mark> existing code that has grown too large and unwieldy. By taking repetitive tasks, and pulling them out into separate functions, it becomes much easier to wrap our heads around a script. [Example: building dynamic parts of the page for a table or menu, without crafting each part individually.]
+-->
 
 <script>
 require(['jquery', 'google-code/prettify'], function($) {
