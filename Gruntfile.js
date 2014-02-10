@@ -42,7 +42,8 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', 'folders shorts compileCSS compileJS connect watch'.split(' '));
+  grunt.registerTask('default', 'build connect watch'.split(' '));
+  grunt.registerTask('build', 'folders shorts compileCSS compileJS'.split(' '));
 
   grunt.registerTask('folders', "Create the /build folder if it doesn't exist", function() {
     if (!grunt.file.exists('./build')) {
