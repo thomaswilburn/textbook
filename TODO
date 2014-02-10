@@ -1,6 +1,10 @@
 Textbook Tasks Remaining
 ========================
 - Switch tools to Ractive
+- Add images:
+  * console for browser, sniff the current browser and offer others
+  * Use Marmoset to generate some code sample images?
+- Figure out smarter JS build step
 - Write sample code for functions chapter
   * Something that illustrates using functions to refactor
   * Spellchecker/sanitizer/image update?
@@ -16,9 +20,6 @@ Textbook Tasks Remaining
     - Maybe use a flow chart instead of light bulbs?
     - Do people really have problems with if/else? 
   * loops
-    - Let's use Excel instead of houses
-    - Can we use Esprima to generate the slo-mo?
-    - Show the live values using Angular
   * inheritance
     - show the "shadow" properties that are inherited on an object
     - side-by-side code is probably better than the dot interactive
@@ -28,9 +29,8 @@ Textbook Tasks Remaining
   * doesn't work if the window is undocked
   * is there really a place where this is useful?
   * better scenario: create more interactive sections where the page is mutable based on console ops
-  * Let's use Angular to make the page more reactive
+  * Let's use Ractive to make the page more reactive
 - Switch to a nice set of web fonts
 - Add a license for this thing
 - Add live animation example
 - Show asteroids live
-- NodeJS - write a simple server?
