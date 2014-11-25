@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Finding Help"]
+<%= t.include("snippets/head.html", { title: "Finding Help" }) %>
 
 <h2>Everyone Starts Somewhere</h2>
 
@@ -52,5 +52,5 @@
 
 </ul>
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

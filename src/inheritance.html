@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Constructors and Inheritance"]
+<%= t.include("snippets/head.html", { title: "Constructors and Inheritance" }) %>
 
 <h2>Functions As Factories</h2>
 
@@ -265,5 +265,5 @@ animate();
   <li> Inheritance is actually used heavily in your browser. Think about the different types of elements on a page: they share many characteristics, such as height and width properties, but they also have differences (some are text, some are images, and some just tell the browser how to render the page). On a piece of paper, draft an inheritance tree showing which elements inherit from others. Think about your reasoning for each placement.
 </ol>
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Table of Contents"]
+<%= t.include("snippets/head.html", { title: "Table of Contents" }) %>
 
 <h2>Chapters</h2>
 
@@ -25,4 +25,4 @@
   <li> <a href="conclusion.html">The Road Ahead</a>
 </ol>
 
-[@import snippets/foot.html]
+<%= t.include("snippets/foot.html") %>

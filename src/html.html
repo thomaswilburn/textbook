@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Writing HTML and CSS for JavaScript"]
+<%= t.include("snippets/head.html", { title: "Writing HTML and CSS for JavaScript" }) %>
 
 <h2>Them Bones</h2>
 
@@ -128,5 +128,5 @@ is completely valid and usable in web browsers.
 <p>
   One of the best resources for HTML5 polyfills is <a href="http://html5please.com">HTML5 Please</a>, a web site that catalogs new browser features and tracks when they're usable for a wide audience (its predecessor, <a href="http://caniuse.com">Can I Use</a>, is more comprehensive but not quite as user-friendly). For example, the <a href="http://html5please.com/#video">HTML5 &lt;video&gt; element</a> can be polyfilled in browsers that don't support it through a combination of JavaScript and Flash. It's not a great solution, but it means you can write one page using standards instead of one standards-based page and one legacy page.
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

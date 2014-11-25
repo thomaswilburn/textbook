@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Beginning jQuery"]
+<%= t.include("snippets/head.html", { title: "Beginning jQuery" }) %>
 
 <h2>Find, Do</h2>
 
@@ -308,6 +308,6 @@ $('li').css({
 <p>
   These are some common uses of jQuery, but they're by no means exhaustive. One of the best ways to learn the library better is to decide on something you want to do--hide only links to certain domains! add a class to all elements inside another type of element! find elements that contain a certain word!--and then look through the <a href="http://api.jquery.com">jQuery Application Programming Interface (API) documentation</a> for functions that will help you accomplish that task. The API also includes information on what arguments are required, and which are optional for any given call. For example, <var>fadeOut()</var> has a default speed, but by calling <var>fadeOut('slow');</var>, we can change how fast the element disappears.
 
-[@import snippets/scripts.html]
+<%= t.include("snippets/scripts.html") %>
 
-[@import snippets/foot.html]
+<%= t.include("snippets/foot.html") %>

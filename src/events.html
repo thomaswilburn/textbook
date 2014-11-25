@@ -1,4 +1,4 @@
-[@import snippets/head.html title="jQuery Events"]
+<%= t.include("snippets/head.html", { title: "jQuery Events" }) %>
 
 <h2>Event-Driven Programming</h2>
 
@@ -170,5 +170,5 @@ $('ul.menu').on('click', 'li', function() {
 
 [@import interactives/timelapse.html src="../../js/interactives/data/tabs.time" id="tab-demo"]
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

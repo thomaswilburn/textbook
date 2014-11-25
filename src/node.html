@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Node.js"]
+<%= t.include("snippets/head.html", { title: "Node.js" }) %>
 
 <h2>JavaScript Everywhere</h2>
 
@@ -106,5 +106,5 @@ fs.readDir(".", function(err, files) {
 <p>
   These are the most basic principles of writing Node scripts. If you'd like to know more, the <a href="http://nodejs.org/api/">Node documentation</a> is a good place to start. You can also look through the source for any modules that you've downloaded by simply opening up the <var>node_modules</var> directory and browsing around, which is a good place to start. You may also want to take a look at <a href="http://www.nodebeginner.org/">The Node Beginner Book</a>, an e-text that will walk you through creating a complete web server in Node.js.
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

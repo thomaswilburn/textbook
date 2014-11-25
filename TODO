@@ -1,10 +1,9 @@
 Textbook Tasks Remaining
 ========================
-- Switch tools to Ractive
+- Convert to CommonJS builds and Lo-dash templates
 - Add images:
   * console for browser, sniff the current browser and offer others
   * Use Marmoset to generate some code sample images?
-- Figure out smarter JS build step
 - Write sample code for functions chapter
   * Something that illustrates using functions to refactor
   * Spellchecker/sanitizer/image update?
@@ -29,7 +28,6 @@ Textbook Tasks Remaining
   * doesn't work if the window is undocked
   * is there really a place where this is useful?
   * better scenario: create more interactive sections where the page is mutable based on console ops
-  * Let's use Ractive to make the page more reactive
 - Switch to a nice set of web fonts
 - Add a license for this thing
 - Add live animation example

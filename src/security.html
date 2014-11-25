@@ -1,4 +1,4 @@
-[@import snippets/head.html title="JavaScript Security"]
+<%= t.include("snippets/head.html", { title: "JavaScript Security" }) %>
 
 <h2>Abandon All Hope</h2>
 
@@ -63,5 +63,5 @@
 <p>
   Security is rarely a top priority for developers, much less JavaScript developers. But as browsers expose more and more functionality to scripts, it's becoming increasingly important to be aware of practices that expose vulnerabilities for your visitors. For more information, you may want to read through the most recent OWASP <a href="https://owasp.org/index.php/Top_10_2013-Table_of_Contents">Top Ten Project</a>, which lists the most common vulnerabilities for the year, as well as ways to minimize or eliminate them from your web apps.
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Loops and Arrays"]
+<%= t.include("snippets/head.html", { title: "Loops and Arrays" }) %>
 
 <h2>List Comprehension</h2>
 
@@ -246,6 +246,6 @@ while (index &lt; names.length) {
 </ul>
 
 
-[@import snippets/scripts.html]
+<%= t.include("snippets/scripts.html") %>
 
-[@import snippets/foot.html]
+<%= t.include("snippets/foot.html") %>

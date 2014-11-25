@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Introduction"]
+<%= t.include("snippets/head.html", { title: "Introduction" }) %>
 
 <h2>What Do You Mean, "Web Savvy?"</h2>
 
@@ -65,4 +65,4 @@
 <p>
   Like a lot of web developers, I'm not formally trained in computer science. I was originally a journalist in Washington, DC, where I ran the multimedia team at Congressional Quarterly, using JavaScript and other languages to help the newsroom report on politics and government. In 2011, I moved to Seattle, where data journalism jobs are thin on the ground, and transitioned into doing straight-up web development for a living. You can see examples of my work, from writing to data visualization to software, at <a href="http://thomaswilburn.net">ThomasWilburn.net</a>.
 
-[@import snippets/foot.html]
+<%= t.include("snippets/foot.html") %>

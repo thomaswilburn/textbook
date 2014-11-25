@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Source Control with Git"]
+<%= t.include("snippets/head.html", { title: "Source Control with Git" }) %>
 
 <h2>Why Source Control?</h2>
 
@@ -140,5 +140,5 @@ git checkout 306d187 first.txt
 <p>
   Finally, it would be a good idea to be familiar with other source control systems. The most common options in the open-source world are Subversion and Mercurial. Although they differ from Git in many ways, the basic workflow--committing and checking out--is much the same. 
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

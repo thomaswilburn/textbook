@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Forms"]
+<%= t.include("snippets/head.html", { title: "Forms" }) %>
 
 <h2>Forms and Functions</h2>
 
@@ -334,5 +334,5 @@ $
   <li> Forms can be validated using JavaScript, but they can also be created in response to user actions. Using jQuery, create a form where a drop-down menu for "city" changes in when the user picks a state.
 </ol>
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

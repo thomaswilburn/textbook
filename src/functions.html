@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Functions"]
+<%= t.include("snippets/head.html", { title: "Functions" }) %>
 
 <h2>Do Something</h2>
 
@@ -191,5 +191,5 @@ paragraphs.css('color', 'green').html('hello').addClass('chained');
   In this example, we'll show how functions can be used to clean up, or <mark>refactor</mark> existing code that has grown too large and unwieldy. By taking repetitive tasks, and pulling them out into separate functions, it becomes much easier to wrap our heads around a script. [Example: building dynamic parts of the page for a table or menu, without crafting each part individually.]
 -->
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

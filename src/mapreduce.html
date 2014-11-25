@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Functional Programming"]
+<%= t.include("snippets/head.html", { title: "Functional Programming" }) %>
 
 <h2>Higher-order Functions</h2>
 
@@ -252,5 +252,5 @@ bound(1, 2, 3);
 <p>
   Bound functions can be very useful for event listeners or object methods. If called directly or through a timeout, those methods would no longer know about their parent objects unless they're bound to its context. This is so handy, the same browsers that support functional operations like <var>map</var> also support <var>bind</var> as a third method on all functions alongside <var>call</var> and <var>apply</var>.
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

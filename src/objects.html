@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Object Lesson"]
+<%= t.include("snippets/head.html", { title: "Object Lesson" }) %>
 
 <h2>Objects as Simulation</h2>
 
@@ -239,5 +239,5 @@ console.log("The biggest earthquake took place in " + highest.location);
   <li> In the earthquake example above, we found the highest magnitude of earthquake. Write another loop that will find the average magnitude of all the quake objects.
 </ol>
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

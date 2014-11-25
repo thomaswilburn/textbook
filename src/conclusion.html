@@ -1,4 +1,4 @@
-[@import snippets/head.html title="The Road Ahead"]
+<%= t.include("snippets/head.html", { title: "The Road Ahead" }) %>
 
 <p>
   Congratulations! Having finished this book, you have completed your education in basic JavaScript. You know how to store values in variables and collections, to make decisions using flow control operators, and to write your own functions. You can interact with the page using jQuery, make your own graphics with HTML5's canvas element, and talk to servers without refreshing the page using AJAX. Along the way, we've also touched on a number of crucial programming skills, such as checking into source control, evaluating technical advice, and even writing JavaScript on the server.
@@ -28,5 +28,5 @@
 <p>
   Thomas Wilburn
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

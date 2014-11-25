@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Cookies and Local Storage"]
+<%= t.include("snippets/head.html", { title: "Cookies and Local Storage" }) %>
 
 <h2>Toll House</h2>
 
@@ -123,5 +123,5 @@ sessionStorage.setItem("forgetMe", "true");
 
 [@import interactives/timelapse.html src="../../js/interactives/data/storage.time" id="storage"]
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

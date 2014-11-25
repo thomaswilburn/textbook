@@ -1,4 +1,4 @@
-[@import snippets/head.html title="Getting Started"]
+<%= t.include("snippets/head.html", { title: "Getting Started" }) %>
 
 <h2>The Console</h2>
 
@@ -314,5 +314,5 @@ The total time required is 6.2150072150072155 hours.
   <li> Say you typed the code "'one' - 2" into the console. What will you see as the result?
 </ol>
 
-[@import snippets/scripts.html]
-[@import snippets/foot.html]
+<%= t.include("snippets/scripts.html") %>
+<%= t.include("snippets/foot.html") %>

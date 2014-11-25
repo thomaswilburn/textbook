@@ -8,10 +8,6 @@ module.exports = function(grunt) {
   var exec = require("child_process").exec;
 
   grunt.initConfig({
-    shorts: {
-      paths: './src/*.html',
-      output: './build'
-    },
     less: {
       paths: ['./src/css'],
       output: './build/css/styles.css'
@@ -19,6 +15,7 @@ module.exports = function(grunt) {
     connect: {
       local: {
         options: {
+          livereload: true,
           base: "build" 
         }
       }
@@ -26,7 +23,7 @@ module.exports = function(grunt) {
     watch: {
       html: {
         files: ['./src/**/*.html'],
-        tasks: ['shorts']
+        tasks: ['template']
       },
       js: {
         files: ['./src/code/*.js'],
@@ -34,22 +31,17 @@ module.exports = function(grunt) {
       },
       css: {
         files: ['./src/css/*.less'],
-        tasks: ['compileCSS']
+        tasks: ['less']
       },
       options: {
-        nospawn: true
+        nospawn: true,
+        livereload: true
       }
     }
   });
 
   grunt.registerTask('default', 'build connect watch'.split(' '));
-  grunt.registerTask('build', 'folders shorts compileCSS compileJS'.split(' '));
-
-  grunt.registerTask('folders', "Create the /build folder if it doesn't exist", function() {
-    if (!grunt.file.exists('./build')) {
-      grunt.file.mkdir('build');
-    }
-  });
+  grunt.registerTask('build', 'template less compileJS'.split(' '));
 
   /*
     The JavaScript on the page is kept in the source folder, then compiled into the build directory so that require() can request it. The textbook base library is also compiled using the RequireJS optimizer. Many scripts will do neither--small demos are included inline using the Shorts tempating.
@@ -62,80 +54,41 @@ module.exports = function(grunt) {
   /*
     A simple LESS compilation task.
   */
-  grunt.registerTask('compileCSS', 'Build the CSS file from seed.less', function() {
+  grunt.registerTask('less', 'Build the CSS file from seed.less', function() {
 
     var less = require('less');
     var config = grunt.config('less');
-    var compiler = new less.Parser({
-      paths: config.paths
-    });
 
-    var seed = fs.readFileSync('./src/css/seed.less', 'utf8');
+    var seed = grunt.file.read('src/css/seed.less');
 
     var callback = this.async();
     
-    compiler.parse(seed, function(error, tree) {
-      if (error) throw('Error in CSS parsing: ' + error.message);
-      var css = tree.toCSS();
-      var output = config.output;
-      var outputDir = path.dirname(output);
-      if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir);
-      }
-      fs.writeFileSync(output, css);
+    less.render(seed, { paths: config.paths }).then(function(rendered) {
+      var css = rendered.css;
+      grunt.file.write(config.output, css);
       callback();
-    });
+    }, function(err) { console.error(err); callback() });
   });
 
   /**
-    Shorts is a simple templating system based on WordPress shortcodes, supporting basic file includes and substitution based on tag attributes.
+    Build output pages via Lo-dash templating
   */
-  grunt.registerTask('shorts', 'Simple shortcode templating', function() {
-    var config = grunt.config('shorts');
-    var files = grunt.file.expand(config.paths);
-    var outputDir = config.output;
-
-    var parse = function(input, data) {
-      data = data || {};
-      var file = fs.readFileSync(input, 'utf-8');
-
-      for (var key in data) {
-        var replacer = new RegExp("\\[#" + key + "\\]", "g");
-        file = file.replace(replacer, data[key]);
-      }
-
-      var dir = path.dirname(input);
-      var importTest = /\[@import(?: [^\s\]]+)*\]/g;
-      var match;
-      while (match = importTest.exec(file)) {
-
-        var importCode = match[0];//.replace(/\[@import|\]/g, '');
-        //chunker finds the attributes within the shortcode
-        var chunker = /\s([\w\/.]+)(?:=\w+|=(['"]{0,1}).*?\2)?/g
-        var attributes = importCode.match(chunker);
-        if (attributes == null) continue;
-        var importPath = attributes.shift().trim();
-        var params = {};
-        for (var i = 0; i < attributes.length; i++) {
-          var split = attributes[i].trim().split('=');
-          if (typeof split[1] == 'string' && split[1][0] && split[1][0].search(/['"]/) != -1) {
-            split[1] = split[1].substr(1, split[1].length - 2);
-          }
-          params[split[0]] = split[1] || "";
-        }
-
-        var imported = parse(path.join(dir, importPath), params);
-
-        file = file.replace(importCode, imported);
-      }
-
-      return file.toString();
-    };
-    for (var i = 0; i < files.length; i++) {
-      var slug = path.basename(files[i]);
-      var parsed = parse(files[i]);
-      fs.writeFileSync(path.join(outputDir, slug), parsed);
-    }
+  var path = require("path");
+  grunt.template.include = function(where, data) {
+    var src = grunt.file.read(path.resolve("src", where));
+    data = Object.create(data || null);
+    data.t = grunt.template;
+    return grunt.template.process(src, {data:data})
+  };
+  grunt.registerTask('template', 'Simple shortcode templating', function() {
+    var files = grunt.file.expandMapping("*.html", "build", { cwd: "src" });
+    var data = { t: grunt.template };
+    
+    files.forEach(function(file) {
+      var src = file.src[0];
+      var rendered = grunt.template.process(grunt.file.read(src), { data: data });
+      grunt.file.write(file.dest, rendered);
+    });
 
   });
 };
