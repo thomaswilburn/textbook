@@ -252,7 +252,7 @@ var fromString = RegExp('\\d+'); //match 1 or more numbers
 <p>
   First, we need to write our regular expression patterns to attach to our elements. Regular expressions can be difficult to write, but there are lots of tools that let us test them in an interactive fashion. The box below contains two inputs: an input area for typing your regular expression, and a text area containing some sample text. Any complete regular expressions will be run against the sample text, and matches will be highlighted. Try to write two patterns: one that matches all the phone numbers in the sample, and one that matches all the e-mail addresses.
 
-[@import interactives/regex.html]
+<%= t.include("interactives/regex.html") %>
 <script>
 require(['interactives/Regex']);
 </script>
@@ -324,7 +324,7 @@ $
 <p>
   From a high level, here's our plan. We want to blend in with HTML features, so we'll use the same <var>pattern</var> attribute to store our regular expressions. When the submit button is clicked, we'll loop through the input elements with <var>pattern</var> attributes, creating regular expressions from the pattern and checking it against the input value. If an input fails, we'll cancel the click event on the submit button and put up a helpful error message for our user. If they all check out, the event goes through and the form submits without a problem.
 
-[@import interactives/timelapse.html src="../../js/interactives/data/formValidation.time" id="template-function"]
+<%= t.include("interactives/timelapse.html", { src: "../js/interactives/data/formValidation.time", id: "template-function" }) %>
 
 <h2>Exercises and Practice Questions</h2>
 

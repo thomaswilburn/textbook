@@ -198,7 +198,7 @@ var route = 'Lincoln Tunnel';
 
   Here, give it a try for yourself. In the following input boxes, there are some strings that haven't been escaped properly. As a result, they are going to break when the browser tries to run them. Add slashes before the quotes that need to be escaped, and the boxes will turn green.
 
-[@import interactives/escaping.html]
+<%= t.include("interactives/escaping.html") %>
 <script>
 require(['interactives/StringEscaping']);
 </script>

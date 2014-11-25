@@ -343,7 +343,7 @@ context.clearRect(0, 0, canvas.width, canvas.height);
   <p>
     In the following example, we're going to create the animation of a bouncing ball. We'll start by creating an object that represents the ball, then work up from there: drawing one frame, animating many frames, checking the ball's position after each update, and clearing the previous drawing.
 
-[@import interactives/timelapse.html src="../../js/interactives/data/canvas.time" id="ricochet"]
+<%= t.include("interactives/timelapse.html", { src: "../js/interactives/data/canvas.time", id: "ricochet" }) %>
 
 <h2>Practice Exercise</h2>
 

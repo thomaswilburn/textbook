@@ -1,4 +1,4 @@
-<div class="interactive timelapse" id="[#id]">
+<div class="interactive timelapse" id="<%= id %>">
   <div class="controls">
     <a class="first">First</a>
     <a class="previous">Previous</a>
@@ -11,11 +11,11 @@
     <div class="comments"></div>
   </aside>
   <code class="revision"></code>
-<script type="text/timelapse">[@import [#src]]</script>
+<script type="text/timelapse"><%= t.include(src) %></script>
 </div>
 <script>
 require(['jquery', 'meta/TLPlayer'], function($, Player) {
-  var element = $('#[#id]');
+  var element = $('#<%= id %>');
   var player = new Player();
   var diff = element.find('script[type="text/timelapse"]');
   var revUL = element.find('ul.revision-list');

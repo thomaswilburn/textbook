@@ -121,7 +121,7 @@ sessionStorage.setItem("forgetMe", "true");
 <p>
   Support for the local storage APIs is actually very good: it's in all modern browsers, including IE 8 and higher. That said, it's a good exercise to write a storage API that can seamlessly switch between cookies and <var>localStorage</var> in older browsers. We call this kind of fallback a <mark>polyfill</mark>: unlike a shim, it gives us a new API that degrades gracefully depending on the browser's capabilities. In many cases, given the general clumsiness of the built-in browser functions, it can actually be more pleasant than the real thing.
 
-[@import interactives/timelapse.html src="../../js/interactives/data/storage.time" id="storage"]
+<%= t.include("interactives/timelapse.html", { src: "../js/interactives/data/storage.time", id: "storage" }) %>
 
 <%= t.include("snippets/scripts.html") %>
 <%= t.include("snippets/foot.html") %>

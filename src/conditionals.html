@@ -231,7 +231,7 @@ if (name == "Thomas") {
 
   It may be easier to visualize <var>if</var> and <var>if/else</var> using a kind of flowchart. In the interactive graphic below, we represent the two branches of our code with lighbulbs that are wired to our <var>if</var> statement, and you can edit the condition that's written between the parentheses. If the condition is true, the first block executes, and its lightbulb will light up. If the condition is false, you'll see the second bulb light up as the <var>else</var> block executes. If your condition isn't valid, neither light will be turned on--in that case, try your JavaScript on the console and see what error it throws.
 
-[@import interactives/lightbulbs.html]
+<%= t.include("interactives/lightbulbs.html") %>
   <script>
 require(['interactives/LightIf']);
   </script>
@@ -311,7 +311,7 @@ var confirmation = confirm("Press OK to set confirmation to 'true.'");
 <p>
   Between <var>prompt()</var>, <var>confirm()</var> and <var>console.log()</var>, we have the required inputs and outputs to write a simple text adventure, like the old "choose your own adventure" books. By nesting our conditional statements inside each other, we can given the story multiple paths and endings. In the following example, we'll retell a well-known fable using JavaScript. 
 
-[@import interactives/timelapse.html src="../../js/interactives/data/goldilocks.time" id="fable"]
+<%= t.include("interactives/timelapse.html", { src: "../js/interactives/data/goldilocks.time", id: "fable" }) %>
 
 <%= t.include("snippets/scripts.html") %>
 <%= t.include("snippets/foot.html") %>

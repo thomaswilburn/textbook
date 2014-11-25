@@ -86,6 +86,7 @@ module.exports = function(grunt) {
     
     files.forEach(function(file) {
       var src = file.src[0];
+      console.log("building file", src);
       var rendered = grunt.template.process(grunt.file.read(src), { data: data });
       grunt.file.write(file.dest, rendered);
     });

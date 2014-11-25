@@ -81,7 +81,7 @@ var x = adder(1, 2) + 3; //becomes 3 + 3, and so x equals 6
 <p>
   In the interactive section below, you can see each revision on our way from a simple block of code all the way up to a completed template function, with comments on each step in the sidebar. You should feel free to load the final version of the code (or any of the intermediate versions) into a script tag to try it out.
 
-[@import interactives/timelapse.html src="../../js/interactives/data/template.time" id="template-function"]
+<%= t.include("interactives/timelapse.html", { src: "../js/interactives/data/template.time", id: "template-function" }) %>
 
 <p>
   Our template function is pretty good, and serves as a great example of a useful function. Now, instead of writing code for each JavaScript object that we want to represent as HTML, we can just feed the template string and the data to our function, and we get back a complete HTML string that we can (in turn) place on the page using jQuery's <var>html()</var> function.
