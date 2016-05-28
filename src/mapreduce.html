@@ -30,7 +30,7 @@ var loop = function(array, func) {
   Inside the loop, we're calling <var>func</var> with two arguments: the item value, and its position in the array. To use our new <var>loop</var> function, we just have to call it and pass in a function that will accept those two values, while returning the new value. Here's our add function again, rewritten into our generic <var>loop</var> form.
 
 <code>
-loop(function(item, i) {
+loop(array, function(item, i) {
   return item + 1;
 });
 </code>
